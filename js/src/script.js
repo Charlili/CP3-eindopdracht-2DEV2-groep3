@@ -7,7 +7,7 @@
 		if(getParameterByName('page') != null && (getParameterByName('page') === 'overview' || getParameterByName('page') === 'group')){
 			console.log('Time to make apps');
 			var FlowchartApplication = require('./classes/FlowchartApplication.js');
-			var flowchartApplication = new FlowchartApplication($('canvas'));
+			var flowchartApplication = new FlowchartApplication($('.app'));
 		}
 	}
 	init();

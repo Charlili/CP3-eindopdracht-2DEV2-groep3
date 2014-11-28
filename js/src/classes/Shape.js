@@ -2,36 +2,35 @@ module.exports = (function(){
 	var size = [];
 
 
-	function Shape(event,temp) {
-		//this.$el = $(document.createElement('input'));
+	function Shape(event) {
 		
-		this.bTemp = temp;
-		//this.$el.addClass('shape');
-		//this.$el.css('value', this.text);
+		this.$el = $(document.createElement('div'));
+		this.x = event.offsetX;
+		this.y = event.offsetY;
+		this.$el.css('top',this.y);
+		this.$el.css('left',this.x);
+		this.$el.addClass('shape');
+		this.$el.addClass('draggable');
 
-		this.square = new Path.Rectangle(event.downPoint,event.point);
-		this.square.opacity = '1';
-		this.square.fillColor = 'white';
-		if(!temp){
-			this.square.opacity = 0.4;
-			this.square.fillColor = 'black';
-			this.textShape = new PointText({
-				point: this.square.point,
-				bounds: this.square.bounds,
-				content: 'THIS IS CONTENT',
-				fillColor: 'black',
-				fontFamily: 'Courier New',
-			    fontWeight: 'normal',
-			    fontSize: 12
-			});
-		}
+		this.input = document.createElement('textarea');
+		this.input.type = 'text';
+		this.$el.css('value', this.text);
+		this.$el.append(this.input);
+		//save input value
+		this.text = this.value;
+		
+		$('.app').append(this.$el);
+		$('.shape').click(function(e) {
+			e.stopPropagation();
+		});
+		$('.draggable').draggable().resizable({ autoHide: false, handles: "se" });
+		
+		
 
-	}
-	function onMouseDown(event){
-		console.log('down 2');
 	}
 	Shape.prototype.changeSize = function(event){
-		this.square('width',event.point);
+		this.$el.css('width',event.offsetX);
+		this.$el.css('height',event.offsetY);
 
 	};
 	Shape.prototype.remove = function(){
@@ -40,9 +39,7 @@ module.exports = (function(){
 	};
 	Shape.prototype.addText = function(){
 		//add event listener for when input loses focus:
-
-		//save input value
-		this.text = this.value;
+		
 	};
 	Shape.prototype.hoverHandler = function(e){
 		//show move and scale tool
@@ -53,7 +50,7 @@ module.exports = (function(){
 	};
 	Shape.prototype.moveHandler = function(e){
 		//event handler for mouseMove
-
+		console.log(this);
 		//move to new position	
 		this.x = offset.x;
 		this.y = offset.y;	

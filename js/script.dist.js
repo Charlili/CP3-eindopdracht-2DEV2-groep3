@@ -8,7 +8,7 @@
 		if(getParameterByName('page') != null && (getParameterByName('page') === 'overview' || getParameterByName('page') === 'group')){
 			console.log('Time to make apps');
 			var FlowchartApplication = require('./classes/FlowchartApplication.js');
-			var flowchartApplication = new FlowchartApplication($('canvas'));
+			var flowchartApplication = new FlowchartApplication($('.app'));
 		}
 	}
 	init();
@@ -28,12 +28,8 @@ module.exports = (function(){
 	var Shape = require('./Shape.js');
 	var Line = require('./Line.js');
 
-	paper.install(window);
-	paper.setup('cnvs');
 	var shapes = [];
 	var lines = [];
-	var tool = new Tool();
-	var creating = false;
 	var tempArray = [];
 	
 	function FlowchartApplication($el) {
@@ -41,39 +37,33 @@ module.exports = (function(){
 
 		this.$el = $el;
 		this.tool = 'shape';
-		//this.$el.mousedown(this.clickHandler).bind(this);
+		
 
-		//this.$el.mousedown(this.mouseDownHandler).bind(this);
-		//create toolbar and add to the canvas
-		//this.$toolbar = new Toolbar();
+		/*this.$el.mousedown(this.clickHandler);
+		this.$el.mouseup(function(event) {
+			creating=false;
+		});*/
 		
-		// Define a mousedown and mousedrag handler
-		
+		var shape;
+		/*this.$el.click(function(e) { 
+			shape = new Shape(e); 
+			shape.addText();
+			shapes.push(shape);
+		});	*/
+		this.$el.click(this.clickHandler);
+
 	}
-	tool.onMouseDrag = function(event){
-		console.log('downdown ');
-		var shape = new Shape(event,true);
-		tempArray.push(shape);
-		creating = true;
-	};
-	tool.onMouseUp = function(event){
-		//console.log(tempArray);
-		$(tempArray).each(function(index,temp){
-			temp.remove(this);
-		});
-		var shape = new Shape(event,false);
-		creating = false;
-	};
 	FlowchartApplication.prototype.clickHandler = function(e){
-		console.log('down');
 		
+		var shape = new Shape(e); 
+		//shape.addText();
+		shapes.push(shape);
 		//get x,y coordinates from start of click
-		
 		//add event handler for drag event?
-
 		//make Shape or Line, depending on this.tool
 		//while get x,y coordinates from release click
 	};
+	
 	FlowchartApplication.prototype.save = function(){
 		//check if user is logged in with $_SESSION['user']
 
@@ -133,36 +123,35 @@ module.exports = (function(){
 	var size = [];
 
 
-	function Shape(event,temp) {
-		//this.$el = $(document.createElement('input'));
+	function Shape(event) {
 		
-		this.bTemp = temp;
-		//this.$el.addClass('shape');
-		//this.$el.css('value', this.text);
+		this.$el = $(document.createElement('div'));
+		this.x = event.offsetX;
+		this.y = event.offsetY;
+		this.$el.css('top',this.y);
+		this.$el.css('left',this.x);
+		this.$el.addClass('shape');
+		this.$el.addClass('draggable');
 
-		this.square = new Path.Rectangle(event.downPoint,event.point);
-		this.square.opacity = '1';
-		this.square.fillColor = 'white';
-		if(!temp){
-			this.square.opacity = 0.4;
-			this.square.fillColor = 'black';
-			this.textShape = new PointText({
-				point: this.square.point,
-				bounds: this.square.bounds,
-				content: 'THIS IS CONTENT',
-				fillColor: 'black',
-				fontFamily: 'Courier New',
-			    fontWeight: 'normal',
-			    fontSize: 12
-			});
-		}
+		this.input = document.createElement('textarea');
+		this.input.type = 'text';
+		this.$el.css('value', this.text);
+		this.$el.append(this.input);
+		//save input value
+		this.text = this.value;
+		
+		$('.app').append(this.$el);
+		$('.shape').click(function(e) {
+			e.stopPropagation();
+		});
+		$('.draggable').draggable().resizable({ autoHide: false, handles: "se" });
+		
+		
 
-	}
-	function onMouseDown(event){
-		console.log('down 2');
 	}
 	Shape.prototype.changeSize = function(event){
-		this.square('width',event.point);
+		this.$el.css('width',event.offsetX);
+		this.$el.css('height',event.offsetY);
 
 	};
 	Shape.prototype.remove = function(){
@@ -171,9 +160,7 @@ module.exports = (function(){
 	};
 	Shape.prototype.addText = function(){
 		//add event listener for when input loses focus:
-
-		//save input value
-		this.text = this.value;
+		
 	};
 	Shape.prototype.hoverHandler = function(e){
 		//show move and scale tool
@@ -184,7 +171,7 @@ module.exports = (function(){
 	};
 	Shape.prototype.moveHandler = function(e){
 		//event handler for mouseMove
-
+		console.log(this);
 		//move to new position	
 		this.x = offset.x;
 		this.y = offset.y;	
