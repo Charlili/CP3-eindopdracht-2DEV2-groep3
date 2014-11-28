@@ -4,9 +4,9 @@ class DAO{
 
 	//DAO::variabelenaam , nut van een static variabele. overal direct aanspreekbaar
 	private static $dbHost = "localhost";
-	private static $dbName = "stackoverflow";
-	private static $dbUser = "stackuser";
-	private static $dbPass = "stackpass";
+	private static $dbName = "CP3-eindopdracht-2DEV2-groep3";
+	private static $dbUser = "user";
+	private static $dbPass = "pass";
 	private static $sharedPDO;
 
 	//enkel aanspreekbaar binnen de package(map)

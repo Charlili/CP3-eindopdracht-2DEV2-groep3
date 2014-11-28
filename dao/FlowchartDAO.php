@@ -2,11 +2,11 @@
 			
 require_once __DIR__ . "/DAO.php";
 
-class BlaDAO extends DAO{
+class FlowchartDAO extends DAO{
 
 	public function selectAll(){
 		$sql = "SELECT * 
-				FROM `tabel`";
+				FROM `flowcharts`";
 		$stmt = $this->pdo->prepare($sql);
 		$stmt->execute();
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -15,7 +15,7 @@ class BlaDAO extends DAO{
 
 	public function selectById($id){
 		$sql = "SELECT * 
-				FROM `tabel`
+				FROM `flowcharts`
 				WHERE `id` = :id";
 		$stmt = $this->pdo->prepare($sql);
 		$stmt->bindValue(":id",$id);
@@ -25,7 +25,7 @@ class BlaDAO extends DAO{
 
 	public function delete($id){
 		$sql = "DELETE 
-				FROM `tabel`
+				FROM `flowcharts`
 				WHERE `id` = :id";
 		$stmt = $this->pdo->prepare($sql);
 		$stmt->bindValue(":id", $id);
@@ -35,7 +35,7 @@ class BlaDAO extends DAO{
 	public function insert($data){
 		$errors = $this->getValidationErrors($data);
 		if(empty($errors)){
-			$sql = "INSERT INTO `tabel` (`eig1`, `eig2`, `eig3`, `eig4`, `eig5`) 
+			$sql = "INSERT INTO `flowcharts` (`eig1`, `eig2`, `eig3`, `eig4`, `eig5`) 
 					VALUES (:eig1, :eig2, :eig3, :eig4, :eig5)";
 			$stmt = $this->pdo->prepare($sql);
 			$stmt->bindValue(':eig1', $data["eig1"]);

@@ -9,13 +9,33 @@ define('WWW_ROOT', __DIR__ . DS);
 //routes definieren zodat we weten welke pagina we moeten tonen
 $routes = array(
     'home' => array(
-    	'controller' => 'Posts',
-    	'action' => 'index'
+    	'controller' => 'Flowcharts',
+    	'action' => 'home'
 	),
-    'page_id' => array(
-    	'controller' => 'Bla',
-    	'action' => 'BlaFunctie'
-	)
+    'overview' => array(
+        'controller' => 'Flowcharts',
+        'action' => 'overview'
+    ),
+    'group' => array(
+        'controller' => 'Flowcharts',
+        'action' => 'group'
+    ),
+    'add' => array(
+        'controller' => 'Flowcharts',
+        'action' => 'add'
+    ),
+    'login' => array(
+    	'controller' => 'Users',
+    	'action' => 'login'
+	),
+    'logout' => array(
+        'controller' => 'Users',
+        'action' => 'logout'
+    ),
+    'register' => array(
+        'controller' => 'Users',
+        'action' => 'register'
+    )
 );
 //als er geen "?page=blabla" is, gaan we gewoon naar de home pagina
 if(empty($_GET['page'])) {

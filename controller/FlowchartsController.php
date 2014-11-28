@@ -1,14 +1,30 @@
 <?php
 require_once WWW_ROOT . 'controller' . DS . 'Controller.php';
 //gebruikte DAOs aanroepen
-require_once WWW_ROOT . 'dao' . DS . 'BlaDAO.php';
-class BlaController extends Controller {
+require_once WWW_ROOT . 'dao' . DS . 'FlowchartDAO.php';
+class FlowchartsController extends Controller {
 	//DAOs aanmaken
-	private $blaDAO;
+	private $flowchartDAO;
 
 	function __construct() {
-		$this->blaDAO = new BlaDAO();
+		$this->flowchartDAO = new FlowchartDAO();
 
+	}
+	public function home() {
+		//index page
+
+	}
+	public function add() {
+		//add group
+		
+	}
+	public function group() {
+		//group page: overview of users and flowchart
+		
+	}
+	public function overview() {
+		//overview of your flowcharts
+		
 	}
 
 
