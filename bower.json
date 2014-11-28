@@ -1,0 +1,25 @@
+{
+  "name": "week07",
+  "version": "0.0.0",
+  "authors": [
+    "Charlotte Vanroelen"
+  ],
+  "description": "Dit is een RMD oefening en dit doe ik nu voor de tweede keer fuck fafnjsf;jnsfgjn",
+  "moduleType": [
+    "globals"
+  ],
+  "license": "MIT",
+  "homepage": "index.php",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jQuery": "~2.1.1",
+    "fallback": "~1.1.6"
+  }
+}
