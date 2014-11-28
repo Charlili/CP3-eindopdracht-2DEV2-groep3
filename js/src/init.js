@@ -3,10 +3,14 @@ fallback.load({
 		'//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
 		'//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js',
 		'js/vendor/jQuery/dist/jquery.min.js'],
-	'script.js': 'js/script.dist.js'
-	//verder ook nog paper.js inladen en andere .js dat we nodig gaan hebben
+	paper: [
+	'//cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.18/paper-full.min.js',
+	'js/vendor/paper/dist/paper-full.min.js'],
+	'script.dist.js': 'js/script.dist.js'
 	},{
 	shim: {
-		'script.js': ['jQuery']
+		'paper': ['jQuery'],
+		'script.dist.js': ['jQuery'],
+		'script.dist.js': ['paper']
 	}
 });

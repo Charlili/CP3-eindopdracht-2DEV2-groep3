@@ -1,21 +1,44 @@
 module.exports = (function(){
+	var size = [];
 
 
-	function Shape(x,y,width,height) {
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
+	function Shape(event,temp) {
+		//this.$el = $(document.createElement('input'));
+		
+		this.bTemp = temp;
+		//this.$el.addClass('shape');
+		//this.$el.css('value', this.text);
 
-		this.text = "";
-		//create shape
+		this.square = new Path.Rectangle(event.downPoint,event.point);
+		this.square.opacity = '1';
+		this.square.fillColor = 'white';
+		if(!temp){
+			this.square.opacity = 0.4;
+			this.square.fillColor = 'black';
+			this.textShape = new PointText({
+				point: this.square.point,
+				bounds: this.square.bounds,
+				content: 'THIS IS CONTENT',
+				fillColor: 'black',
+				fontFamily: 'Courier New',
+			    fontWeight: 'normal',
+			    fontSize: 12
+			});
+		}
 
-		//create input in the shape
-
-		//when Shape.input becomes active: addText
-		//when Shape.input loses focus
 	}
-	Shape.prototype.addText = function(this){
+	function onMouseDown(event){
+		console.log('down 2');
+	}
+	Shape.prototype.changeSize = function(event){
+		this.square('width',event.point);
+
+	};
+	Shape.prototype.remove = function(){
+		this.square.remove();
+
+	};
+	Shape.prototype.addText = function(){
 		//add event listener for when input loses focus:
 
 		//save input value
@@ -27,7 +50,7 @@ module.exports = (function(){
 		//add click listener for move and scale thingy.
 
 
-	}
+	};
 	Shape.prototype.moveHandler = function(e){
 		//event handler for mouseMove
 
@@ -36,7 +59,7 @@ module.exports = (function(){
 		this.y = offset.y;	
 
 		//update shape?
-	}
+	};
 	Shape.prototype.scaleHandler = function(e){
 		//event handler for mouseMove
 		//scale to new position
@@ -44,7 +67,7 @@ module.exports = (function(){
 		this.height = offset.y;	
 
 		//update shape?	
-	}
+	};
 	/* //example function
 	Shape.prototype.removeHandler = function(){
 		console.log('trying to delete the mutherfucker');

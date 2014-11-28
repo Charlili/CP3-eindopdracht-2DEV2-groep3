@@ -2,3 +2,13 @@
 header{
 	
 }
+.app{
+	position: relative;
+	left: 100px;
+	background-color: #eee;
+}
+.shape{
+	position: absolute;
+	background-color: #ddd;
+	padding: 10px;
+}

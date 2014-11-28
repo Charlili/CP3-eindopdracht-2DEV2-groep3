@@ -1,34 +1,50 @@
 module.exports = (function(){
 
-	var Toolbar = require('./Toolbar.js');
+	//var Toolbar = require('./Toolbar.js');
 	var Shape = require('./Shape.js');
 	var Line = require('./Line.js');
+
+	paper.install(window);
+	paper.setup('cnvs');
+	var shapes = [];
+	var lines = [];
+	var tool = new Tool();
+	var creating = false;
+	var tempArray = [];
 	
 	function FlowchartApplication($el) {
+		console.log('Making app....');
+
 		this.$el = $el;
 		this.tool = 'shape';
-		//array of all shapes used in flowchart app
-		this.shapes = array();
-		//array of all lines used in flowchart app
-		this.lines = array();
-		//initialize paper.js
+		//this.$el.mousedown(this.clickHandler).bind(this);
 
+		//this.$el.mousedown(this.mouseDownHandler).bind(this);
 		//create toolbar and add to the canvas
-
-		//add event handler for click-drag function
-
-		//listen to bean.on om this.tool aan te passen
-
-
+		//this.$toolbar = new Toolbar();
+		
+		// Define a mousedown and mousedrag handler
 		
 	}
-	//example function
-	/*FlowchartApplication.prototype.example = function(){
-		return example;
-	};*/
+	tool.onMouseDrag = function(event){
+		console.log('downdown ');
+		var shape = new Shape(event,true);
+		tempArray.push(shape);
+		creating = true;
+	};
+	tool.onMouseUp = function(event){
+		//console.log(tempArray);
+		$(tempArray).each(function(index,temp){
+			temp.remove(this);
+		});
+		var shape = new Shape(event,false);
+		creating = false;
+	};
 	FlowchartApplication.prototype.clickHandler = function(e){
+		console.log('down');
+		
 		//get x,y coordinates from start of click
-
+		
 		//add event handler for drag event?
 
 		//make Shape or Line, depending on this.tool
@@ -43,7 +59,7 @@ module.exports = (function(){
 	};
 	FlowchartApplication.prototype.changeTool = function(tool){
 		//change tool
-		this.tool = tool;
+		//this.tool = tool;
 	};
 	return FlowchartApplication;
 })();

@@ -20,6 +20,7 @@
   ],
   "dependencies": {
     "jQuery": "~2.1.1",
-    "fallback": "~1.1.6"
+    "fallback": "~1.1.6",
+    "paper": "0.9.18"
   }
 }
