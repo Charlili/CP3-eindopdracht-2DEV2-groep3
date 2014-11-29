@@ -2,6 +2,7 @@
 require_once WWW_ROOT . 'controller' . DS . 'Controller.php';
 //gebruikte DAOs aanroepen
 require_once WWW_ROOT . 'dao' . DS . 'FlowchartDAO.php';
+require_once WWW_ROOT . 'dao' . DS . 'GroupDAO.php';
 class FlowchartsController extends Controller {
 	//DAOs aanmaken
 	private $flowchartDAO;
