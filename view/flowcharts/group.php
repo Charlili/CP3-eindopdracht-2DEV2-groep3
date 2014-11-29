@@ -58,7 +58,14 @@
         </ul>
 	     </div>
 
+    <div class='app'>
+    </div>
+    <canvas id="cnvs" width="600px" height="600px">
+      <p>no canvas support</p>
+    </canvas>
+    
     </section>
+
 
     <div class="add">
       <span><a href="#">+</a></span>
