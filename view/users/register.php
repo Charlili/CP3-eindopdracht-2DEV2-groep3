@@ -1,92 +1,64 @@
-<?php
-session_start();
+<section class="register">
+		 
+      <h1>Register</h1>
+ 		
+ 	    <form method="post" action="index.php?page=register" enctype="multipart/form-data">
 
-require_once 'phpass/Phpass.php';
-require_once __DIR__ . '/dao/UserDAO.php';
-
-$userDAO = new UserDAO();
-
-$errors = array();
-if(!empty($_POST)) {
-	if(empty($_POST['email'])) {
-		$errors['email'] = 'Please enter your email';
-	} else {
-		$existing = $userDAO->selectByEmail($_POST["email"]);
-
-		if(!empty($existing)) {
-			$errors['email'] = 'Email address is already in use';
-		}
-	}
-
-	if(empty($_POST['password'])) {
-		$errors['password'] = 'Please enter a password';
-	}
-
-	if($_POST['confirm_password'] != $_POST['password']) {
-		$errors['confirm_password'] = 'Passwords do not match';
-	}
+ 		<div>
+ 		   <a href="#"><img src="images/addprofilepic.jpg"/></a>
+               <!-- bij klik ->venster -->
+ 		   <input type="file" name="image">
+  		   <span>
+                  <?php if(!empty($errors['image'])){
+      			   echo $errors['image'];
+      		};?>
+      	     </span>
+ 		</div>
+		
+ 		<div>
+ 			<label for="username">Username:</label>
+ 			<input type="text" name="username" value="<?php if(!empty($_POST['username'])) echo $_POST['username'];?>">
+                  <span>
+ 		     	   <?php if(!empty($errors['username'])){
+      				echo $errors['username'];
+      		    };?>
+      		</span>
+ 		</div>
 	
-	if(empty($errors)) {
-		$hasher = new \Phpass\Hash;
-		$passwordHash = $hasher->hashPassword($_POST['password']);
-
-		$newUser = array(
-			"email"=>$_POST['email'],
-			"password"=>$passwordHash
-		);
-
-		$user = $userDAO->insert($newUser);
-		if(!empty($user)) {
-			$_SESSION['info'] = 'Registration successful';
-			header('Location: index.php');
-			exit();
-		} else {
-			$errors = $userDAO->getValidationErrors($newUser);
-			$_SESSION['error'] = 'Registration failed';
-		}
-	} else {
-		$_SESSION['error'] = 'Please complete the form';
-	}
-}
-
-include 'header.php';
-?>
-	<section>
-		<header><h1>Register</h1></header>
-		<form action="register.php" method="post">
-			<fieldset>
-				<legend>Register</legend>
-				<div class="input text">
-					<label>
-						Email:
-						<input type="email" name="email" value="<?php if(!empty($_POST['email'])) echo $_POST['email'];?>" />
-						<?php if(!empty($errors['email'])) echo '<span class="error">' . $errors['email'] . '</span>'; ?>
-					</label>
-				</div>
-				<div class="input password">
-					<label>
-						Password:
-						<input type="password" name="password" />
-						<?php if(!empty($errors['password'])) echo '<span class="error">' . $errors['password'] . '</span>'; ?>
-					</label>
-				</div>
-				<div class="input password">
-					<label>
-						Confirm Password:
-						<input type="password" name="confirm_password" />
-						<?php if(!empty($errors['confirm_password'])) echo '<span class="error">' . $errors['confirm_password'] . '</span>'; ?>
-					</label>
-				</div>
-				<div class="input checkbox">
-					<label>
-						<input type="checkbox" name="log_me_in">
-						Log me in
-					</label>
-				</div>
-				<div class="input submit"><input type="submit" value="register"></div>
-			</fieldset>
-		</form>
-	</section>
-<?php
-include 'footer.php';
-?>
+ 		<div>
+ 			<label for="password">Password:</label>
+ 			<input type="password" name="password" value="<?php if(!empty($_POST['password'])) echo $_POST['password'];?>">
+                  <span>
+ 		     	   <?php if(!empty($errors['password'])){
+      			   echo $errors['password'];
+      		    };?>
+      		</span>
+ 		</div>
+	
+		<div>
+ 		   <label for="confirm_password">Confirm password:</label>
+ 		   <input type="password" name="confirm_password" value="<?php if(!empty($_POST['confirm_password'])) echo $_POST['confirm_password'];?>">
+               <span>
+                  <?php if(!empty($errors['confirm_password'])){
+      			   echo $errors['confirm_password'];
+      		};?>
+            </span>
+ 	       </div>
+		
+ 		<div>
+ 			<label for="email">Email address:</label>
+ 			<input type="email" name="email" value="<?php if(!empty($_POST['email'])) echo $_POST['email'];?>">
+                  <span>
+ 		     	   <?php if(!empty($errors['email'])){
+      			   echo $errors['email'];
+      		    };?>
+      		</span>
+ 		</div>
+	
+ 		<div>
+ 			<a href="index.php">Cancel</a>
+ 			<input type="submit" value="Register">
+ 		</div>
+	
+	</form>
+</section>
