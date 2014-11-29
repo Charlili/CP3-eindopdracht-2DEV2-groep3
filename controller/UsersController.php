@@ -20,6 +20,11 @@ class UsersController extends Controller {
 
 		
 		if(!empty($_POST)) {
+
+			if(empty($_POST['username'])) {
+				$errors['username'] = 'Please enter a username';
+			}
+
 			if(empty($_POST['email'])) {
 				$errors['email'] = 'Please enter your email';
 			} else {
@@ -39,9 +44,36 @@ class UsersController extends Controller {
 			}
 			//IMAGE FUNCTIONALITEIT
 
-			/*
+			if(empty($_POST['image'])){
+                if(!empty($_FILES['image']['error'])){
+                    $errors['image'] = 'Something went wrong, please try again';
+                }
+                
+                if(empty($errors['image'])){
+                    $size = getimagesize($_FILES['image']['tmp_name']);
+                    if(empty($size)){
+                        $errors['image'] = 'Uploaded file is not an image';
+                    }
+                }
 
-*/
+                //MAX SIZE
+                
+                if(empty($errors['image'])){
+                    $sourceFile = $_FILES['image']['tmp_name'];
+                    $destFile = WWW_ROOT . 'uploads' . DS . $_FILES['image']['name'];
+                    move_uploaded_file($sourceFile, $destFile);
+                    
+                    $dotPos = strrpos($_FILES['image']['name'],'.');
+                    $name = substr($_FILES['image']['name'],0,$dotPos);
+                    $extension = substr($_FILES['image']['name'],$dotPos+1);
+        
+                    $image = new Eventviva\ImageResize($destFile);
+                    $image->resizeToHeight(100);
+                    //$image->save(WWW_ROOT . 'uploads' . DS . $name . '_th.' . $extension);
+                    $image->save(WWW_ROOT . 'uploads' . DS . $_POST['username'] . '_th.' . $extension);
+                }
+            }
+
 			if(empty($errors)) {
 
 				$hasher = new \Phpass\Hash;
@@ -50,8 +82,8 @@ class UsersController extends Controller {
 				$newUser = array(
 					"email"=>$_POST['email'],
 					"password"=>$passwordHash,
-					"first_name"=>$_POST['first_name'],
-					"last_name"=>$_POST['last_name']
+					"username"=>$_POST['username'],
+					"extension"=>$extension
 				);
 
 				$user = $this->usersDAO->insert($newUser);
@@ -75,25 +107,30 @@ class UsersController extends Controller {
 			$this->set('errors',$errors);
 		}
 	}
+
 	public function login(){
 
 		$errors = array();
 
 		if(!empty($_POST)){
-			if(empty($_POST['email'])) {
-				$errors['email'] = 'Please enter your email';
+			if(empty($_POST['username'])) {
+				$errors['username'] = 'Please enter your username';
 			}
 			if(empty($_POST['password'])) {
 				$errors['password'] = 'Please enter your password';
 			}
 			if(empty($errors)){
 				
-				$existing = $this->usersDAO->selectByEmail($_POST["email"]);
+				$existing = $this->usersDAO->selectByUsername($_POST['username']);
+				//var_dump($existing);
 
 				if(!empty($existing)){
 					$hasher = new \Phpass\Hash;
 					if ($hasher->checkPassword($_POST['password'], $existing['password'])) {
 						$_SESSION['user'] = $existing;
+
+						$this->redirect('index.php?page=index');
+						exit;
 					} else {
 						$_SESSION['error'] = 'That user doesnt exist. Do you want to register?';
 						$this->redirect('index.php?page=register');
@@ -105,24 +142,25 @@ class UsersController extends Controller {
 					exit;
 				}
 			}else{
-					$_SESSION['error'] = 'Please fill in your email and password.';
+					$_SESSION['error'] = 'Please fill in your username and password.';
 					
 			}
 		}
 		
 		
 		$this->set('errors',$errors);
-		if(empty($_SESSION['book'])){
-			unset($_SESSION['book']);
-			$this->redirect("index.php");}
-		else{
+		// if(empty($_SESSION['book'])){
+		// 	unset($_SESSION['book']);
+		// 	$this->redirect("index.php");}
+		// else{
 
-			$this->redirect("index.php?page=book");
+		// 	$this->redirect("index.php?page=book");
 			
-		}
+		// }
 		
 
 	}
+
 	public function logout(){
 		unset($_SESSION['user']);
 		$_SESSION['info'] = 'logged out';

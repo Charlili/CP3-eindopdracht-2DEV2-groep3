@@ -1,41 +1,61 @@
 module.exports = (function(){
 
-	//var Toolbar = require('./Toolbar.js');
+	var Toolbar = require('./Toolbar.js');
 	var Shape = require('./Shape.js');
 	var Line = require('./Line.js');
 
 	var shapes = [];
 	var lines = [];
 	var tempArray = [];
+	var creatingLine = false;
+	var point = [];
+
+	paper.install(window);
+	paper.setup('cnvs');
+
 	
 	function FlowchartApplication($el) {
+		var tool = new Tool();
 		console.log('Making app....');
 
 		this.$el = $el;
 		this.tool = 'shape';
-		
+		this.toolbar = new Toolbar($el);
 
-		/*this.$el.mousedown(this.clickHandler);
-		this.$el.mouseup(function(event) {
-			creating=false;
-		});*/
-		
 		var shape;
-		/*this.$el.click(function(e) { 
-			shape = new Shape(e); 
-			shape.addText();
-			shapes.push(shape);
-		});	*/
 		this.$el.click(this.clickHandler);
+		tool.onMouseDown = this.clickHandler;
+		//$('canvas').mouseup(this.clickHandler);
 
 	}
 	FlowchartApplication.prototype.clickHandler = function(e){
+		//will replace this with bean event later
+		if($('.button').attr('value') == 'Shape Tool'){
+			console.log('click');
+			var shape = new Shape(e); 
+			shapes.push(shape);
+
+		}else{
+			if(project.hitTest(e.point) == null){	
+				//create lines with canvas
+				if(!creatingLine){
+					console.log('first create Line');
+					//point = [e.offsetX,e.offsetY]
+					var line = new Line(e);
+					lines.push(line);
+					line.$c1.onMouseDrag = line.moveHandler.bind(line);
+
+				}else{
+					console.log('second create Line');
+					var line = lines[lines.length-1];
+					line.addCircle(e);
+					line.$c2.onMouseDrag = line.moveHandler.bind(line);
+				}
+				console.log(lines);
+				creatingLine = !creatingLine;
+			}
+		}
 		
-		var shape = new Shape(e); 
-		//shape.addText();
-		shapes.push(shape);
-		//get x,y coordinates from start of click
-		//add event handler for drag event?
 		//make Shape or Line, depending on this.tool
 		//while get x,y coordinates from release click
 	};

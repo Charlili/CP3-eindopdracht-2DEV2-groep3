@@ -7,8 +7,8 @@ module.exports = (function(){
 		this.$el = $(document.createElement('div'));
 		this.x = event.offsetX;
 		this.y = event.offsetY;
-		this.$el.css('top',this.y);
-		this.$el.css('left',this.x);
+		this.$el.css('top',this.y - 50);
+		this.$el.css('left',this.x - 100);
 		this.$el.addClass('shape');
 		this.$el.addClass('draggable');
 
@@ -28,11 +28,11 @@ module.exports = (function(){
 		
 
 	}
-	Shape.prototype.changeSize = function(event){
+	/*Shape.prototype.changeSize = function(event){
 		this.$el.css('width',event.offsetX);
 		this.$el.css('height',event.offsetY);
 
-	};
+	};*/
 	Shape.prototype.remove = function(){
 		this.square.remove();
 
@@ -50,7 +50,7 @@ module.exports = (function(){
 	};
 	Shape.prototype.moveHandler = function(e){
 		//event handler for mouseMove
-		console.log(this);
+		//console.log(this);
 		//move to new position	
 		this.x = offset.x;
 		this.y = offset.y;	
