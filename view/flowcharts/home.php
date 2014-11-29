@@ -4,7 +4,7 @@
 	
 	<ul>
 		<li class="groen">
-			<a href="index.php?page=add">Create flowchart</a>
+			<a href="index.php?page=overview">Create flowchart</a>
 		</li>
 		
 		<li class="groen">
@@ -43,7 +43,7 @@
 		</li>
 		
 		<li class="groen">
-			<a href="index.php?page=groups">My groups</a>
+			<a href="index.php?page=listgroups">My groups</a>
 		</li>
 	</ul>
 
@@ -52,9 +52,7 @@
 	</div>
 
 	<div class="info_user">
-		<!-- <span><a href="addnewgroup.html">+</a></span> -->
-		<p>Logged in as User</p>
-		<!--<?php echo $user['username'];?>-->
+		<p>Logged in as <?php echo $_SESSION['user']['username'];?></p>
 	</div>
 
 	<?php endif;?>

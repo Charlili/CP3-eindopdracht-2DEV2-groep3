@@ -11,11 +11,11 @@
 	
 	<ul>
 		<li class="groen">
-			<a href="index.php?page=groupdetail&amp;id=1">Group 1</a>
+			<a href="index.php?page=group&amp;id=1">Group 1</a>
 		</li>
 		
 		<li class="groen">
-			<a href="index.php?page=groupdetail&amp;id=2">Group 2</a>
+			<a href="index.php?page=group&amp;id=2">Group 2</a>
 		</li>
 	</ul>
 
