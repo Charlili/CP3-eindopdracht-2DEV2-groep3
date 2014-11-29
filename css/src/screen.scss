@@ -4,11 +4,13 @@ header{
 }
 .content{
 	position:relative;
+
 }
 .app {
+	background-color: rgba(200,200,200,.4);
 	margin-top: 30px;
 	position: relative;
-	background-color: #eee;
+	//left: 400px;
 	display: block;
 	width: 600px;
 	height: 600px;

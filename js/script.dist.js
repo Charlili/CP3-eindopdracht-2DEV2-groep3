@@ -31,6 +31,12 @@ module.exports = (function(){
 	var shapes = [];
 	var lines = [];
 	var tempArray = [];
+	var creatingLine = false;
+	var point = [];
+
+	paper.install(window);
+	paper.setup('cnvs');
+
 	
 	function FlowchartApplication($el) {
 		console.log('Making app....');
@@ -41,17 +47,31 @@ module.exports = (function(){
 
 		var shape;
 		this.$el.click(this.clickHandler);
+		$('canvas').click(this.clickHandler);
 
 	}
 	FlowchartApplication.prototype.clickHandler = function(e){
 		//will replace this with bean event later
-		if($('.button').attr('value') == 'Draw Shapes'){
+		if($('.button').attr('value') == 'Shape Tool'){
+			console.log('click');
 			var shape = new Shape(e); 
 			shapes.push(shape);
 		}else{
+				
 			//create lines with canvas
-			var line = new Line(e); 
-			lines.push(line);
+			if(!creatingLine){
+				console.log('first create Line');
+				point = [e.offsetX,e.offsetY]
+				var line = new Line(e);
+				lines.push(line);
+
+			}else{
+				console.log('second create Line');
+				var line = lines[lines.length-1];
+				line.addCircle(e);
+			}
+			console.log(lines);
+			creatingLine = !creatingLine;
 		}
 		
 		//make Shape or Line, depending on this.tool
@@ -73,17 +93,41 @@ module.exports = (function(){
 })();
 },{"./Line.js":3,"./Shape.js":4,"./Toolbar.js":5}],3:[function(require,module,exports){
 module.exports = (function(){
-
+	
 	function Line(event) {
+		//var tool = new Tool();
 		
-		//create 2 circles, this.c1 & this.c2
-		//create line
+		//create first circle, this.c1 & this.c2
+		console.log('creating first circle');
+	
+		this.$c1 = new Shape.Circle(new Point(event.offsetX,event.offsetY), 5);
+		this.x1 = event.offsetX;
+		this.y1 = event.offsetY;
+		this.$c1.fillColor = 'black';
 
-		//add event listener for clicking on the c1, c2: moveHandler	
+		//tool.onMouseDrag = this.moveHandler.bind(this);
+		//console.log(this.$c1);
+		//$('canvas').append(this.$c1);
+
 	}
-	Line.prototype.addText = function(){
-		//add event listener for when input loses focus:
+	Line.prototype.addCircle = function(event){
+		//add 2nd circle
+		
+		this.$c2 = new Shape.Circle(new Point(event.offsetX,event.offsetY), 5);
+		this.$c2.fillColor = 'black';
+		this.x2 = event.offsetX;
+		this.y2 = event.offsetY;
 
+		//draw line between the two circles
+		this.$line = new Path.Line([this.x1,this.y1], [this.x2,this.y2]);
+		this.$line.strokeColor = 'black';
+		this.$line.strokeWidth = 2;
+		//console.log(this);
+
+
+
+		//$('canvas').append(this.$c2);
+		//$('canvas').append(this.$line);
 		//save input value
 		//this.text = this.value;
 	};
@@ -95,6 +139,10 @@ module.exports = (function(){
 
 	};
 	Line.prototype.moveHandler = function(e){
+		e.stopPropagation();
+		console.log('draggin');
+		console.log(this);
+		console.log('movin the bugger');
 		//is currentTarget c1 or c2?
 
 		//event handler for mouseMove
@@ -122,8 +170,8 @@ module.exports = (function(){
 		this.$el = $(document.createElement('div'));
 		this.x = event.offsetX;
 		this.y = event.offsetY;
-		this.$el.css('top',this.y);
-		this.$el.css('left',this.x);
+		this.$el.css('top',this.y - 50);
+		this.$el.css('left',this.x - 100);
 		this.$el.addClass('shape');
 		this.$el.addClass('draggable');
 
@@ -143,11 +191,11 @@ module.exports = (function(){
 		
 
 	}
-	Shape.prototype.changeSize = function(event){
+	/*Shape.prototype.changeSize = function(event){
 		this.$el.css('width',event.offsetX);
 		this.$el.css('height',event.offsetY);
 
-	};
+	};*/
 	Shape.prototype.remove = function(){
 		this.square.remove();
 
@@ -165,7 +213,7 @@ module.exports = (function(){
 	};
 	Shape.prototype.moveHandler = function(e){
 		//event handler for mouseMove
-		console.log(this);
+		//console.log(this);
 		//move to new position	
 		this.x = offset.x;
 		this.y = offset.y;	
@@ -194,7 +242,7 @@ module.exports = (function(){
 	var shapeTool = true;
 	function Toolbar($el) {
 		//make 2 buttons
-		this.$el = $('<input type="button" class="button" value="Draw Shapes" />');
+		this.$el = $('<input type="button" class="button" value="Shape Tool" />');
 		
 		$el.append(this.$el);
 		this.$el.click(this.changeTool);
@@ -206,9 +254,14 @@ module.exports = (function(){
 		// switch between makeShape or makeLine tool
 		shapeTool = !shapeTool;
 		if(shapeTool){
-			this.value = 'Draw Shapes';
+			this.value = 'Shape Tool';
+			$('canvas').css('z-index','-1');
+			$('.app').css('z-index','0');
+
 		}else{
-			this.value = 'Draw Lines';
+			this.value = 'Line Tool';
+			$('canvas').css('z-index','0');
+			$('.app').css('z-index','-1');
 		}
 		//use bean.fire to communicate this change to FlowchartApplication
 

@@ -1,15 +1,39 @@
 module.exports = (function(){
-
+	
 	function Line(event) {
+		//var tool = new Tool();
 		
-		//create 2 circles, this.c1 & this.c2
-		//create line
+		//create first circle, this.c1 & this.c2
+		console.log('creating first circle');
+	
+		this.$c1 = new Shape.Circle(new Point(event.offsetX,event.offsetY), 5);
+		this.x1 = event.offsetX;
+		this.y1 = event.offsetY;
+		this.$c1.fillColor = 'black';
 
-		//add event listener for clicking on the c1, c2: moveHandler	
+		//tool.onMouseDrag = this.moveHandler.bind(this);
+		//console.log(this.$c1);
+		//$('canvas').append(this.$c1);
+
 	}
-	Line.prototype.addText = function(){
-		//add event listener for when input loses focus:
+	Line.prototype.addCircle = function(event){
+		//add 2nd circle
+		
+		this.$c2 = new Shape.Circle(new Point(event.offsetX,event.offsetY), 5);
+		this.$c2.fillColor = 'black';
+		this.x2 = event.offsetX;
+		this.y2 = event.offsetY;
 
+		//draw line between the two circles
+		this.$line = new Path.Line([this.x1,this.y1], [this.x2,this.y2]);
+		this.$line.strokeColor = 'black';
+		this.$line.strokeWidth = 2;
+		//console.log(this);
+
+
+
+		//$('canvas').append(this.$c2);
+		//$('canvas').append(this.$line);
 		//save input value
 		//this.text = this.value;
 	};
@@ -21,6 +45,10 @@ module.exports = (function(){
 
 	};
 	Line.prototype.moveHandler = function(e){
+		e.stopPropagation();
+		console.log('draggin');
+		console.log(this);
+		console.log('movin the bugger');
 		//is currentTarget c1 or c2?
 
 		//event handler for mouseMove
