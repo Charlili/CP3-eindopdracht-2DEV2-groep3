@@ -35,7 +35,7 @@
 	<?php endif;
 	if(!empty($_SESSION['user'])):;?>
 
-	<h1>Welcome User!</h1>
+	<h1>Welcome <?php echo $_SESSION['user']['username'];?>!</h1>
 	
 	<ul>
 		<li class="groen">
