@@ -1,6 +1,6 @@
 module.exports = (function(){
 
-	//var Toolbar = require('./Toolbar.js');
+	var Toolbar = require('./Toolbar.js');
 	var Shape = require('./Shape.js');
 	var Line = require('./Line.js');
 
@@ -13,29 +13,23 @@ module.exports = (function(){
 
 		this.$el = $el;
 		this.tool = 'shape';
-		
+		this.toolbar = new Toolbar($el);
 
-		/*this.$el.mousedown(this.clickHandler);
-		this.$el.mouseup(function(event) {
-			creating=false;
-		});*/
-		
 		var shape;
-		/*this.$el.click(function(e) { 
-			shape = new Shape(e); 
-			shape.addText();
-			shapes.push(shape);
-		});	*/
 		this.$el.click(this.clickHandler);
 
 	}
 	FlowchartApplication.prototype.clickHandler = function(e){
+		//will replace this with bean event later
+		if($('.button').attr('value') == 'Draw Shapes'){
+			var shape = new Shape(e); 
+			shapes.push(shape);
+		}else{
+			//create lines with canvas
+			var line = new Line(e); 
+			lines.push(line);
+		}
 		
-		var shape = new Shape(e); 
-		//shape.addText();
-		shapes.push(shape);
-		//get x,y coordinates from start of click
-		//add event handler for drag event?
 		//make Shape or Line, depending on this.tool
 		//while get x,y coordinates from release click
 	};

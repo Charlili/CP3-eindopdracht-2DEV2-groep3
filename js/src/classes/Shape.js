@@ -28,11 +28,11 @@ module.exports = (function(){
 		
 
 	}
-	Shape.prototype.changeSize = function(event){
+	/*Shape.prototype.changeSize = function(event){
 		this.$el.css('width',event.offsetX);
 		this.$el.css('height',event.offsetY);
 
-	};
+	};*/
 	Shape.prototype.remove = function(){
 		this.square.remove();
 

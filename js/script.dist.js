@@ -24,7 +24,7 @@
 },{"./classes/FlowchartApplication.js":2}],2:[function(require,module,exports){
 module.exports = (function(){
 
-	//var Toolbar = require('./Toolbar.js');
+	var Toolbar = require('./Toolbar.js');
 	var Shape = require('./Shape.js');
 	var Line = require('./Line.js');
 
@@ -37,29 +37,23 @@ module.exports = (function(){
 
 		this.$el = $el;
 		this.tool = 'shape';
-		
+		this.toolbar = new Toolbar($el);
 
-		/*this.$el.mousedown(this.clickHandler);
-		this.$el.mouseup(function(event) {
-			creating=false;
-		});*/
-		
 		var shape;
-		/*this.$el.click(function(e) { 
-			shape = new Shape(e); 
-			shape.addText();
-			shapes.push(shape);
-		});	*/
 		this.$el.click(this.clickHandler);
 
 	}
 	FlowchartApplication.prototype.clickHandler = function(e){
+		//will replace this with bean event later
+		if($('.button').attr('value') == 'Draw Shapes'){
+			var shape = new Shape(e); 
+			shapes.push(shape);
+		}else{
+			//create lines with canvas
+			var line = new Line(e); 
+			lines.push(line);
+		}
 		
-		var shape = new Shape(e); 
-		//shape.addText();
-		shapes.push(shape);
-		//get x,y coordinates from start of click
-		//add event handler for drag event?
 		//make Shape or Line, depending on this.tool
 		//while get x,y coordinates from release click
 	};
@@ -77,7 +71,7 @@ module.exports = (function(){
 	};
 	return FlowchartApplication;
 })();
-},{"./Line.js":3,"./Shape.js":4}],3:[function(require,module,exports){
+},{"./Line.js":3,"./Shape.js":4,"./Toolbar.js":5}],3:[function(require,module,exports){
 module.exports = (function(){
 
 	function Line(event) {
@@ -193,6 +187,34 @@ module.exports = (function(){
 	}; */
 	
 	return Shape;
+})();
+},{}],5:[function(require,module,exports){
+module.exports = (function(){
+
+	var shapeTool = true;
+	function Toolbar($el) {
+		//make 2 buttons
+		this.$el = $('<input type="button" class="button" value="Draw Shapes" />');
+		
+		$el.append(this.$el);
+		this.$el.click(this.changeTool);
+		//addEventListener for button: changeTool			
+	}
+	Toolbar.prototype.changeTool = function(e){
+		e.stopPropagation();
+		console.log('clicking tha button');
+		// switch between makeShape or makeLine tool
+		shapeTool = !shapeTool;
+		if(shapeTool){
+			this.value = 'Draw Shapes';
+		}else{
+			this.value = 'Draw Lines';
+		}
+		//use bean.fire to communicate this change to FlowchartApplication
+
+	};
+	
+	return Toolbar;
 })();
 },{}]},{},[1])
 
