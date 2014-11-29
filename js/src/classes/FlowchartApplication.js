@@ -15,6 +15,7 @@ module.exports = (function(){
 
 	
 	function FlowchartApplication($el) {
+		var tool = new Tool();
 		console.log('Making app....');
 
 		this.$el = $el;
@@ -23,7 +24,8 @@ module.exports = (function(){
 
 		var shape;
 		this.$el.click(this.clickHandler);
-		$('canvas').click(this.clickHandler);
+		tool.onMouseDown = this.clickHandler;
+		//$('canvas').mouseup(this.clickHandler);
 
 	}
 	FlowchartApplication.prototype.clickHandler = function(e){
@@ -32,22 +34,26 @@ module.exports = (function(){
 			console.log('click');
 			var shape = new Shape(e); 
 			shapes.push(shape);
-		}else{
-				
-			//create lines with canvas
-			if(!creatingLine){
-				console.log('first create Line');
-				point = [e.offsetX,e.offsetY]
-				var line = new Line(e);
-				lines.push(line);
 
-			}else{
-				console.log('second create Line');
-				var line = lines[lines.length-1];
-				line.addCircle(e);
+		}else{
+			if(project.hitTest(e.point) == null){	
+				//create lines with canvas
+				if(!creatingLine){
+					console.log('first create Line');
+					//point = [e.offsetX,e.offsetY]
+					var line = new Line(e);
+					lines.push(line);
+					line.$c1.onMouseDrag = line.moveHandler.bind(line);
+
+				}else{
+					console.log('second create Line');
+					var line = lines[lines.length-1];
+					line.addCircle(e);
+					line.$c2.onMouseDrag = line.moveHandler.bind(line);
+				}
+				console.log(lines);
+				creatingLine = !creatingLine;
 			}
-			console.log(lines);
-			creatingLine = !creatingLine;
 		}
 		
 		//make Shape or Line, depending on this.tool
