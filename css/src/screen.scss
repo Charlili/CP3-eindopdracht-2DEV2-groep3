@@ -53,13 +53,30 @@ section input[type="text"], input[type="email"], input[type="password"] {
 	
 }
 
-.register div {
+.register div, .createflow div {
 	padding: 12px;
 }
 
 .register a {
 	color: #ed6838;
 	text-decoration: none;
+}
+
+.register label, .createflow label {
+	padding-right: 12px;
+}
+
+.createflow textarea.description {
+	max-width: 250px;
+    min-width: 250px;
+    max-height: 100px;
+    min-height: 100px;
+    background-color: #d1d1d1;
+    border: none;
+    color: white;
+    font-size: 1.6em;
+	padding-left: 6px;
+	padding-right: 6px;
 }
 
 .index ul, .mygroups ul {
@@ -90,6 +107,11 @@ section input[type="text"], input[type="email"], input[type="password"] {
 	font-size: 2.6em;
 	text-decoration: none;
 }
+
+// .login {
+// 	height: 120px;
+// 	overflow: hidden;
+// }
 
 .yellow {
 
@@ -182,6 +204,10 @@ aside > p {
 	font-size: 2.6em;
 }
 
+.test {
+	float: left;
+}
+
 .content{
 	position:relative;
 
@@ -189,13 +215,20 @@ aside > p {
 .app {
 	background-color: rgba(200,200,200,.4);
 	margin-top: 30px;
-	position: relative;
 	//left: 400px;
 	display: block;
-	width: 600px;
-	height: 600px;
 	z-index: 0;
 
+}
+.app, canvas{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+canvas{
+	z-index: -1;
 }
 
 .button {
@@ -208,14 +241,7 @@ aside > p {
 
 }
 
-canvas{
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 600px;
-	height: 600px;
-	z-index: -1;
-}
+
 .shape {
 	z-index: 1;
 	width: 200px;
@@ -235,9 +261,11 @@ canvas{
 	transition: background-color 1s;
 	resize: none;
 }
+
 .shape textarea:hover {
 	background-color: #eee;
 }
+
 textarea {
 	padding: 0;
 	border: none;
@@ -247,9 +275,11 @@ textarea {
 	-moz-box-shadow: none;
 	box-shadow: none;
 }
+
 .draggable {
     cursor: move;
 }
+
 .ui-resizable-handle, .ui-icon, .ui-icon-gripsmall-diagonal-se, .ui-resizable-se{
 	width: 20px;
 	height: 20px;

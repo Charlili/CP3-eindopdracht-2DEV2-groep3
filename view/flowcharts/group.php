@@ -1,75 +1,29 @@
 <section class="group">
 
     <aside>
-      <h2><?php echo $group['name'];?></h2>
+      <h2><a href="index.php?page=groupdetail&amp;id=<?php echo $group['id'];?>"><?php echo $group['name'];?></a></h2>
       <ul>
 
-        <li>User 1
-
+        <?php foreach($users as $user){
+            echo '<li>'.$user['username'].'</li>';
+        };?>
           <ul>
             <li><a href="#">Flowchart 1</a></li>
-            <li><a href="#">Flowchart 2</a></li>
+            <li><a href="#">Flowchart 2</a></li> 
           </ul>
-
-        </li>
-
-        <li>User 2
-
-          <ul>
-            <li><a href="#">Flowchart 1</a></li>
-            <li><a href="#">Flowchart 2</a></li>
-          </ul>
-
-        </li>
-
-        <li>User 3
-
-          <ul>
-            <li><a href="#">Flowchart 1</a></li>
-          </ul>
-
-        </li>
-
       </ul>
 
       <p><a href="index.php?page=listgroups">Back</a></p>
     </aside>
 
-    <section class="groupinfo">
-
-      <h1><?php echo $group['name'];?></h1>
-
-      <div>
-        <label>Description:</label>
-        <p>
-          <?php echo $group['description'];?>
-        </p>
-      </div>
-
-      <div>
-        <label>Users:</label>
-        <ul>
-          <?php 
-            foreach($users as $user){
-              echo '<li><img src="uploads/'. $user['name'].'.'. $user['extension'].'</li>';
-              //join
-            }
-          ;?>
-        </ul>
-	     </div>
+    <section class="createflow">
 
     <div class='app'>
     </div>
-    <canvas id="cnvs" width="600px" height="600px">
+    <canvas id="cnvs">
       <p>no canvas support</p>
     </canvas>
     
     </section>
-
-
-    <div class="add">
-      <span><a href="#">+</a></span>
-      <p>Invite someone</p>
-    </div>
 
 </section>

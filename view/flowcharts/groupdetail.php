@@ -4,6 +4,10 @@
       <h2><?php echo $group['name'];?></h2>
       <ul>
 
+<!--         <?php foreach($user as $user){
+
+        };?> -->
+
         <li>User 1
 
           <ul>
@@ -32,7 +36,7 @@
 
       </ul>
 
-      <p><a href="index.php?page=ingelogd">Back</a></p>
+      <p><a href="index.php?page=listgroups">Back</a></p>
     </aside>
 
     <section class="groupinfo">
@@ -49,16 +53,18 @@
       <div>
         <label>Users:</label>
         <ul>
-          <?php 
+<!--           <?php 
             foreach($users as $user){
               echo '<li><img src="uploads/'. $user['name'].'.'. $user['extension'].'</li>';
               //join
             }
-          ;?>
+          ;?> -->
         </ul>
 	     </div>
-
+    
     </section>
+
+
 
     <div class="add">
       <span><a href="#">+</a></span>

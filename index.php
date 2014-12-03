@@ -39,6 +39,10 @@ $routes = array(
     'listgroups' => array(
         'controller' => 'Flowcharts',
         'action' => 'listgroups'
+    ),
+    'groupdetail' => array(
+        'controller' => 'Flowcharts',
+        'action' => 'groupdetail'
     )
 );
 //als er geen "?page=blabla" is, gaan we gewoon naar de home pagina

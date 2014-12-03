@@ -3,20 +3,20 @@
 
 	<a href="#">Add existing group</a>
 
-	<!-- bij klik 
+	<!-- bij klik  -->
 
-	<form method="get">
+	<form method="get" class="hidden">
 		<input type="search"> 
-	</form>-->
+	</form>
 	
 	<ul>
-		<li class="groen">
-			<a href="index.php?page=group&amp;id=1">Group 1</a>
-		</li>
-		
-		<li class="groen">
-			<a href="index.php?page=group&amp;id=2">Group 2</a>
-		</li>
+
+		<?php 
+			foreach($groups as $group){
+				echo '<li class="groen">
+					<a href="index.php?page=group&amp;id='.$group['id'].'">'. $group['name'].'</li>';
+			}
+		;?>
 	</ul>
 
 	<div class="back">
