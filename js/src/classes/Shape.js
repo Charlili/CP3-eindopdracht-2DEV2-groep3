@@ -9,6 +9,8 @@ module.exports = (function(){
 		this.y = event.offsetY;
 		this.$el.css('top',this.y - 50);
 		this.$el.css('left',this.x - 100);
+		this.$el.css('width',200);
+		this.$el.css('height',100);
 		this.$el.addClass('shape');
 		this.$el.addClass('draggable');
 

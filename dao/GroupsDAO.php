@@ -2,7 +2,7 @@
 			
 require_once __DIR__ . "/DAO.php";
 
-class GroupDAO extends DAO{
+class GroupsDAO extends DAO{
 
 	public function selectAll(){
 		$sql = "SELECT * 

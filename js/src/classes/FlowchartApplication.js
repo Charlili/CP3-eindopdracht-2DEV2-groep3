@@ -25,6 +25,8 @@ module.exports = (function(){
 		var shape;
 		this.$el.click(this.clickHandler);
 		tool.onMouseDown = this.clickHandler;
+
+		$('.save-flowchart').click(this.save);
 		//$('canvas').mouseup(this.clickHandler);
 
 	}
@@ -60,9 +62,70 @@ module.exports = (function(){
 		//while get x,y coordinates from release click
 	};
 	
-	FlowchartApplication.prototype.save = function(){
-		//check if user is logged in with $_SESSION['user']
+	FlowchartApplication.prototype.save = function(event){
+		event.preventDefault();
+		//data doorsturen via eigen post
+		//eigen var aanmaken, object dus {}
+		var $shapes2 = [];
+		$(shapes).each(function(id,shape){
+			$shapes2.push(
+				{
+					'x':shape.x,
+					'y':shape.y,
+					'width':shape.input.parentNode.style.width,
+					'height':shape.input.parentNode.style.height,
+					'type':'text',
+					'content':shape.input.value
 
+				});
+		});
+		
+		var $lines2 = [];
+		$(lines).each(function(id,line){
+			$lines2.push(
+				{
+					'x1':line.x1,
+					'y1':line.y1,
+					'x2':line.x2,
+					'y2':line.y2,
+				});
+		});
+		// var lines2 = {};
+		// $(lines).each(function(id,line){
+		// 	lines2.push($.param(line));
+		// });
+		var dataFlowchart = {
+			'name': $('#name_flowchart').val(),
+			'shapes': $shapes2,
+			'lines': $lines2
+		};
+		//console.log(shapes2,lines2);
+
+		// $.ajax({
+		//   type: "GET",
+		//   url: 'index.php?page=saveFlowchart', //pad naar url zelf die ik wil uitvoern 
+		//   data: dataFlowchart,
+		//   success: function(){console.log('yeahbaby');}
+		// });
+
+		$.post('index.php?page=saveFlowchart',dataFlowchart)
+		.success(function(data){
+			//$('.content').replace(data['content']);
+			console.log('posted');
+		});
+		/*
+		$.get( "ajax/test.html", function( data ) {
+  			$( ".result" ).html( data );
+  alert( "Load was performed." );
+});
+
+
+		$.get(''checkLoggedIn)
+		//check if user is logged in with $_SESSION['user']
+		if(session['user']['id'].length() != -1){
+			console.log('User logged in');
+		}*/
+		console.log('Save it yo');
 		//if logged in: save shapes, lines, flowchart to database
 
 		//if not logged in: register popup (when registered, automatic login.)

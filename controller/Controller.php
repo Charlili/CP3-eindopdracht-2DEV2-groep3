@@ -6,6 +6,7 @@ class Controller {
 	protected $viewVars = array();
 	//de juiste controller aanroepen adhv index.php en daar de juiste dao's aanroepen
 	public function filter() {
+
 		call_user_func(array($this, $this->route['action']));
 	}
 	//alles op scherm zetten
