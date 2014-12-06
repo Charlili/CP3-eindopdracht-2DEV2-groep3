@@ -23,6 +23,16 @@ class LinesDAO extends DAO{
 		return $stmt->fetch(PDO::FETCH_ASSOC);
 	}
 
+	public function selectByFlowchartId($flowchart_id){
+        $sql = "SELECT *
+         		FROM `lines`
+         		WHERE `flowchart_id` = :flowchart_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':flowchart_id', $flowchart_id);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 	public function delete($id){
 		$sql = "DELETE 
 				FROM `lines`

@@ -3,12 +3,16 @@ module.exports = (function(){
 
 
 	function Shape(event) {
-		
+		console.log('creating shape');
+		this.x = 100;
+		this.y = 50;
+		if(event != undefined){
+			this.x = event.offsetX;
+			this.y = event.offsetY;
+		}
 		this.$el = $(document.createElement('div'));
-		this.x = event.offsetX;
-		this.y = event.offsetY;
-		this.$el.css('top',this.y - 50);
-		this.$el.css('left',this.x - 100);
+		this.$el.css('top',this.y - 50 + 'px');
+		this.$el.css('left',this.x - 100 + 'px');
 		this.$el.css('width',200);
 		this.$el.css('height',100);
 		this.$el.addClass('shape');
@@ -30,6 +34,27 @@ module.exports = (function(){
 		
 
 	}
+	Shape.prototype.create = function(x,y,width,height,color,type,content) {
+		console.log('recreating shape');
+		this.x = x;
+		this.y = y;
+		this.$el.css('top',y + 'px');
+		this.$el.css('left',x +'px');
+		this.$el.css('width',width);
+		this.$el.css('height',height);
+		
+		this.$el.addClass('draggable');
+
+		this.input.type = 'text';
+		this.text = content;
+		this.input.innerText = content;
+		this.type = type;
+		this.$el.css('value', this.text);
+		this.$el.append(this.input);
+		//save input value
+		
+
+	};
 	/*Shape.prototype.changeSize = function(event){
 		this.$el.css('width',event.offsetX);
 		this.$el.css('height',event.offsetY);

@@ -25,6 +25,10 @@ $routes = array(
     'saveFlowchart' => array(
         'controller' => 'Flowcharts',
         'action' => 'saveFlowchart'
+    ),
+    'loadFlowchart' => array(
+        'controller' => 'Flowcharts',
+        'action' => 'loadFlowchart'
     ),    
     'login' => array(
     	'controller' => 'Users',
@@ -63,9 +67,9 @@ $controllerObj->route = $route;
 //we filteren de database vragen
 $controllerObj->filter();
 //render doorsturen bij ajax aanvraag
-if ( ! isset($_SERVER['HTTP_X_REQUESTED_WITH']) ) {
+//if ( ! isset($_SERVER['HTTP_X_REQUESTED_WITH']) ) {
     $controllerObj->render();
-}
+//}
 //we geven de juiste antwoorden terug en zetten alles op het scherm
 //$controllerObj->render();
 

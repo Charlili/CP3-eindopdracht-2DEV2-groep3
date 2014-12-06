@@ -27,7 +27,35 @@ module.exports = (function(){
 		tool.onMouseDown = this.clickHandler;
 
 		$('.save-flowchart').click(this.save);
-		//$('canvas').mouseup(this.clickHandler);
+		if(getParameterByName('id') != ''){
+			$.get('index.php?page=loadFlowchart&id='+getParameterByName('id'),function(data){
+				this.createFlowchart(data);
+			}.bind(this));	
+		}
+		
+
+	}
+	FlowchartApplication.prototype.createFlowchart = function(data){
+		console.log(data);
+		var shapes = data.shapes;
+		for(var i = 0; i < shapes.length;i++){
+			var shape = new Shape();
+			shape.create(shapes[i].x,shapes[i].y,shapes[i].width,shapes[i].height,shapes[i].color,shapes[i].type,shapes[i].content);
+			//shapes.push(shape);
+		}
+		var lines = data.lines;
+		var tool = new ToolEvent;
+		tool.point = [0,0];
+		for(var i = 0; i < lines.length;i++){
+
+			var line = new Line();
+			line.create(lines[i].x1,lines[i].y1,lines[i].x2,lines[i].y2,lines[i].color);
+			//lines.push(line);
+			line.$c1.onMouseDrag = line.moveHandler.bind(line);
+			line.$c2.onMouseDrag = line.moveHandler.bind(line);
+		}
+		
+
 
 	}
 	FlowchartApplication.prototype.clickHandler = function(e){
@@ -70,8 +98,8 @@ module.exports = (function(){
 		$(shapes).each(function(id,shape){
 			$shapes2.push(
 				{
-					'x':shape.x,
-					'y':shape.y,
+					'x':shape.input.parentNode.style.left,
+					'y':shape.input.parentNode.style.top,
 					'width':shape.input.parentNode.style.width,
 					'height':shape.input.parentNode.style.height,
 					'type':'text',
@@ -134,5 +162,11 @@ module.exports = (function(){
 		//change tool
 		//this.tool = tool;
 	};
+	function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 	return FlowchartApplication;
 })();

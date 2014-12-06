@@ -129,25 +129,34 @@ class FlowchartsController extends Controller {
 		
 		if(!empty($_GET['id'])){
 			$chosen = $this->flowchartDAO->selectById($_GET['id']);
-			if(!empty($chosen)){
-				$this->set('chosen',$chosen);
-			}
-
-
-
-		}
-
-		
-
-		
+		}	
 	}
+	public function loadFlowchart(){
+		if(!empty($_GET['id'])){
+			$chosen = $this->flowchartDAO->selectById($_GET['id']);
+			if(!empty($chosen)){
+				//$this->set('chosen',$chosen);
+				$shapes = $this->shapeDAO->selectByFlowchartId($chosen['id']);
+				$lines = $this->lineDAO->selectByFlowchartId($chosen['id']);
+				$data = array(
+					'flowchart' => $chosen,
+					'shapes' => $shapes,
+					'lines' => $lines
+				);
+				header('Content-Type: application/json');
+    			echo json_encode($data);
+    			die();
+			}
+		}
+	}
+
 	public function saveFlowchart(){
 
 		//Flowchart saven
 
 		//request valideren
-		if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
-		    && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+		//if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+		//    && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
 			// I'm AJAX!
 
 			$errors = array();
@@ -160,7 +169,7 @@ class FlowchartsController extends Controller {
 			//als er iets is gestuurd
 			if(!empty($_POST)){
 				//get name
-				$name = $data['name'];
+				if(!empty($data['name'])){$name = $data['name'];}
 				//check if user is logged in
 				if(!empty($_SESSION['user'])){
 					$userId = $_SESSION['user']['id'];
@@ -170,7 +179,7 @@ class FlowchartsController extends Controller {
 					//TODO
 				}
 				//save flowchart
-				//TODO: shape_ids en line_ids niet nodig eigenlijk want flwochart_id wordt opgeslagen bij shapes en lines
+				//TODO: shape_ids en line_ids niet nodig eigenlijk want flowchart_id wordt opgeslagen bij shapes en lines
 				$flowchart = array(
 					'name' => $name,
 					'user_id' => $userId,
@@ -230,10 +239,11 @@ class FlowchartsController extends Controller {
 				}
 
 			}
-		}
+		//}
 		//$this->set('errors',$errors);
 		if(!empty($errors)){
 			$_SESSION['error'] = 'Oh noes, the save failed!';
+			var_dump($errors);
 		}
 
 	}
