@@ -31,10 +31,11 @@
 
 		if(getParameterByName('page') == '' || getParameterByName('page') === 'add' || getParameterByName('page') === 'overview'  ){
 			//title live change
-			$('#viewerchanger').keydown(function(){
+			$('#viewerchanger').keyup(function(){
 				var str = $(this).val();
 				$("#viewer").text(str);
 			});
+
 		}
 
 	}

@@ -66,13 +66,6 @@ class FlowchartsController extends Controller {
 
 				if(!empty($group)) {
 					$_SESSION['info'] = 'New group added';
-					// $registered = $this->usersDAO->selectByEmail($user['email']);
-					// $_SESSION['user']=$registered;
-					// if(empty($_SESSION['book'])){$this->redirect("index.php");}
-					// else{
-					// 	$this->redirect("index.php?page=book");
-					// 	unset($_SESSION['book']);
-					// }
 					$this->redirect('index.php?page=listgroups');
 					exit();
 				} else {
@@ -222,6 +215,7 @@ class FlowchartsController extends Controller {
 			//als er iets is gestuurd
 			if(!empty($_POST)){
 				//get name
+				var_dump($data['name']);
 				if(!empty($data['name'])){$name = $data['name'];}
 				//check if user is logged in
 				if(!empty($_SESSION['user'])){

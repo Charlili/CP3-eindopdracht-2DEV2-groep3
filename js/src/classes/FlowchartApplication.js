@@ -118,46 +118,20 @@ module.exports = (function(){
 					'y2':line.y2,
 				});
 		});
-		// var lines2 = {};
-		// $(lines).each(function(id,line){
-		// 	lines2.push($.param(line));
-		// });
+		
 		var dataFlowchart = {
-			'name': $('#name_flowchart').val(),
+			'name': $("#viewerchanger").val(),
 			'shapes': $shapes2,
 			'lines': $lines2
 		};
-		//console.log(shapes2,lines2);
-
-		// $.ajax({
-		//   type: "GET",
-		//   url: 'index.php?page=saveFlowchart', //pad naar url zelf die ik wil uitvoern 
-		//   data: dataFlowchart,
-		//   success: function(){console.log('yeahbaby');}
-		// });
 
 		$.post('index.php?page=saveFlowchart',dataFlowchart)
 		.success(function(data){
-			//$('.content').replace(data['content']);
 			console.log('posted');
 		});
-		/*
-		$.get( "ajax/test.html", function( data ) {
-  			$( ".result" ).html( data );
-  alert( "Load was performed." );
-});
-
-
-		$.get(''checkLoggedIn)
-		//check if user is logged in with $_SESSION['user']
-		if(session['user']['id'].length() != -1){
-			console.log('User logged in');
-		}*/
+		
 		console.log('Save it yo');
-		//if logged in: save shapes, lines, flowchart to database
-
-		//if not logged in: register popup (when registered, automatic login.)
-	};
+};
 	FlowchartApplication.prototype.changeTool = function(tool){
 		//change tool
 		//this.tool = tool;
