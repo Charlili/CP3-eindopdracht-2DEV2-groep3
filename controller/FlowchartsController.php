@@ -2,14 +2,11 @@
 require_once WWW_ROOT . 'controller' . DS . 'Controller.php';
 //gebruikte DAOs aanroepen
 require_once WWW_ROOT . 'dao' . DS . 'FlowchartsDAO.php';
-<<<<<<< HEAD
 require_once WWW_ROOT . 'dao' . DS . 'GroupsDAO.php';
 require_once WWW_ROOT . 'dao' . DS . 'UsersDAO.php';
-=======
 require_once WWW_ROOT . 'dao' . DS . 'ShapesDAO.php';
 require_once WWW_ROOT . 'dao' . DS . 'LinesDAO.php';
 require_once WWW_ROOT . 'dao' . DS . 'GroupsDAO.php';
->>>>>>> 8892989c7e4bbfcec347a60de96f04baad0fe46c
 class FlowchartsController extends Controller {
 	//DAOs aanmaken
 	private $flowchartDAO;
@@ -20,14 +17,11 @@ class FlowchartsController extends Controller {
 
 	function __construct() {
 		$this->flowchartDAO = new FlowchartsDAO();
-<<<<<<< HEAD
 		$this->groupDAO = new GroupsDAO();
 		$this->usersDAO = new UsersDAO();
-=======
 		$this->shapeDAO = new ShapesDAO();
 		$this->lineDAO = new LinesDAO();
 		$this->groupDAO = new GroupsDAO();
->>>>>>> 8892989c7e4bbfcec347a60de96f04baad0fe46c
 
 	}
 	public function home() {
