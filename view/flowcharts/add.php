@@ -3,7 +3,8 @@
   <aside>
     <h2>Add new group</h2>
     <ul>
-      <li><a href="#">Untitled</a></li>
+      <!-- <li><a href="#">Untitled</a></li> -->
+      <li id="viewer">Untitled</li>
     </ul>
 
     <p><a href="index.php?page=groups">Cancel</a></p>
@@ -13,10 +14,10 @@
 
     <h1>Add new group</h1>
 
-    <form method="post" action="index.php?page=add">
+    <form method="post" action="index.php?page=add" class="addgroupform">
       <div>
         <label for="groupname">Groupname:</label>
-          <input type="text" placeholder="Untitled" name="groupname" value="<?php if(!empty($_POST['groupname'])) echo $_POST['groupname'] ;?>">
+          <input type="text" placeholder="Untitled" name="groupname" id="viewerchanger" value="<?php if(!empty($_POST['groupname'])) echo $_POST['groupname'] ;?>">
           <span>
              <?php if(!empty($errors['groupname'])){
               echo $errors['groupname'];
@@ -36,7 +37,16 @@
 
       <div>
         <label for="invite">Send invites:</label>
-        <input type="text" name="invite" value="<?php if(!empty($_POST['invite'])) echo $_POST['invite'] ;?>"/>
+        <select name="invite[]" multiple>
+          <?php 
+            foreach($users as $user){
+              echo '<option value="'.$user['id'].'">';
+              echo $user['username'];
+              echo '</option>';
+            }
+          ;?>
+          
+        </select>
           <span>
              <?php if(!empty($errors['invite'])){
               echo $errors['invite'];

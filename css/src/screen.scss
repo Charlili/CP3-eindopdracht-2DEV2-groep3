@@ -20,12 +20,57 @@ h1 {
 }
 
 .hidden {
-	display: none;
+
+	width: 240%;
+	margin-left: -180px;
+	opacity: 0;
+    -webkit-transition: all 0.8s ease-in-out;
+    -moz-transition: all 0.8s ease-in-out;
+    transition: all 0.8s ease-in-out;
+
+	input[type="submit"] {
+		font-size: 1.5em;
+		color: #00b097;
+		border: none;
+		background: none;
+		cursor: pointer;
+	}
+
+}
+
+.hidden.closed {
+	opacity: 1;
+	//display: block;
+	margin-top: 25px;
+	margin-bottom: 250px;
+}
+
+.searchgroup {
+	width: 125%;
+}
+
+.searchgroup.test {
+	opacity: 1;
 }
 
 label {
 	color: #9fa3a3;
 	font-size: 2.2em;
+	vertical-align: top;
+	margin-left: 4px;
+}
+
+select {
+	background-color: #d1d1d1;
+	border: none;
+	width: 250px;
+	height: 60px;
+	color: white;
+	font-size: 1.6em;
+	margin-top: 20px;
+	-webkit-appearance: none;
+  	-webkit-border-radius: 0px;
+  	padding: 6px;
 }
 
 section {
@@ -44,15 +89,6 @@ section input[type="text"], input[type="email"], input[type="password"] {
 
 }
 
-.loginform {
-
-	width: 200%;
-	overflow: auto;
-	margin: 0 auto;
-	padding-bottom: 100px;
-	
-}
-
 .register div, .createflow div {
 	padding: 12px;
 }
@@ -66,6 +102,14 @@ section input[type="text"], input[type="email"], input[type="password"] {
 	padding-right: 12px;
 }
 
+.addgroupform input[type="submit"] {
+	font-size: 1.5em;
+	color: #00b097;
+	border: none;
+	background: none;
+	cursor: pointer;
+}
+
 .createflow textarea.description {
 	max-width: 250px;
     min-width: 250px;
@@ -75,8 +119,7 @@ section input[type="text"], input[type="email"], input[type="password"] {
     border: none;
     color: white;
     font-size: 1.6em;
-	padding-left: 6px;
-	padding-right: 6px;
+	padding: 6px;
 }
 
 .index ul, .mygroups ul {
@@ -108,10 +151,10 @@ section input[type="text"], input[type="email"], input[type="password"] {
 	text-decoration: none;
 }
 
-// .login {
-// 	height: 120px;
-// 	overflow: hidden;
-// }
+#test2 { //login test
+	height: 120px;
+	//overflow: hidden;
+}
 
 .yellow {
 
@@ -123,6 +166,19 @@ section input[type="text"], input[type="email"], input[type="password"] {
     line-height : 55px;
     margin-top: 50px;
 
+}
+
+.searchgroup input{
+	background-color: #d1d1d1;
+	border: none;
+	width: 250px;
+	height: 30px;
+	color: white;
+    font-size: 1.6em;
+}
+
+.save {
+	font-size: 1.6em;
 }
 
 aside {
@@ -204,7 +260,7 @@ aside > p {
 	font-size: 2.6em;
 }
 
-.test {
+.title { 
 	float: left;
 }
 

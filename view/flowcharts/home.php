@@ -13,18 +13,27 @@
 				<!-- bij klik login-->
 				<form method="post" action="index.php?page=login" class="loginform hidden">
 					<div>
-						<label for="username">Username:</label>
-						<input type="text" name="username">
+						<input type="text" name="username" placeholder="Username">
+						<span>
+							<?php if(!empty($errors['username'])){
+      							echo $errors['username'];
+      		    			};?>
+						</span>
 					</div>
 		
 					<div>
-						<label for="password">Password:</label>
-						<input type="password" name="password"/>
+						<input type="password" name="password" placeholder="Password"/>
+						<span>
+							<?php if(!empty($errors['password'])){
+      							echo $errors['password'];
+      		    			};?>
+						</span>
 					</div>
 		
 					<div>
-						<input type="submit" value="Log in"/>
+						<input type="submit" value="Log in!"/>
 					</div>
+
 				</form>
 		</li>
 	

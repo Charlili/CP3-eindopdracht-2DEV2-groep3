@@ -22,6 +22,7 @@ class UsersDAO extends DAO{
 		return $stmt->fetch(PDO::FETCH_ASSOC);
 	}
 
+
 	public function selectByEmail($email){
         $sql = "SELECT *
          		FROM `users`

@@ -5,7 +5,9 @@
 
   <aside>
     <h2>Existing flowcharts</h2>
+
     <ul>
+      <li id="viewer">Untitled</li>
       <?php 
         foreach($flowcharts as $flowchart){
           echo '<li><a href="index.php?page=overview&amp;id='.$flowchart['id'].'">'.$flowchart['name'].'</a></li>';
@@ -13,14 +15,14 @@
       ;?>
     </ul>
 
-    <p><a href="index.php?page=index">Cancel</a> | <a href="#">Save flowchart</a></p>
+    <p><a href="index.php?page=index">Cancel</a> | <a href="#" class="save">Save flowchart</a></p>
   </aside>
 
   <section class="createflow">
 
     <form method="post">
       <div>
-        <input type="text" placeholder="Untitled" class="test" name="name_flowchart">
+        <input type="text" placeholder="Untitled" class="title" id="viewerchanger" name="name_flowchart">
       </div>
     </form>
 
@@ -41,7 +43,7 @@
   <aside>
     <h2><?php echo $flowchart['name'];?></h2>
 
-    <p><a href="index.php?page=overview">Cancel</a> | <a href="#">Save flowchart</a></p>
+    <p><a href="index.php?page=overview">Cancel</a> | <a href="#" class="save">Save flowchart</a></p>
   </aside>
 
   <section class="createflow">

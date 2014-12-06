@@ -2,7 +2,7 @@
 			
 require_once __DIR__ . "/DAO.php";
 
-class FlowchartDAO extends DAO{
+class FlowchartsDAO extends DAO{
 
 	public function selectAll(){
 		$sql = "SELECT * 

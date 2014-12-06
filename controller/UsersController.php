@@ -127,11 +127,11 @@ class UsersController extends Controller {
 				if(!empty($existing)){
 					$hasher = new \Phpass\Hash;
 					if ($hasher->checkPassword($_POST['password'], $existing['password'])) {
+						//ingelogd
 						$_SESSION['user'] = $existing;
-
 						$this->redirect('index.php?page=index');
 						exit;
-					} else {
+					} else { 
 						$_SESSION['error'] = 'That user doesnt exist. Do you want to register?';
 						$this->redirect('index.php?page=register');
 						exit;

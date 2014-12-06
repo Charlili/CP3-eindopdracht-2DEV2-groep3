@@ -2,7 +2,7 @@
 			
 require_once __DIR__ . "/DAO.php";
 
-class GroupDAO extends DAO{
+class GroupsDAO extends DAO{
 
 	public function selectAll(){
 		$sql = "SELECT * 
@@ -38,6 +38,16 @@ class GroupDAO extends DAO{
 				WHERE `user_ids` = :user_id";
 		$stmt = $this->pdo->prepare($sql);
 		$stmt->bindValue(":user_id", $user_id);
+		$stmt->execute();
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+	}
+
+	public function selectAllUserIds($group_id){
+		$sql = "SELECT `user_ids`
+				FROM `groups`
+				WHERE `id` = :group_id";
+		$stmt = $this->pdo->prepare($sql);
+		$stmt->bindValue(":group_id", $group_id);
 		$stmt->execute();
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
@@ -86,6 +96,34 @@ class GroupDAO extends DAO{
 
 		return $errors;
 
+	}
+
+	public function update($id,$data){
+		$errors = $this->getValidationErrorsAdd($data);
+		if(empty($errors)){
+			$sql = "UPDATE `groups` SET (`user_ids`) = :user_id 
+					WHERE `id`= :id";
+			$stmt = $this->pdo->prepare($sql);
+			$stmt->bindValue(':id', $data['group']);
+			$stmt->bindValue(':user_id', $data['user_id']);
+			if($stmt->execute()){
+				return $this->selectById($id);
+			}
+		}
+
+		return false;
+	}
+
+	public function getValidationErrorsAdd($data){
+		$errors = array();
+
+		if(!isset($data["group"])){
+			$errors["group"] = "Please choose a group";
+		}
+
+		if(!isset($data["user_id"])){
+			$errors["user_id"] = "Please give your user id";
+		}	
 	}
 	
 }

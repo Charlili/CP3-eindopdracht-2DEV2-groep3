@@ -1,16 +1,19 @@
 <?php
 require_once WWW_ROOT . 'controller' . DS . 'Controller.php';
 //gebruikte DAOs aanroepen
-require_once WWW_ROOT . 'dao' . DS . 'FlowchartDAO.php';
-require_once WWW_ROOT . 'dao' . DS . 'GroupDAO.php';
+require_once WWW_ROOT . 'dao' . DS . 'FlowchartsDAO.php';
+require_once WWW_ROOT . 'dao' . DS . 'GroupsDAO.php';
+require_once WWW_ROOT . 'dao' . DS . 'UsersDAO.php';
 class FlowchartsController extends Controller {
 	//DAOs aanmaken
 	private $flowchartDAO;
 	private $groupDAO;
+	private $usersDAO;
 
 	function __construct() {
-		$this->flowchartDAO = new FlowchartDAO();
-		$this->groupDAO = new GroupDAO();
+		$this->flowchartDAO = new FlowchartsDAO();
+		$this->groupDAO = new GroupsDAO();
+		$this->usersDAO = new UsersDAO();
 
 	}
 	public function home() {
@@ -37,10 +40,11 @@ class FlowchartsController extends Controller {
 				$errors['description'] = 'Please enter a description';
 			}
 
-			// if(empty($_POST['invite'])) {
-			// 	$errors['invite'] = 'Please invite someone';
-			// }
+			if(empty($_POST['invite'])){
+				$errors['invite'] = 'Please invite people';
+			}
 
+			//var_dump($_POST);
 
 			if(empty($errors)) {
 
@@ -72,6 +76,8 @@ class FlowchartsController extends Controller {
 			}
 			$this->set('errors',$errors);
 		}
+
+		$this->set('users',$this->usersDAO->selectAll());
 		
 	}
 	public function group() {
@@ -90,11 +96,41 @@ class FlowchartsController extends Controller {
         $this->set('group',$group);
         $this->set('users',$this->groupDAO->getUsersFromGroup($_GET['id']));
 		
+		$string = $this->groupDAO->selectAllUserIds($_GET['id']);
+
+		// $old = $string[0]['user_ids'];
+		// var_dump($old);
+		// $user_ids = explode(", ", $old);
+		// var_dump($user_ids);
+
+		// $new = $old + $_SESSION['user']['id'];
+		// var_dump($_SESSION['user']['id']);
+		// var_dump($new);
 	}
 
 	public function listgroups(){
 
-		$this->set('groups', $this->groupDAO->selectByUserId($_SESSION['user']['id']));
+		$this->set('groups', $this->groupDAO->selectAll());
+		$this->set('mygroups', $this->groupDAO->selectByUserId($_SESSION['user']['id']));
+
+		$errors = array();
+
+		if(!empty($_POST)){
+					var_dump($_POST);
+
+			if(empty($_POST['addme'])){
+				$errors['addme'] = 'Choose a group';
+			}
+
+			if(empty($errors)){
+				$addMe = array(
+					"group" => $_POST['addme'],
+					"user_id" => $_SESSION['user']['id']
+				);
+
+			$add = $this->groupDAO->update($_POST['addme'],$addme);
+			}
+		}
 
 	}
 
@@ -110,6 +146,21 @@ class FlowchartsController extends Controller {
         }
 
         $this->set('group',$group);
+
+        $string = $this->groupDAO->selectAllUserIds($_GET['id']);
+
+
+  		$old = $string[0]['user_ids'];
+		//var_dump($old);
+		$user_ids = explode(", ", $old);
+		//var_dump($user_ids);
+
+		// foreach ($user_ids as $user_id){
+		// 	// $this->set('user',$this->usersDAO->selectById($user_id));
+		// 	//echo '<li>'.$user_id.'</li>';
+		// }
+
+		
 	}
 	public function overview() {
 		//overview of your flowcharts

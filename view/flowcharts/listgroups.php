@@ -1,20 +1,29 @@
 <section class="mygroups">
 	<h1>My groups</h1>
 
-	<a href="#">Add existing group</a>
+	<a class="addgroup" href="#">Add existing group</a>
 
 	<!-- bij klik  -->
 
-	<form method="get" class="hidden">
-		<input type="search"> 
+	<form method="post" class="searchgroup hidden" name="addme" id="myform" action="index.php?page=listgroups">
+		<select id="mySelect">
+			<option value="">Select a group</option>
+		<?php
+			foreach($groups as $group){
+				echo '<option value="'.$group['id'].'">';
+				echo $group['name'];
+				echo '</option>';
+			}
+		 ;?>
+		</select>
 	</form>
 	
 	<ul>
 
 		<?php 
-			foreach($groups as $group){
+			foreach($mygroups as $mygroup){
 				echo '<li class="groen">
-					<a href="index.php?page=group&amp;id='.$group['id'].'">'. $group['name'].'</li>';
+					<a href="index.php?page=group&amp;id='.$mygroup['id'].'">'. $mygroup['name'].'</li>';
 			}
 		;?>
 	</ul>

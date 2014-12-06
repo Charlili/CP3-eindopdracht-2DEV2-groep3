@@ -11,8 +11,8 @@
         <li>User 1
 
           <ul>
-            <li><a href="#">Flowchart 1</a></li>
-            <li><a href="#">Flowchart 2</a></li>
+            <li><a href="index.php?page=overview&amp;id=1">Flowchart 1</a></li>
+            <li><a href="index.php?page=overview&amp;id=2">Flowchart 2</a></li>
           </ul>
 
         </li>
@@ -22,14 +22,6 @@
           <ul>
             <li><a href="#">Flowchart 1</a></li>
             <li><a href="#">Flowchart 2</a></li>
-          </ul>
-
-        </li>
-
-        <li>User 3
-
-          <ul>
-            <li><a href="#">Flowchart 1</a></li>
           </ul>
 
         </li>
@@ -53,12 +45,14 @@
       <div>
         <label>Users:</label>
         <ul>
-<!--           <?php 
+<!--      <?php 
             foreach($users as $user){
-              echo '<li><img src="uploads/'. $user['name'].'.'. $user['extension'].'</li>';
+              //echo '<li><img src="uploads/'. $user['name'].'.'. $user['extension'].'</li>';
+              echo '<li>'.$user.'</li>';
               //join
             }
-          ;?> -->
+          ;?>  -->
+
         </ul>
 	     </div>
     

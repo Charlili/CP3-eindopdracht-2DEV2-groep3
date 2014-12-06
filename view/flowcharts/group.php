@@ -13,7 +13,7 @@
           </ul>
       </ul>
 
-      <p><a href="index.php?page=listgroups">Back</a></p>
+      <p><a href="index.php?page=listgroups">Back</a> | <a class="save" href="index.php?page=addme">Add me in group</a></p>
     </aside>
 
     <section class="createflow">
