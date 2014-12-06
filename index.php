@@ -1,7 +1,5 @@
 <?php
 
-
-
 session_start();
 //constant variabel
 define('DS', DIRECTORY_SEPARATOR);
@@ -24,6 +22,14 @@ $routes = array(
         'controller' => 'Flowcharts',
         'action' => 'add'
     ),
+    'saveFlowchart' => array(
+        'controller' => 'Flowcharts',
+        'action' => 'saveFlowchart'
+    ),
+    'loadFlowchart' => array(
+        'controller' => 'Flowcharts',
+        'action' => 'loadFlowchart'
+    ),    
     'login' => array(
     	'controller' => 'Users',
     	'action' => 'login'
@@ -60,7 +66,11 @@ $controllerObj = new $controllerName();
 $controllerObj->route = $route;
 //we filteren de database vragen
 $controllerObj->filter();
+//render doorsturen bij ajax aanvraag
+//if ( ! isset($_SERVER['HTTP_X_REQUESTED_WITH']) ) {
+    $controllerObj->render();
+//}
 //we geven de juiste antwoorden terug en zetten alles op het scherm
-$controllerObj->render();
+//$controllerObj->render();
 
 ?>

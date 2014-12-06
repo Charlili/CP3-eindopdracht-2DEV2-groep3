@@ -168,4 +168,14 @@ class UsersController extends Controller {
 		
 	}
 
+	public function checkLoggedIn(){
+		if(!empty($_SESSION['user'])){
+			//voor ajax call altijd echo gebruiken ipv return
+			//ajax verwacht tekst terug, dus echo.
+			echo true;
+		}
+		echo false;
+
+	}
+
 }

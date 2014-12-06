@@ -297,7 +297,11 @@ canvas{
 
 }
 
-
+.chosen{
+	font-weight: bold;
+	color: black;
+	font-size: 2.0em;
+}
 .shape {
 	z-index: 1;
 	width: 200px;

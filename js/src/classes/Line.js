@@ -2,13 +2,17 @@ module.exports = (function(){
 	
 	function Line(event) {
 		//var tool = new Tool();
-		
+		this.x1 = 0;
+		this.y1 = 0;
+		if(event != undefined){
+			this.x1 = event.point.x;
+			this.y1 = event.point.y;
+
+		}
 		//create first circle, this.c1 & this.c2
 		console.log('creating first circle');
 	
-		this.$c1 = new Shape.Circle(event.point, 5);
-		this.x1 = event.point.x;
-		this.y1 = event.point.y;
+		this.$c1 = new Shape.Circle([this.x1,this.y1], 5);
 		this.$c1.fillColor = 'black';
 
 		
@@ -16,6 +20,23 @@ module.exports = (function(){
 		//$('canvas').append(this.$c1);
 
 	}
+	Line.prototype.create = function(x1,y1,x2,y2,color) {
+
+		console.log('creating first circle');
+		this.x1 = x1;
+		this.y1 = y1;
+		this.x2 = x2;
+		this.y2 = y2;
+		this.$c2 = new Shape.Circle([x2,y2], 5);
+		this.$c1.position = [x1,y1];
+		this.$c2.position = [x2,y2];
+		this.$line = new Path.Line(this.$c1.position,this.$c2.position);
+		this.$line.strokeColor = 'black';
+		this.$line.strokeWidth = 2;
+		this.$c1.fillColor = 'black';
+		this.$c2.fillColor = 'black';
+
+	};
 	Line.prototype.addCircle = function(event){
 		//add 2nd circle
 		
@@ -53,13 +74,9 @@ module.exports = (function(){
 			//console.log(this.$c2.position);
 			this.$line.remove();
 			this.$line = new Path.Line(e.point,this.$c2.position);
-			//this.$line.strokeColor = 'black';
-			//this.$line.strokeWidth = 2;
 		}else if(e.target == this.$c2){
 			this.$line.remove();
 			this.$line = new Path.Line(this.$c1.position,e.point);
-			//this.$line.strokeColor = 'black';
-			//this.$line.strokeWidth = 2;
 		}
 		this.$line.strokeColor = 'black';
 		this.$line.strokeWidth = 2;
