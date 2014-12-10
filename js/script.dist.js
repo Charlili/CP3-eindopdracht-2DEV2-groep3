@@ -21,13 +21,6 @@
 			var addgroup = document.querySelector('.addgroup');
 			addgroup.addEventListener('click',clickHandlerAddgroup);
 			var myform = document.getElementById('myform');
-
-			// $(document).ready(function(){
-			// 	$('#mySelect').change(function(){
-			// 		$(this).val();
-			// 		myform.submit();
-			// 	});
-			// });
 		}
 
 		if(getParameterByName('page') == '' || getParameterByName('page') === 'add' || getParameterByName('page') === 'overview'  ){

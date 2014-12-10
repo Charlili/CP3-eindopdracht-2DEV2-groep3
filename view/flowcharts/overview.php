@@ -23,13 +23,12 @@
 
   <section class="createflow">
 
-    <form method="post">
-      <div>
+    
         <input type="text" placeholder="Untitled" class="title" id="viewerchanger" name="name_flowchart">
-      </div>
-    </form>
+     
 
     <div class='app'>
+
     </div>
     <canvas id="cnvs">
       <p>no canvas support</p>

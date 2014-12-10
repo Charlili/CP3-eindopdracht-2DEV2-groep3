@@ -85,8 +85,8 @@ class FlowchartsController extends Controller {
 		//group page: overview of users and flowchart
 
 		$group =false;
-        if(!empty($_GET['id'])){
-            $group =$this->groupDAO->selectById($_GET['id']);
+        if(!empty($_GET['groupid'])){
+            $group =$this->groupDAO->selectById($_GET['groupid']);
         }
     
         if(empty($group)){
@@ -95,9 +95,11 @@ class FlowchartsController extends Controller {
         }
 
         $this->set('group',$group);
-        $this->set('users',$this->groupDAO->getUsersFromGroup($_GET['id']));
+        $this->set('users',$this->groupDAO->getUsersFromGroup($_GET['groupid']));
+
+        $this->set('flowcharts',$this->flowchartDAO->selectByGroupId($_GET['groupid']));
 		
-		$string = $this->groupDAO->selectAllUserIds($_GET['id']);
+		$string = $this->groupDAO->selectAllUserIds($_GET['groupid']);
 
 		// $old = $string[0]['user_ids'];
 		// var_dump($old);
@@ -111,27 +113,103 @@ class FlowchartsController extends Controller {
 
 	public function listgroups(){
 
-		$this->set('groups', $this->groupDAO->selectAll());
+		$this->set('groups', $this->groupDAO->notInGroupYet($_SESSION['user']['id']));
 		$this->set('mygroups', $this->groupDAO->selectByUserId($_SESSION['user']['id']));
 
 		$errors = array();
 
-		if(!empty($_POST)){
-					var_dump($_POST);
+		// if(!empty($_POST)){
+		// 			var_dump($_POST);
 
-			if(empty($_POST['addme'])){
-				$errors['addme'] = 'Choose a group';
-			}
+		// 	if(empty($_POST['addme'])){
+		// 		$errors['addme'] = 'Choose a group';
+		// 	}
 
-			if(empty($errors)){
-				$addMe = array(
-					"group" => $_POST['addme'],
-					"user_id" => $_SESSION['user']['id']
-				);
+		// 	if(empty($errors)){
+		// 		$addMe = array(
+		// 			"group" => $_POST['addme'],
+		// 			"user_id" => $_SESSION['user']['id']
+		// 		);
 
-			$add = $this->groupDAO->update($_POST['addme'],$addme);
-			}
-		}
+		// 	//$add = $this->groupDAO->update($_POST['addme'],$addme);
+		// 	}
+		// }
+
+		 // 	$data = $_POST;
+			// if(!empty($_POST)){
+		 // 		//get name
+		 // 		var_dump($data['addme']);
+			// 	 if(!empty($data['addme'])){
+			// 	 	$groupid = $data['addme'];
+			// 	 }
+			// 	// //check if user is logged in
+			// 	 if(!empty($_SESSION['user'])){
+			// 	 	$userId = $_SESSION['user']['id'];
+			// 	 }else{
+			// 	 	$errors['user'] = 'Not logged in'; 
+			// 	 }
+			// 	 $newAdd = array(
+			// 	 	'user_id' => $userId + ', ',
+			// 	 	'group_ids' => $groupid
+			// 	 );
+			// 	 if(empty($errors)){
+				// 	$makeNewAdd = $this->groupDAO->update($flowchart);
+				// 	if(!$makeNewAdd){
+				// 		$errors['addme'] = $this->flowchartDAO->getValidationErrors($flowchart);
+				// 	}
+				// 	else{
+				// 		//flowchart-save succeeded
+				// 		//get flowchart id
+				// 		$flowchart_id = $makeFlowchart['id'];
+
+				// 		//als er shapes zijn gesaved
+				// 		if(!empty($data['shapes'])){
+				// 			foreach($data['shapes'] as $shape){
+				// 				//set shapesDAO voor elke shape
+				// 				$shapeData = array(
+				// 					'flowchart_id' => $flowchart_id,
+				// 					'x' => $shape['x'],
+				// 					'y' => $shape['y'],
+				// 					'width' => $shape['width'],
+				// 					'height' => $shape['height'],
+				// 					'color' => '200,200,200',
+				// 					'type' => $shape['type'],
+				// 					'content' => $shape['content']
+				// 				);
+				// 				$makeShape = $this->shapeDAO->insert($shapeData);
+				// 				if(!$makeShape){
+				// 					$errors['shapes'] = $this->shapeDAO->getValidationErrors($makeShape);
+				// 				}
+				// 			}
+				// 		}
+				// 		//als er lines zijn gesaved
+				// 		if(!empty($data['lines'])){
+				// 			foreach($data['lines'] as $line){
+				// 				//set linesDAO voor elke line
+				// 				$lineData = array(
+				// 					'flowchart_id' => $flowchart_id,
+				// 					'x1' => $line['x1'],
+				// 					'y1' => $line['y1'],
+				// 					'x2' => $line['x2'],
+				// 					'y2' => $line['y2'],
+				// 					'color' => '0,0,0'
+				// 				);
+				// 				$makeLine = $this->lineDAO->insert($lineData);
+				// 				if(!$makeLine){
+				// 					$errors['lines'] = $this->lineDAO->getValidationErrors($makeLine);
+				// 				}
+				// 			}
+				// 		}
+				// 	}
+				// }
+
+			//}
+		//}
+		//$this->set('errors',$errors);
+		// if(!empty($errors)){
+		// 	$_SESSION['error'] = 'Oh noes, the save failed!';
+		// 	var_dump($errors);
+		// }
 
 	}
 
@@ -149,6 +227,7 @@ class FlowchartsController extends Controller {
         $this->set('group',$group);
 
         $string = $this->groupDAO->selectAllUserIds($_GET['id']);
+        //var_dump($string);
 
 
   		$old = $string[0]['user_ids'];
@@ -156,10 +235,17 @@ class FlowchartsController extends Controller {
 		$user_ids = explode(", ", $old);
 		//var_dump($user_ids);
 
-		// foreach ($user_ids as $user_id){
-		// 	// $this->set('user',$this->usersDAO->selectById($user_id));
-		// 	//echo '<li>'.$user_id.'</li>';
-		// }
+		//$this->set('user_ids',$user_ids);
+		//$this->set('user_ids',$user_ids);
+		$users = array();
+
+		foreach ($user_ids as $user_id){
+			$user = $this->usersDAO->selectById($user_id);
+			array_push($users,$user);
+			 
+			//echo '<li>'.$user_id.'</li>';
+		}
+		$this->set('users',$users);
 
 		
 	}
