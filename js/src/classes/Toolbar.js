@@ -3,6 +3,7 @@ module.exports = (function(){
 	var shapeTool = true;
 	function Toolbar($el) {
 		//make 2 buttons
+		//handlebars gebruiken maar is overkill momenteel. :)
 		this.$el = $('<input type="button" class="button" value="Shape Tool" />');
 		
 		$el.append(this.$el);
