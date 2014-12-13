@@ -4,11 +4,33 @@ module.exports = (function(){
 	function Toolbar($el) {
 		//make 2 buttons
 		//handlebars gebruiken maar is overkill momenteel. :)
-		this.$el = $('<input type="button" class="button" value="Shape Tool" />');
+		//this.$el = $('<input type="button" class="button" value="Shape Tool" />');
 
-		//this.$el2 
+		this.$elToolbar = $('<div class="toolbar">');
+		this.$elSelect = $('<input type="button" class="button2 active" id="Select"/>');
+		this.$elShape = $('<input type="button" class="button2 active" id="Shape"/>');
+		this.$elLine = $('<input type="button" class="button2" id="Line"/>');
+		this.$elFile = $('<input type="button" class="button2" id="File"/>');
+		this.$elDelete = $('<input type="button" class="button2" id="Delete"/>');
+
+		this.$elColor = $('<select class="button2" id="changeColor">');
+		this.$elColorOptions = 
+		$('<option value=""></option>' + '<option value="groen"></option>' + '<option value="geel"></option>' + '<option value="oranje"></option>');
+
+		this.$elSize = $('<select class="button2" id="changeSize">');
+		this.$elSizeOptions = $('<option value=""></option>' + '<option value="s">S</option>' + '<option value="m">M</option>' + '<option value="l">L</option>');
+
+		this.$elAlign = $('<select class="button2" id="changeAlign"/>');
+		this.$elAlignOptions = $('<option value=""></option>' + '<option value="left"><img src="images/left.jpg"></option>' + '<option value="right"><img src="images/right.jpg"></option>' + '<option value="center"><img src="images/center.jpg"></option>');
+
+		this.$elColor.append(this.$elColorOptions);
+		this.$elSize.append(this.$elSizeOptions);
+		this.$elAlign.append(this.$elAlignOptions);
+
+		this.$elToolbar.append(this.$elSelect, this.$elShape, this.$elLine, this.$elFile, this.$elDelete, this.$elColor, this.$elSize, this.$elAlign);
 		
-		$el.append(this.$el);
+		$el.append(this.$elToolbar);
+
 		this.$el.click(this.changeTool);
 		//addEventListener for button: changeTool			
 	}

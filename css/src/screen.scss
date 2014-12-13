@@ -273,22 +273,70 @@ aside > p {
 }
 
 .toolbar {
-	background-color: #e6e6e6;
-	width: 475px;
+	width: 525px;
 	height: 35px;
+	float: right;
+	margin-right: 50px;
 
 	input {
-		border: 1px solid #d1d1d1;
-		background-color: #e6e6e6;
+
 		width: 60px;
 		height: 35px;
+		border: none;
+		cursor: pointer;
+
 	}
 
 	select {
 		width: 60px;
 		height: 35px;
+		cursor: pointer;
+	}
+
+}
+
+#Select {
+	background: url('../images/select.jpg');
+
+	&:hover, .active {
+		background: url('../images/select_hover.jpg');
+	}
+
+}
+
+#Shape {
+	background: url('../images/shape.jpg');
+
+	&:hover, .active {
+		background: url('../images/shape_hover.jpg');
 	}
 }
+
+#Line {
+	background: url('../images/line.jpg');
+}
+
+#File {
+	background: url('../images/file.jpg');
+}
+
+#Delete {
+	background: url('../images/delete.jpg');
+}
+
+#changeColor {
+	background: url('../images/color.jpg');
+}
+
+#changeSize {
+	background: url('../images/size.jpg');
+}
+
+
+#changeAlign {
+	background: url('../images/align.jpg');
+}
+
 
 .title { 
 	float: left;
