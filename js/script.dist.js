@@ -209,7 +209,7 @@ module.exports = (function(){
 						line.addCircle(e);
 						line.$c2.onMouseDrag = line.moveHandler.bind(line);
 						this.selectHandler(line);
-						bean.on(shape,'changeSelected',this.changeSelected.bind(this));
+						bean.on(line,'changeSelected',this.changeSelected.bind(this));
 					}
 					console.log(lines);
 					creatingLine = !creatingLine;
