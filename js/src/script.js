@@ -16,7 +16,7 @@
 			login.addEventListener('click',clickHandlerLogin);
 		}
 
-		if(getParameterByName('page') == '' || getParameterByName('page') === 'listgroups' ){
+		if(getParameterByName('page') === 'listgroups' ){
 			var addgroup = document.querySelector('.addgroup');
 			addgroup.addEventListener('click',clickHandlerAddgroup);
 			var myform = document.getElementById('myform');
