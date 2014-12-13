@@ -32,6 +32,14 @@ class FlowchartsDAO extends DAO{
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
 
+	public function selectByGroupId($group_id){
+		$sql = "SELECT * FROM `flowcharts` WHERE `group_ids` = :group_id";
+		$stmt = $this->pdo->prepare($sql);
+		$stmt->bindValue(":group_id",$group_id);
+		$stmt->execute();
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+	}
+
 	public function delete($id){
 		$sql = "DELETE 
 				FROM `flowcharts`

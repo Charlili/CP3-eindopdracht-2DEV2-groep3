@@ -63,6 +63,16 @@ class GroupsDAO extends DAO{
 		$stmt->execute();
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
+
+	public function notInGroupYet($user_id){
+		$sql = "SELECT * 
+				FROM  `groups` 
+				WHERE  `user_ids` NOT LIKE :user_id";
+		$stmt = $this->pdo->prepare($sql);
+		$stmt->bindValue(":user_id", ', ' . $user_id . ',');
+		$stmt->execute();
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+	}
 	
 	public function insert($data){
 		$errors = $this->getValidationErrors($data);
@@ -81,6 +91,20 @@ class GroupsDAO extends DAO{
 		return false;
 		/*USERS*/
 	}
+
+	// public function update($id, $data){
+	// 	if(empty($errors)){
+	// 		$sql = "UPDATE `groups` SET `user_ids` = : user_ids";
+	// 		$stmt = $this->pdo->prepare($sql);
+	// 		$stmt->bindValue(':user_ids', $data['user_id']);
+	// 		if($stmt->execute()){
+	// 			return $this->selectById($id);
+	// 		}
+	// 	}
+
+	// 	return false;
+
+	// }
 
 	public function getValidationErrors($data){
 		$errors = array();

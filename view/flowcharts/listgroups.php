@@ -16,6 +16,7 @@
 			}
 		 ;?>
 		</select>
+		<input type="submit" value="Add me"/>
 	</form>
 	
 	<ul>
@@ -23,7 +24,7 @@
 		<?php 
 			foreach($mygroups as $mygroup){
 				echo '<li class="groen">
-					<a href="index.php?page=group&amp;id='.$mygroup['id'].'">'. $mygroup['name'].'</li>';
+					<a href="index.php?page=group&amp;groupid='.$mygroup['id'].'">'. $mygroup['name'].'</li>';
 			}
 		;?>
 	</ul>
