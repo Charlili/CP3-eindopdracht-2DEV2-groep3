@@ -1,5 +1,6 @@
 module.exports = (function(){
 	var size = [];
+	//var clicks = 0;
 
 
 	function Shape(event) {
@@ -15,6 +16,7 @@ module.exports = (function(){
 		this.$el.css('left',this.x - 100 + 'px');
 		this.$el.css('width',200);
 		this.$el.css('height',100);
+		this.$el.css('z-index',0);
 		this.$el.addClass('shape');
 		this.$el.addClass('draggable');
 
@@ -29,11 +31,56 @@ module.exports = (function(){
 		$('.shape').click(function(e) {
 			e.stopPropagation();
 		});
-		$('.draggable').draggable().resizable({ autoHide: false, handles: "se" });
+		this._mMoveHandler = this.mMoveHandler.bind(this);
+		this._mUpHandler = this.mUpHandler.bind(this);
+		this._mDownHandler = this.mDownHandler.bind(this);
+
+		this.$el.mousedown(this._mDownHandler);
+		this.clicks = 0;
+		
 		
 		
 
 	}
+	Shape.prototype.xPos = function(xPos){
+		this.x = xPos;
+		this.$el.style.left = xPos + 'px';
+	};
+	Shape.prototype.yPos = function(yPos){
+		this.y = xPos;
+		this.$el.style.top = yPos + 'px';
+	};
+	Shape.prototype.mDownHandler = function(event){
+		console.log(this);
+		this.offsetX = event.offsetX;
+		this.offsetY = event.offsetY;
+		this.clicks++;
+		this.$el.css('z-index', this.clicks);
+		window.addEventListener('mousemove',this._mMoveHandler);
+		window.addEventListener('mouseup',this._mUpHandler);
+		
+
+		console.log('down');
+		
+	};
+	Shape.prototype.mMoveHandler = function(event){
+
+		console.log(parseInt(this.$el.css("width")));
+		this.x = event.x - this.offsetX - parseInt(this.$el.css("width"))/2;
+		this.$el.css('left',this.x + 'px');
+		//this.xPos(event.x - this.offsetX);
+		this.y = event.y - this.offsetY - parseInt(this.$el.css("height"))/2;
+		this.$el.css('top',this.y + 'px');
+		//this.yPos(event.y - this.offsetY);
+
+
+		
+	};
+	Shape.prototype.mUpHandler = function(event){
+		window.removeEventListener('mousemove',this._mMoveHandler);
+		window.removeEventListener('mouseup',this._mUpHandler);
+		console.log('up');
+	};
 	Shape.prototype.create = function(x,y,width,height,color,type,content) {
 		console.log('recreating shape');
 		this.x = x;
@@ -77,12 +124,14 @@ module.exports = (function(){
 	};
 	Shape.prototype.moveHandler = function(e){
 		//event handler for mouseMove
-		//console.log(this);
+		console.log(this);
 		//move to new position	
 		this.x = offset.x;
 		this.y = offset.y;	
-
 		//update shape?
+		this.$el.css('top',this.y + 'px');
+		this.$el.css('left',this.x +'px');
+
 	};
 	Shape.prototype.scaleHandler = function(e){
 		//event handler for mouseMove

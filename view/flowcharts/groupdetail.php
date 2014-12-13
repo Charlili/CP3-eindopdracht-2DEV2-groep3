@@ -62,7 +62,7 @@
 
 
     <div class="add">
-      <span><a href="#">+</a></span>
+      <span><a href="index.php?page=sendInvite">+</a></span>
       <p>Invite someone</p>
     </div>
 

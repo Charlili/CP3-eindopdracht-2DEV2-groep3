@@ -18,6 +18,10 @@ $routes = array(
         'controller' => 'Flowcharts',
         'action' => 'group'
     ),
+    'sendInvite' => array(
+        'controller' => 'Flowcharts',
+        'action' => 'sendInvite'
+    ),
     'add' => array(
         'controller' => 'Flowcharts',
         'action' => 'add'
