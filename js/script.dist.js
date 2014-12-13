@@ -359,9 +359,6 @@ module.exports = (function(){
 		this.$el = $(document.createElement('div'));
 		this.$el.css('top',this.y - 50 + 'px');
 		this.$el.css('left',this.x - 100 + 'px');
-		this.$el.css('width',200);
-		this.$el.css('height',100);
-		this.$el.css('z-index',0);
 		this.$el.addClass('shape');
 		this.$el.addClass('draggable');
 
@@ -372,62 +369,97 @@ module.exports = (function(){
 		//save input value
 		this.text = this.value;
 		
+		
+
+		this.$resizeBox = $(document.createElement('div'));
+		this.$resizeBox.addClass('resizable');
+		//this.$resizeBox.css('top','50px');
+		//this.$resizeBox.css('left','150px');
+
+		this.$el.append(this.$resizeBox);
+
 		$('.app').append(this.$el);
 		$('.shape').click(function(e) {
 			e.stopPropagation();
 		});
+
+		
+
 		this._mMoveHandler = this.mMoveHandler.bind(this);
 		this._mUpHandler = this.mUpHandler.bind(this);
 		this._mDownHandler = this.mDownHandler.bind(this);
 
 		this.$el.mousedown(this._mDownHandler);
+
+		this._rMoveHandler = this.rMoveHandler.bind(this);
+		this._rUpHandler = this.rUpHandler.bind(this);
+		this._rDownHandler = this.rDownHandler.bind(this);
+
+		this.$resizeBox.mousedown(this._rDownHandler);
+
 		this.clicks = 0;
 		
 		
 		
 
 	}
-	Shape.prototype.xPos = function(xPos){
-		this.x = xPos;
-		this.$el.style.left = xPos + 'px';
+	Shape.prototype.rDownHandler = function(event){
+		
+		//console.log('down on the scaler');
+		this.offsetX = event.pageX;
+		this.offsetY = event.pageY;
+
+		this.width = parseInt(this.$el.css('width'));
+		this.height = parseInt(this.$el.css('height'));
+		window.addEventListener('mousemove',this._rMoveHandler);
+		window.addEventListener('mouseup',this._rUpHandler);
+		event.stopPropagation();		
 	};
-	Shape.prototype.yPos = function(yPos){
-		this.y = xPos;
-		this.$el.style.top = yPos + 'px';
+	Shape.prototype.rMoveHandler = function(event){
+		//console.log('movin');
+
+		width = event.pageX - this.offsetX;
+		this.$el.css('width',this.width + width + 'px');
+		height = event.pageY - this.offsetY;
+		this.$el.css('height',this.height + height + 'px');
+		this.$resizeBox.css('right',-parseInt(this.$el.css('width')) + 7 + 'px');
+		//console.log(width+","+height);
+
+		
+	};
+	Shape.prototype.rUpHandler = function(event){
+		window.removeEventListener('mousemove',this._rMoveHandler);
+		window.removeEventListener('mouseup',this._rUpHandler);
+
 	};
 	Shape.prototype.mDownHandler = function(event){
-		console.log(this);
-		this.offsetX = event.offsetX;
-		this.offsetY = event.offsetY;
+		//console.log(this)
+		//console.log('down on the mover');
+		this.offsetX = event.pageX;
+		this.offsetY = event.pageY;
+		this.left = parseInt(this.$el.css('left'));
+		this.top = parseInt(this.$el.css('top'));
 		this.clicks++;
 		this.$el.css('z-index', this.clicks);
 		window.addEventListener('mousemove',this._mMoveHandler);
 		window.addEventListener('mouseup',this._mUpHandler);
-		
-
-		console.log('down');
-		
+				
 	};
 	Shape.prototype.mMoveHandler = function(event){
-
-		console.log(parseInt(this.$el.css("width")));
-		this.x = event.x - this.offsetX - parseInt(this.$el.css("width"))/2;
+		//console.log(parseInt(this.$el.css("width")));
+		this.x = event.pageX - this.offsetX + this.left;
 		this.$el.css('left',this.x + 'px');
-		//this.xPos(event.x - this.offsetX);
-		this.y = event.y - this.offsetY - parseInt(this.$el.css("height"))/2;
+		this.y = event.pageY - this.offsetY + this.top;
 		this.$el.css('top',this.y + 'px');
-		//this.yPos(event.y - this.offsetY);
-
-
 		
 	};
 	Shape.prototype.mUpHandler = function(event){
 		window.removeEventListener('mousemove',this._mMoveHandler);
 		window.removeEventListener('mouseup',this._mUpHandler);
-		console.log('up');
+		//console.log('up');
 	};
 	Shape.prototype.create = function(x,y,width,height,color,type,content) {
-		console.log('recreating shape');
+		console.log('recreating shapes');
 		this.x = x;
 		this.y = y;
 		this.$el.css('top',y + 'px');
