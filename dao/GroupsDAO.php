@@ -35,9 +35,15 @@ class GroupsDAO extends DAO{
 	public function selectByUserId($user_id){
 		$sql = "SELECT *
 				FROM `groups`
-				WHERE `user_ids` = :user_id";
+				WHERE `user_ids` LIKE :user_id
+				OR `user_ids` LIKE :user_id2
+				OR `user_ids` LIKE :user_id3
+				OR `user_ids` LIKE :user_id4";
 		$stmt = $this->pdo->prepare($sql);
-		$stmt->bindValue(":user_id", $user_id);
+		$stmt->bindValue(":user_id", '%, '.$user_id.',%');
+		$stmt->bindValue(":user_id2",$user_id);
+		$stmt->bindValue(":user_id3",$user_id.', %');
+		$stmt->bindValue(":user_id4",'%, '. $user_id);
 		$stmt->execute();
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
@@ -65,15 +71,20 @@ class GroupsDAO extends DAO{
 	}
 
 	public function notInGroupYet($user_id){
-		$sql = "SELECT * 
-				FROM  `groups` 
-				WHERE  `user_ids` != :user_id";
+		$sql = "SELECT *
+				FROM `groups`
+				WHERE `user_ids` NOT LIKE :user_id
+				AND `user_ids` NOT LIKE :user_id2
+				AND `user_ids` NOT LIKE :user_id3
+				AND `user_ids` NOT LIKE :user_id4";
 		$stmt = $this->pdo->prepare($sql);
-		$stmt->bindValue(":user_id", $user_id);
+		$stmt->bindValue(":user_id", '%, '.$user_id.',%');
+		$stmt->bindValue(":user_id2", $user_id);
+		$stmt->bindValue(":user_id3", $user_id.', %');
+		$stmt->bindValue(":user_id4", '%, '. $user_id);
 		$stmt->execute();
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
-	
 	public function insert($data){
 		$errors = $this->getValidationErrors($data);
 		if(empty($errors)){
@@ -125,7 +136,7 @@ class GroupsDAO extends DAO{
 	public function update($id,$data){
 		$errors = $this->getValidationErrorsAdd($data);
 		if(empty($errors)){
-			$sql = "UPDATE `groups` SET (`user_ids`) = :user_id 
+			$sql = "UPDATE `groups` SET `user_ids` = :user_id 
 					WHERE `id`= :id";
 			$stmt = $this->pdo->prepare($sql);
 			$stmt->bindValue(':id', $data['group']);

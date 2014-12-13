@@ -33,6 +33,10 @@ $routes = array(
     'loadFlowchart' => array(
         'controller' => 'Flowcharts',
         'action' => 'loadFlowchart'
+    ),
+    'addme' => array(
+        'controller' => 'Flowcharts',
+        'action' => 'addme'
     ),    
     'login' => array(
     	'controller' => 'Users',
