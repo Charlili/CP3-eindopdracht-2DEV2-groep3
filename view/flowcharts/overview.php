@@ -26,6 +26,30 @@
     
         <input type="text" placeholder="Untitled" class="title" id="viewerchanger" name="name_flowchart">
      
+     <div class="toolbar">
+      <input type="button" class="button2" value="Select Tool"/>
+      <input type="button" class="button2" value="Shape Tool"/>
+      <input type="button" class="button2" value="Line Tool"/>
+      <input type="button" class="button2" value="File Tool"/>
+      <input type="button" class="button2" value="Delete Tool"/>
+      <input type="button" class="button2" value="Shape Tool"/>
+
+      <select class="button2" id="changeColor">
+        <option value="">Choose color</option>
+        <option value="groen"></option>
+        <option value="geel"></option>
+        <option value="oranje"></option>
+      </select>
+
+      <select class="button2" id="changeSize">
+        <option value="">Change size</option>
+        <option value="s">S</option>
+        <option value="m">M</option>
+        <option value="l">L</option>
+      </select>
+      
+      <input type="button" class="button2" value="Align Tool"/>
+     </div>
 
     <div class='app'>
 

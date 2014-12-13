@@ -5,6 +5,8 @@ module.exports = (function(){
 		//make 2 buttons
 		//handlebars gebruiken maar is overkill momenteel. :)
 		this.$el = $('<input type="button" class="button" value="Shape Tool" />');
+
+		//this.$el2 
 		
 		$el.append(this.$el);
 		this.$el.click(this.changeTool);
