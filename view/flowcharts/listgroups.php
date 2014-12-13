@@ -5,7 +5,7 @@
 
 	<!-- bij klik  -->
 
-	<form method="post" class="searchgroup hidden" name="addme" id="myform" action="index.php?page=listgroups">
+<!-- 	<form method="post" class="searchgroup hidden" name="addme" id="myform" action="index.php?page=listgroups">
 		<select id="mySelect">
 			<option value="">Select a group</option>
 		<?php
@@ -17,8 +17,22 @@
 		 ;?>
 		</select>
 		<input type="submit" value="Add me"/>
+	</form> -->
+
+	<form method="post" class="searchgroup hidden" name="addme" id="myform" action="index.php?page=addme">
+		<select id="mySelect" name="addme">
+			<option value="">Select a group</option>
+		<?php
+			foreach($groups as $group){
+				echo '<option value="'.$group['id'].'">';
+				echo $group['name'];
+				echo '</option>';
+			}
+		 ;?>
+		</select>
+		<input type="submit" value="Add me"/>
 	</form>
-	
+
 	<ul class="nav">
 
 		<?php 
