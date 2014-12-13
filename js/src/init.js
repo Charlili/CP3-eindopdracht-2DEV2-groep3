@@ -6,11 +6,15 @@ fallback.load({
 	paper: [
 	'//cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.18/paper-full.min.js',
 	'js/vendor/paper/dist/paper-full.min.js'],
+	bean: [
+	'//cdnjs.cloudflare.com/ajax/libs/bean/1.0.14/bean.min.js',
+	'js/vendor/bean/bean.min.js'],
 	'script.dist.js': 'js/script.dist.js'
 	},{
 	shim: {
 		'paper': ['jQuery'],
-		'script.dist.js': ['jQuery'],
-		'script.dist.js': ['paper'],
+		'bean' : ['jQuery'],
+		'script.dist.js': ['jQuery','paper','bean']
+		//'script.dist.js': ['paper'],
 	}
 });

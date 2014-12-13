@@ -59,6 +59,9 @@ module.exports = (function(){
 
 	}
 	Shape.prototype.rDownHandler = function(event){
+
+		this.removeSelected();
+		this.makeSelected();
 		
 		//console.log('down on the scaler');
 		this.offsetX = event.pageX;
@@ -88,6 +91,9 @@ module.exports = (function(){
 
 	};
 	Shape.prototype.mDownHandler = function(event){
+
+		this.removeSelected();
+		this.makeSelected();
 		//console.log(this)
 		//console.log('down on the mover');
 		this.offsetX = event.pageX;
@@ -113,6 +119,15 @@ module.exports = (function(){
 		window.removeEventListener('mouseup',this._mUpHandler);
 		//console.log('up');
 	};
+	Shape.prototype.makeSelected = function(){
+		this.$el.addClass('selected');
+		bean.fire(this,'changeSelected',this);
+	}
+	Shape.prototype.removeSelected = function(){
+		if($('.selected').length != 0){
+			$('.selected').removeClass('selected');
+		}
+	}
 	Shape.prototype.create = function(x,y,width,height,color,type,content) {
 		console.log('recreating shapes');
 		this.x = x;

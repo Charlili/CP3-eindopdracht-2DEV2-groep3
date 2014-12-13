@@ -16,13 +16,13 @@
 			login.addEventListener('click',clickHandlerLogin);
 		}
 
-		if(getParameterByName('page') == '' || getParameterByName('page') === 'listgroups' ){
+		if(getParameterByName('page') === 'listgroups' ){
 			var addgroup = document.querySelector('.addgroup');
 			addgroup.addEventListener('click',clickHandlerAddgroup);
 			var myform = document.getElementById('myform');
 		}
 
-		if(getParameterByName('page') == '' || getParameterByName('page') === 'add' || getParameterByName('page') === 'overview'  ){
+		if(getParameterByName('page') === 'add' || getParameterByName('page') === 'overview'  ){
 			//title live change
 			$('#viewerchanger').keyup(function(){
 				var str = $(this).val();

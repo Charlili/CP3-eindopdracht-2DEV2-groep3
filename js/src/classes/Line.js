@@ -15,10 +15,23 @@ module.exports = (function(){
 		this.$c1 = new Shape.Circle([this.x1,this.y1], 5);
 		this.$c1.fillColor = 'black';
 
-		
+		this.$el;
 		//console.log(this.$c1);
 		//$('canvas').append(this.$c1);
 
+	}
+	Line.prototype.makeSelected = function(){
+		this.selectBox = new Shape.Rectangle(this.$c1.position,this.$c2.position);
+		this.selectBox.style = {
+			strokeColor: 'black',
+		    dashArray: [3, 3],
+		    strokeWidth: 1,
+		    opacity: .5
+		}
+		bean.fire(this,'changeSelected',this);
+	};
+	Line.prototype.removeSelected = function(){
+		this.selectBox.remove();
 	}
 	Line.prototype.create = function(x1,y1,x2,y2,color) {
 

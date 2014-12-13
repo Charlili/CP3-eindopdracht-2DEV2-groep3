@@ -16,6 +16,7 @@ module.exports = (function(){
 	
 	function FlowchartApplication($el) {
 		var tool = new Tool();
+		this.selected = 0;
 		console.log('Making app....');
 
 		this.$el = $el;
@@ -23,8 +24,8 @@ module.exports = (function(){
 		this.toolbar = new Toolbar($el);
 
 		var shape;
-		this.$el.click(this.clickHandler);
-		tool.onMouseDown = this.clickHandler;
+		this.$el.click(this.clickHandler.bind(this));
+		tool.onMouseDown = this.clickHandler.bind(this);
 
 		$('.save-flowchart').click(this.save);
 		if(getParameterByName('id') != ''){
@@ -32,9 +33,27 @@ module.exports = (function(){
 				this.createFlowchart(data);
 			}.bind(this));	
 		}
+
+		//bean.on(this.deleteButton, 'click', this.removeHandler.bind(this));
+		bean.on(this.toolbar,'changeTool',this.changeTool.bind(this));
+		
 		
 
 	}
+	FlowchartApplication.prototype.changeSelected = function(obj){
+		//change tool
+		console.log('selecting');
+		this.selected = obj;
+		console.log(this.selected);
+		//this.tool = tool;
+	};
+	FlowchartApplication.prototype.changeTool = function(tool){
+		//change tool
+		console.log('tool tool tool');
+		this.tool = tool.tool.toLowerCase();
+		console.log(this.tool);
+		//this.tool = tool;
+	};
 	FlowchartApplication.prototype.createFlowchart = function(data){
 		console.log(data);
 		var shapes = data.shapes;
@@ -58,9 +77,54 @@ module.exports = (function(){
 
 
 	}
+	FlowchartApplication.prototype.selectHandler = function(obj){
+		if(this.selected != 0){
+			var currSelected = this.selected;
+			currSelected.removeSelected();
+		}
+		this.selected = obj;
+		obj.makeSelected();
+	}
 	FlowchartApplication.prototype.clickHandler = function(e){
-		//will replace this with bean event later
-		if($('.button').attr('value') == 'Shape Tool'){
+		//console.log(this);
+		switch(this.tool){
+			case 'select':
+			break;
+			case 'shape':
+				console.log('click');
+				var shape = new Shape(e); 
+				shapes.push(shape);
+				this.selectHandler(shape);
+				bean.on(shape,'changeSelected',this.changeSelected.bind(this));
+			break;
+			case 'line':
+				if(project.hitTest(e.point) == null){	
+					//create lines with canvas
+					if(!creatingLine){
+						console.log('first create Line');
+						//point = [e.offsetX,e.offsetY]
+						var line = new Line(e);
+						lines.push(line);
+						line.$c1.onMouseDrag = line.moveHandler.bind(line);
+
+					}else{
+						console.log('second create Line');
+						var line = lines[lines.length-1];
+						line.addCircle(e);
+						line.$c2.onMouseDrag = line.moveHandler.bind(line);
+						this.selectHandler(line);
+						bean.on(shape,'changeSelected',this.changeSelected.bind(this));
+					}
+					console.log(lines);
+					creatingLine = !creatingLine;
+				}
+			break;
+			case 'file':
+			break;
+			case 'delete':
+			break;
+		}
+		/*if(this.tool === 'shape'){
 			console.log('click');
 			var shape = new Shape(e); 
 			shapes.push(shape);
@@ -84,7 +148,7 @@ module.exports = (function(){
 				console.log(lines);
 				creatingLine = !creatingLine;
 			}
-		}
+		}*/
 		
 		//make Shape or Line, depending on this.tool
 		//while get x,y coordinates from release click
@@ -131,16 +195,13 @@ module.exports = (function(){
 		});
 		
 		console.log('Save it yo');
-};
-	FlowchartApplication.prototype.changeTool = function(tool){
-		//change tool
-		//this.tool = tool;
 	};
+	
 	function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
         results = regex.exec(location.search);
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-}
+	}
 	return FlowchartApplication;
 })();

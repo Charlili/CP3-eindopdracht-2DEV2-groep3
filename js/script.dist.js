@@ -17,13 +17,13 @@
 			login.addEventListener('click',clickHandlerLogin);
 		}
 
-		if(getParameterByName('page') == '' || getParameterByName('page') === 'listgroups' ){
+		if(getParameterByName('page') === 'listgroups' ){
 			var addgroup = document.querySelector('.addgroup');
 			addgroup.addEventListener('click',clickHandlerAddgroup);
 			var myform = document.getElementById('myform');
 		}
 
-		if(getParameterByName('page') == '' || getParameterByName('page') === 'add' || getParameterByName('page') === 'overview'  ){
+		if(getParameterByName('page') === 'add' || getParameterByName('page') === 'overview'  ){
 			//title live change
 			$('#viewerchanger').keyup(function(){
 				var str = $(this).val();
@@ -112,6 +112,7 @@ module.exports = (function(){
 	
 	function FlowchartApplication($el) {
 		var tool = new Tool();
+		this.selected = 0;
 		console.log('Making app....');
 
 		this.$el = $el;
@@ -119,8 +120,8 @@ module.exports = (function(){
 		this.toolbar = new Toolbar($el);
 
 		var shape;
-		this.$el.click(this.clickHandler);
-		tool.onMouseDown = this.clickHandler;
+		this.$el.click(this.clickHandler.bind(this));
+		tool.onMouseDown = this.clickHandler.bind(this);
 
 		$('.save-flowchart').click(this.save);
 		if(getParameterByName('id') != ''){
@@ -128,9 +129,27 @@ module.exports = (function(){
 				this.createFlowchart(data);
 			}.bind(this));	
 		}
+
+		//bean.on(this.deleteButton, 'click', this.removeHandler.bind(this));
+		bean.on(this.toolbar,'changeTool',this.changeTool.bind(this));
+		
 		
 
 	}
+	FlowchartApplication.prototype.changeSelected = function(obj){
+		//change tool
+		console.log('selecting');
+		this.selected = obj;
+		console.log(this.selected);
+		//this.tool = tool;
+	};
+	FlowchartApplication.prototype.changeTool = function(tool){
+		//change tool
+		console.log('tool tool tool');
+		this.tool = tool.tool.toLowerCase();
+		console.log(this.tool);
+		//this.tool = tool;
+	};
 	FlowchartApplication.prototype.createFlowchart = function(data){
 		console.log(data);
 		var shapes = data.shapes;
@@ -154,9 +173,54 @@ module.exports = (function(){
 
 
 	}
+	FlowchartApplication.prototype.selectHandler = function(obj){
+		if(this.selected != 0){
+			var currSelected = this.selected;
+			currSelected.removeSelected();
+		}
+		this.selected = obj;
+		obj.makeSelected();
+	}
 	FlowchartApplication.prototype.clickHandler = function(e){
-		//will replace this with bean event later
-		if($('.button').attr('value') == 'Shape Tool'){
+		//console.log(this);
+		switch(this.tool){
+			case 'select':
+			break;
+			case 'shape':
+				console.log('click');
+				var shape = new Shape(e); 
+				shapes.push(shape);
+				this.selectHandler(shape);
+				bean.on(shape,'changeSelected',this.changeSelected.bind(this));
+			break;
+			case 'line':
+				if(project.hitTest(e.point) == null){	
+					//create lines with canvas
+					if(!creatingLine){
+						console.log('first create Line');
+						//point = [e.offsetX,e.offsetY]
+						var line = new Line(e);
+						lines.push(line);
+						line.$c1.onMouseDrag = line.moveHandler.bind(line);
+
+					}else{
+						console.log('second create Line');
+						var line = lines[lines.length-1];
+						line.addCircle(e);
+						line.$c2.onMouseDrag = line.moveHandler.bind(line);
+						this.selectHandler(line);
+						bean.on(shape,'changeSelected',this.changeSelected.bind(this));
+					}
+					console.log(lines);
+					creatingLine = !creatingLine;
+				}
+			break;
+			case 'file':
+			break;
+			case 'delete':
+			break;
+		}
+		/*if(this.tool === 'shape'){
 			console.log('click');
 			var shape = new Shape(e); 
 			shapes.push(shape);
@@ -180,7 +244,7 @@ module.exports = (function(){
 				console.log(lines);
 				creatingLine = !creatingLine;
 			}
-		}
+		}*/
 		
 		//make Shape or Line, depending on this.tool
 		//while get x,y coordinates from release click
@@ -227,17 +291,14 @@ module.exports = (function(){
 		});
 		
 		console.log('Save it yo');
-};
-	FlowchartApplication.prototype.changeTool = function(tool){
-		//change tool
-		//this.tool = tool;
 	};
+	
 	function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
         results = regex.exec(location.search);
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-}
+	}
 	return FlowchartApplication;
 })();
 },{"./Line.js":3,"./Shape.js":4,"./Toolbar.js":5}],3:[function(require,module,exports){
@@ -258,10 +319,23 @@ module.exports = (function(){
 		this.$c1 = new Shape.Circle([this.x1,this.y1], 5);
 		this.$c1.fillColor = 'black';
 
-		
+		this.$el;
 		//console.log(this.$c1);
 		//$('canvas').append(this.$c1);
 
+	}
+	Line.prototype.makeSelected = function(){
+		this.selectBox = new Shape.Rectangle(this.$c1.position,this.$c2.position);
+		this.selectBox.style = {
+			strokeColor: 'black',
+		    dashArray: [3, 3],
+		    strokeWidth: 1,
+		    opacity: .5
+		}
+		bean.fire(this,'changeSelected',this);
+	};
+	Line.prototype.removeSelected = function(){
+		this.selectBox.remove();
 	}
 	Line.prototype.create = function(x1,y1,x2,y2,color) {
 
@@ -404,6 +478,9 @@ module.exports = (function(){
 
 	}
 	Shape.prototype.rDownHandler = function(event){
+
+		this.removeSelected();
+		this.makeSelected();
 		
 		//console.log('down on the scaler');
 		this.offsetX = event.pageX;
@@ -433,6 +510,9 @@ module.exports = (function(){
 
 	};
 	Shape.prototype.mDownHandler = function(event){
+
+		this.removeSelected();
+		this.makeSelected();
 		//console.log(this)
 		//console.log('down on the mover');
 		this.offsetX = event.pageX;
@@ -458,6 +538,15 @@ module.exports = (function(){
 		window.removeEventListener('mouseup',this._mUpHandler);
 		//console.log('up');
 	};
+	Shape.prototype.makeSelected = function(){
+		this.$el.addClass('selected');
+		bean.fire(this,'changeSelected',this);
+	}
+	Shape.prototype.removeSelected = function(){
+		if($('.selected').length != 0){
+			$('.selected').removeClass('selected');
+		}
+	}
 	Shape.prototype.create = function(x,y,width,height,color,type,content) {
 		console.log('recreating shapes');
 		this.x = x;
@@ -531,12 +620,15 @@ module.exports = (function(){
 
 	var shapeTool = true;
 	function Toolbar($el) {
+
+		//bean.fire(this, 'remove', this);
+		//bean.fire(this,'create-item',this.input.value);
 		//make 2 buttons
 		//handlebars gebruiken maar is overkill momenteel. :)
 		//this.$el = $('<input type="button" class="button" value="Shape Tool" />');
 
-		this.$elToolbar = $('<div class="toolbar">');
-		this.$elSelect = $('<input type="button" class="button2 active" id="Select"/>');
+		this.$elToolbar = $('<div class="toolbar" value="Shape Tool">');
+		this.$elSelect = $('<input type="button" class="button2" id="Select"/>');
 		this.$elShape = $('<input type="button" class="button2 active" id="Shape"/>');
 		this.$elLine = $('<input type="button" class="button2" id="Line"/>');
 		this.$elFile = $('<input type="button" class="button2" id="File"/>');
@@ -558,16 +650,28 @@ module.exports = (function(){
 
 		this.$elToolbar.append(this.$elSelect, this.$elShape, this.$elLine, this.$elFile, this.$elDelete, this.$elColor, this.$elSize, this.$elAlign);
 		
-		$el.append(this.$elToolbar);
+		$el.parent().prepend(this.$elToolbar);
 
-		this.$el.click(this.changeTool);
-		//addEventListener for button: changeTool			
+		this.$elShape.click(this.changeTool);
+		//addEventListener for button: changeTool
+		//bean.on($('.toolbar input'), 'click', this.changeTool);
+		$('.toolbar input').click(this.changeTool.bind(this));			
 	}
 	Toolbar.prototype.changeTool = function(e){
 		e.stopPropagation();
-		console.log('clicking tha button');
+		console.log('clicking '+e.currentTarget.getAttribute('id') + ' button');
+		this.tool = e.currentTarget.getAttribute('id').toLowerCase();
+		if(this.tool === 'line'){
+			$('canvas').css('z-index','0');
+			$('.app').css('z-index','-1');
+		}else{
+			$('canvas').css('z-index','-1');
+			$('.app').css('z-index','0');
+		}
+		bean.fire(this, 'changeTool', this);
+		//console.log(this);
 		// switch between makeShape or makeLine tool
-		shapeTool = !shapeTool;
+		/*shapeTool = !shapeTool;
 		if(shapeTool){
 			this.value = 'Shape Tool';
 			$('canvas').css('z-index','-1');
@@ -577,7 +681,7 @@ module.exports = (function(){
 			this.value = 'Line Tool';
 			$('canvas').css('z-index','0');
 			$('.app').css('z-index','-1');
-		}
+		}*/
 		//use bean.fire to communicate this change to FlowchartApplication
 
 	};
