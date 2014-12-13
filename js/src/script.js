@@ -1,7 +1,7 @@
 (function(){
 	console.log('Goed bezig Charlotte.');
 
-	//
+	
 	function init() {
 		console.log('test');
 		if(getParameterByName('page') != null && (getParameterByName('page') === 'overview' || getParameterByName('page') === 'group')){

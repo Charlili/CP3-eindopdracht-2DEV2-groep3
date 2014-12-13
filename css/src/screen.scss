@@ -118,11 +118,7 @@ section input[type="text"], input[type="email"], input[type="password"] {
 
 }
 
-<<<<<<< HEAD
-.register div, /*.createflow div */{
-=======
 .register div {
->>>>>>> 019eb10bffe8722565303fec2bd9fa5a6542a862
 	padding: 12px;
 }
 
@@ -366,6 +362,7 @@ aside > p {
 }
 
 #File {
+
 	background: url('../images/file.jpg');
 
 	&:hover, .active {
