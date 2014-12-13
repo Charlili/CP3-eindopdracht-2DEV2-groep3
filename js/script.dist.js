@@ -38,7 +38,7 @@
 		event.preventDefault();
 		console.log(this);
 		var loginform = document.querySelector('.hidden');
-		loginform.classList.toggle('closed');
+		loginform.classList.toggle('open');
 	}
 
 	function clickHandlerAddgroup(){

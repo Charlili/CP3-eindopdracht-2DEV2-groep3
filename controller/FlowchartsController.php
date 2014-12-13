@@ -92,14 +92,37 @@ class FlowchartsController extends Controller {
         if(empty($group)){
             $_SESSION['error'] = 'Group does not exist';
             $this->redirect('index.php');
-        }
+        }        
 
         $this->set('group',$group);
-        $this->set('users',$this->groupDAO->getUsersFromGroup($_GET['groupid']));
 
+        //$this->set('users',$this->groupDAO->getUsersFromGroup($_GET['groupid']));
+
+        $string = $this->groupDAO->selectAllUserIds($_GET['groupid']);
+        $old = $string[0]['user_ids'];
+        $user_ids = explode(", ", $old);
+
+        $users = array();
+
+        foreach($user_ids as $user_id){
+        	$user = $this->usersDAO->selectById($user_id);
+        	array_push($users, $user);
+        }
+
+        //show flowcharts from group
         $this->set('flowcharts',$this->flowchartDAO->selectByGroupId($_GET['groupid']));
-		
-		$string = $this->groupDAO->selectAllUserIds($_GET['groupid']);
+
+        $detail = false;
+
+        //detailpagina
+        if(!empty($_GET['detailid'])){
+        	$detail = $this->groupDAO->selectById($_GET['detailid']);
+			$this->set('detail',$detail);
+        }
+
+        $this->set('users',$users);
+
+        //var_dump($string);
 
 		// $old = $string[0]['user_ids'];
 		// var_dump($old);
@@ -118,8 +141,8 @@ class FlowchartsController extends Controller {
 
 		$errors = array();
 
-		// if(!empty($_POST)){
-		// 			var_dump($_POST);
+		if(!empty($_POST)){
+			var_dump($_POST);}
 
 		// 	if(empty($_POST['addme'])){
 		// 		$errors['addme'] = 'Choose a group';
@@ -213,42 +236,40 @@ class FlowchartsController extends Controller {
 
 	}
 
-	public function groupdetail(){
-		$group =false;
-        if(!empty($_GET['id'])){
-            $group =$this->groupDAO->selectById($_GET['id']);
-        }
+	// public function groupdetail(){
+	// 	$group =false;
+ //        if(!empty($_GET['id'])){
+ //            $group =$this->groupDAO->selectById($_GET['id']);
+ //        }
 
-        if(empty($group)){
-            $_SESSION['error'] = 'Group does not exist';
-            $this->redirect('index.php');
-        }
+ //        if(empty($group)){
+ //            $_SESSION['error'] = 'Group does not exist';
+ //            $this->redirect('index.php');
+ //        }
 
-        $this->set('group',$group);
+ //        $this->set('group',$group);
 
-        $string = $this->groupDAO->selectAllUserIds($_GET['id']);
-        //var_dump($string);
+ //        $string = $this->groupDAO->selectAllUserIds($_GET['id']);
+ //        //var_dump($string);
 
 
-  		$old = $string[0]['user_ids'];
-		//var_dump($old);
-		$user_ids = explode(", ", $old);
-		//var_dump($user_ids);
+ //  		$old = $string[0]['user_ids'];
+	// 	//var_dump($old);
+	// 	$user_ids = explode(", ", $old);
+	// 	//var_dump($user_ids);
 
-		//$this->set('user_ids',$user_ids);
-		//$this->set('user_ids',$user_ids);
-		$users = array();
+	// 	$users = array();
 
-		foreach ($user_ids as $user_id){
-			$user = $this->usersDAO->selectById($user_id);
-			array_push($users,$user);
+	// 	foreach ($user_ids as $user_id){
+	// 		$user = $this->usersDAO->selectById($user_id);
+	// 		array_push($users,$user);
 			 
-			//echo '<li>'.$user_id.'</li>';
-		}
-		$this->set('users',$users);
+	// 		//echo '<li>'.$user_id.'</li>';
+	// 	}
+	// 	$this->set('users',$users);
 
-		
-	}
+	// }
+
 	public function overview() {
 		//overview of your flowcharts
 

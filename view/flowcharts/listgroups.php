@@ -19,12 +19,12 @@
 		<input type="submit" value="Add me"/>
 	</form>
 	
-	<ul>
+	<ul class="nav">
 
 		<?php 
 			foreach($mygroups as $mygroup){
-				echo '<li class="groen">
-					<a href="index.php?page=group&amp;groupid='.$mygroup['id'].'">'. $mygroup['name'].'</li>';
+				echo '<a href="index.php?page=group&amp;groupid='.$mygroup['id'].'"><li class="groen">'. $mygroup['name'].'</li></a>';
+
 			}
 		;?>
 	</ul>

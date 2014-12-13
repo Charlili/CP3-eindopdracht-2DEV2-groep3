@@ -45,20 +45,9 @@
       <div>
         <label>Users:</label>
         <ul>
-          <!-- <li><?php echo $group['user_ids'];?></li> -->
-<!--      <?php 
-            foreach($users as $user){
-              //echo '<li><img src="uploads/'. $user['name'].'.'. $user['extension'].'</li>';
-              echo '<li>'.$user.'</li>';
-              //join
-            }
-          ;?>  -->
-
 
 
          <?php 
-            //echo '<li><img src="uploads/'.$user_id['username'].'_th.'.$user_id['extension'].'"/></li>';
-            
 
             foreach($users as $user){
               echo '<li><img src="uploads/'. $user['username'].'_th.'. $user['extension'].'"/></li>';

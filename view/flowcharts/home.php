@@ -2,16 +2,14 @@
 	<?php if(empty($_SESSION['user'])):;?>
 	<h1>Welcome to Whiteboard!</h1>
 	
-	<ul>
-		<li class="groen">
-			<a href="index.php?page=overview">Create flowchart</a>
-		</li>
-		
-		<li class="groen">
-			<a class="login" href="index.php?page=ingelogd">Login</a>
-	
-				<!-- bij klik login-->
-				<form method="post" action="index.php?page=login" class="loginform hidden">
+	<ul class="nav">
+
+		<a href="index.php?page=overview"><li class="groen">Create Flowchart</li></a>
+
+		<a class="login" href="index.php?page=ingelogd"><li class="groen">Login</li></a>
+
+
+			<form method="post" action="index.php?page=login" class="loginform hidden">
 					<div>
 						<input type="text" name="username" placeholder="Username">
 						<span>
@@ -35,25 +33,20 @@
 					</div>
 
 				</form>
-		</li>
-	
-		<li class="yellow">
-			<a href="index.php?page=register">Register</a>
-		</li>
+
+		<a href="index.php?page=register"><li class="yellow">Register</li></a>
+
+
 	</ul>
 	<?php endif;
 	if(!empty($_SESSION['user'])):;?>
 
 	<h1>Welcome <?php echo $_SESSION['user']['username'];?>!</h1>
 	
-	<ul>
-		<li class="groen">
-			<a href="index.php?page=overview">My flowcharts</a>
-		</li>
-		
-		<li class="groen">
-			<a href="index.php?page=listgroups">My groups</a>
-		</li>
+	<ul class="nav">
+		<a href="index.php?page=overview"><li class="groen">My flowcharts</li></a>
+
+		<a href="index.php?page=listgroups"><li class="groen">My groups</li></a>		
 	</ul>
 
 	<div class="back">

@@ -67,9 +67,9 @@ class GroupsDAO extends DAO{
 	public function notInGroupYet($user_id){
 		$sql = "SELECT * 
 				FROM  `groups` 
-				WHERE  `user_ids` NOT LIKE :user_id";
+				WHERE  `user_ids` != :user_id";
 		$stmt = $this->pdo->prepare($sql);
-		$stmt->bindValue(":user_id", ', ' . $user_id . ',');
+		$stmt->bindValue(":user_id", $user_id);
 		$stmt->execute();
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
