@@ -124,7 +124,7 @@ module.exports = (function(){
 			'shapes': $shapes2,
 			'lines': $lines2
 		};
-
+		//TODO: error handling met .error: meegeven aan user dmv evt window alert?
 		$.post('index.php?page=saveFlowchart',dataFlowchart)
 		.success(function(data){
 			console.log('posted');

@@ -184,7 +184,7 @@ module.exports = (function(){
 			'shapes': $shapes2,
 			'lines': $lines2
 		};
-
+		//TODO: error handling met .error: meegeven aan user dmv evt window alert?
 		$.post('index.php?page=saveFlowchart',dataFlowchart)
 		.success(function(data){
 			console.log('posted');
@@ -370,7 +370,7 @@ module.exports = (function(){
 
 	};*/
 	Shape.prototype.remove = function(){
-		this.square.remove();
+		//this.square.remove();
 
 	};
 	Shape.prototype.addText = function(){
@@ -415,6 +415,7 @@ module.exports = (function(){
 	var shapeTool = true;
 	function Toolbar($el) {
 		//make 2 buttons
+		//handlebars gebruiken maar is overkill momenteel. :)
 		this.$el = $('<input type="button" class="button" value="Shape Tool" />');
 		
 		$el.append(this.$el);

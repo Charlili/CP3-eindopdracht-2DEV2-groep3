@@ -61,7 +61,7 @@ module.exports = (function(){
 
 	};*/
 	Shape.prototype.remove = function(){
-		this.square.remove();
+		//this.square.remove();
 
 	};
 	Shape.prototype.addText = function(){
