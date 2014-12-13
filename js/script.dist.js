@@ -625,28 +625,36 @@ module.exports = (function(){
 		//bean.fire(this,'create-item',this.input.value);
 		//make 2 buttons
 		//handlebars gebruiken maar is overkill momenteel. :)
-		//this.$el = $('<input type="button" class="button" value="Shape Tool" />');
 
 		this.$elToolbar = $('<div class="toolbar" value="Shape Tool">');
 		this.$elSelect = $('<input type="button" class="button2" id="Select"/>');
+		this.$elSelect = $('<input type="button" class="button2 active" id="Select"/>');
 		this.$elShape = $('<input type="button" class="button2 active" id="Shape"/>');
 		this.$elLine = $('<input type="button" class="button2" id="Line"/>');
 		this.$elFile = $('<input type="button" class="button2" id="File"/>');
 		this.$elDelete = $('<input type="button" class="button2" id="Delete"/>');
 
-		this.$elColor = $('<select class="button2" id="changeColor">');
+		this.$elColor = $('<div class="changeColor"><a href="#"><img src="images/color.jpg"></a>');
+		this.$elColorUl = $('<ul class="testhidden">');
 		this.$elColorOptions = 
-		$('<option value=""></option>' + '<option value="groen"></option>' + '<option value="geel"></option>' + '<option value="oranje"></option>');
+		$('<li><a href="#"><img src="images/groen.jpg"></a></li>' + '<li><a href="#"><img src="images/geel.jpg"></a></li>' + '<li><a href="#"><img src="images/oranje.jpg"></a></li>');
+		
+		this.$elSize = $('<div class="changeSize"><a href="#"><img src="images/size.jpg"></a>');
+		this.$elSizeUl = $('<ul class="testhidden">');
+		this.$elSizeOptions = $('<li><a href="#">S</a></li>' + '<li><a href="#">M</a></li>' + '<li><a href="#">L</a></li>');
 
-		this.$elSize = $('<select class="button2" id="changeSize">');
-		this.$elSizeOptions = $('<option value=""></option>' + '<option value="s">S</option>' + '<option value="m">M</option>' + '<option value="l">L</option>');
+		this.$elAlign = $('<div class="changeAlign"><a href="#"><img src="images/align.jpg"></a><ul class="hidden">');
+		this.$elAlignUl = $('<ul class="testhidden open">');
+		this.$elAlignOptions = $('<li><a href="#"><img src="images/left.jpg"></a></li>' + '<li><a href="#"><img src="images/right.jpg"></a></li>' + '<li><a href="#"><img src="images/center.jpg"></a></li>');
 
-		this.$elAlign = $('<select class="button2" id="changeAlign"/>');
-		this.$elAlignOptions = $('<option value=""></option>' + '<option value="left"><img src="images/left.jpg"></option>' + '<option value="right"><img src="images/right.jpg"></option>' + '<option value="center"><img src="images/center.jpg"></option>');
+		this.$elColorUl.append(this.$elColorOptions);
+		this.$elColor.append(this.$elColorUl);
 
-		this.$elColor.append(this.$elColorOptions);
-		this.$elSize.append(this.$elSizeOptions);
-		this.$elAlign.append(this.$elAlignOptions);
+		this.$elSizeUl.append(this.$elSizeOptions);
+		this.$elSize.append(this.$elSizeUl);
+
+		this.$elAlignUl.append(this.$elAlignOptions);
+		this.$elAlign.append(this.$elAlignUl);
 
 		this.$elToolbar.append(this.$elSelect, this.$elShape, this.$elLine, this.$elFile, this.$elDelete, this.$elColor, this.$elSize, this.$elAlign);
 		
@@ -656,6 +664,8 @@ module.exports = (function(){
 		//addEventListener for button: changeTool
 		//bean.on($('.toolbar input'), 'click', this.changeTool);
 		$('.toolbar input').click(this.changeTool.bind(this));			
+		this.$elToolbar.click(this.changeTool);
+		//addEventListener for button: changeTool			
 	}
 	Toolbar.prototype.changeTool = function(e){
 		e.stopPropagation();

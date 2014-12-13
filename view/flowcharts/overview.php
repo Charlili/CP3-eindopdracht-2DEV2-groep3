@@ -24,41 +24,9 @@
   <section class="createflow">
 
     
-        <input type="text" placeholder="Untitled" class="title" id="viewerchanger" name="name_flowchart">
-
-        <script id="toolTemplate" type="text/template">
-
-        </script>
-     
-<!--      <div class="toolbar">
-
-      <input type="button" class="button2" id="Select"/>
-      <input type="button" class="button2" id="Shape"/>
-      <input type="button" class="button2" id="Line"/>
-      <input type="button" class="button2" id="File"/>
-      <input type="button" class="button2" id="Delete"/>
-
-      <select class="button2" id="changeColor">
-        <option value=""></option>
-        <option value="groen">#00b097</option>
-        <option value="geel">#f8ee67</option>
-        <option value="oranje">#fe7259</option>
-      </select>
-
-      <select class="button2" id="changeSize">
-        <option value=""></option>
-        <option value="s">S</option>
-        <option value="m">M</option>
-        <option value="l">L</option>
-      </select>
-
-      <select class="button2" id="changeAlign"/>
-        <option value=""></option>
-        <option value="left"><img src="images/left.jpg"></option>
-        <option value="right"><img src="images/right.jpg"></option>
-        <option value="center"><img src="images/center.jpg"></option>
-      </select>
-     </div> -->
+        <input type="text" placeholder="Untitled" class="title" id="viewerchanger" name="name_flowchart"> 
+        
+      
 
     <div class='app'>
 
