@@ -32,6 +32,42 @@
 
 		}
 
+		/*if(getParameterByName('page') == 'saveImage'){
+			require('../vendor/phantomjs/bin/phantomjs');
+			var system = require('system');
+ 
+			// Web Address (URL) of the page to capture
+			//var url  = system.args[1];
+			 var url = "http://localhost/CPIII/CPIII_whiteboard/index.php?page=overview&id=35";
+			 var page = 'testingThis' + '.png';
+			// File name of the captured image
+			//var file = system.args[2]  + ".png";
+			 
+			var page = require('webpage').create();
+			 
+			// Browser size - height and width in pixels
+			// Change the viewport to 480x320 to emulate the iPhone
+			page.viewportSize = { width: 1200, height : 800 };
+			 
+			// Set the User Agent String 
+			// You can change it to iPad or Android for mobile screenshots
+			page.settings.userAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.56 Safari/536.5";
+			 
+			// Render the screenshot image
+			page.open ( url, function ( status ) {
+			  if ( status !== "success") {
+			       console.log("Could not open web page : " + url);
+			       phantom.exit();
+			   } else {
+			       window.setTimeout ( function() {
+			          page.render(file);
+			          console.log("Download the screenshot : " + file);
+			          phantom.exit();
+			       }, 1000);
+			   }
+			});
+		}*/
+
 	}
 
 	function clickHandlerLogin(){
@@ -309,6 +345,7 @@ module.exports = (function(){
 },{}],4:[function(require,module,exports){
 module.exports = (function(){
 	var size = [];
+	//var clicks = 0;
 
 
 	function Shape(event) {
@@ -324,6 +361,7 @@ module.exports = (function(){
 		this.$el.css('left',this.x - 100 + 'px');
 		this.$el.css('width',200);
 		this.$el.css('height',100);
+		this.$el.css('z-index',0);
 		this.$el.addClass('shape');
 		this.$el.addClass('draggable');
 
@@ -338,11 +376,56 @@ module.exports = (function(){
 		$('.shape').click(function(e) {
 			e.stopPropagation();
 		});
-		$('.draggable').draggable().resizable({ autoHide: false, handles: "se" });
+		this._mMoveHandler = this.mMoveHandler.bind(this);
+		this._mUpHandler = this.mUpHandler.bind(this);
+		this._mDownHandler = this.mDownHandler.bind(this);
+
+		this.$el.mousedown(this._mDownHandler);
+		this.clicks = 0;
+		
 		
 		
 
 	}
+	Shape.prototype.xPos = function(xPos){
+		this.x = xPos;
+		this.$el.style.left = xPos + 'px';
+	};
+	Shape.prototype.yPos = function(yPos){
+		this.y = xPos;
+		this.$el.style.top = yPos + 'px';
+	};
+	Shape.prototype.mDownHandler = function(event){
+		console.log(this);
+		this.offsetX = event.offsetX;
+		this.offsetY = event.offsetY;
+		this.clicks++;
+		this.$el.css('z-index', this.clicks);
+		window.addEventListener('mousemove',this._mMoveHandler);
+		window.addEventListener('mouseup',this._mUpHandler);
+		
+
+		console.log('down');
+		
+	};
+	Shape.prototype.mMoveHandler = function(event){
+
+		console.log(parseInt(this.$el.css("width")));
+		this.x = event.x - this.offsetX - parseInt(this.$el.css("width"))/2;
+		this.$el.css('left',this.x + 'px');
+		//this.xPos(event.x - this.offsetX);
+		this.y = event.y - this.offsetY - parseInt(this.$el.css("height"))/2;
+		this.$el.css('top',this.y + 'px');
+		//this.yPos(event.y - this.offsetY);
+
+
+		
+	};
+	Shape.prototype.mUpHandler = function(event){
+		window.removeEventListener('mousemove',this._mMoveHandler);
+		window.removeEventListener('mouseup',this._mUpHandler);
+		console.log('up');
+	};
 	Shape.prototype.create = function(x,y,width,height,color,type,content) {
 		console.log('recreating shape');
 		this.x = x;
@@ -386,12 +469,14 @@ module.exports = (function(){
 	};
 	Shape.prototype.moveHandler = function(e){
 		//event handler for mouseMove
-		//console.log(this);
+		console.log(this);
 		//move to new position	
 		this.x = offset.x;
 		this.y = offset.y;	
-
 		//update shape?
+		this.$el.css('top',this.y + 'px');
+		this.$el.css('left',this.x +'px');
+
 	};
 	Shape.prototype.scaleHandler = function(e){
 		//event handler for mouseMove

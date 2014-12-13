@@ -351,8 +351,11 @@ textarea {
 .draggable {
     cursor: move;
 }
+.resizable {
+	cursor: se-resize;
+}
 
-.ui-resizable-handle, .ui-icon, .ui-icon-gripsmall-diagonal-se, .ui-resizable-se{
+/*.ui-resizable-handle, .ui-icon, .ui-icon-gripsmall-diagonal-se, .ui-resizable-se{
 	width: 20px;
 	height: 20px;
 	z-index: 90;
@@ -360,5 +363,5 @@ textarea {
 	position: absolute;
 	bottom: 0;
 	right: 0;
-}
+}*/
 
