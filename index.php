@@ -14,6 +14,10 @@ $routes = array(
         'controller' => 'Flowcharts',
         'action' => 'overview'
     ),
+    'uploadFile' => array(
+        'controller' => 'Flowcharts',
+        'action' => 'uploadFile'
+    ),
     'group' => array(
         'controller' => 'Flowcharts',
         'action' => 'group'

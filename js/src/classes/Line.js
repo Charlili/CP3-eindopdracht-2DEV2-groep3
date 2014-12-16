@@ -1,7 +1,9 @@
 module.exports = (function(){
 	
-	function Line(event) {
+	function Line(event,id) {
 		//var tool = new Tool();
+		this.type = 'line';
+		this.id = id;
 		this.x1 = 0;
 		this.y1 = 0;
 		if(event != undefined){
@@ -15,7 +17,7 @@ module.exports = (function(){
 		this.$c1 = new Shape.Circle([this.x1,this.y1], 5);
 		this.$c1.fillColor = 'black';
 
-		this.$el;
+		//this.$el;
 		//console.log(this.$c1);
 		//$('canvas').append(this.$c1);
 
@@ -23,15 +25,23 @@ module.exports = (function(){
 	Line.prototype.makeSelected = function(){
 		this.selectBox = new Shape.Rectangle(this.$c1.position,this.$c2.position);
 		this.selectBox.style = {
-			strokeColor: 'black',
-		    dashArray: [3, 3],
+			strokeColor: 'rgba(0,0,0,.3)',
+		    dashArray: [1, 2],
 		    strokeWidth: 1,
-		    opacity: .5
+		    opacity: .1
 		}
-		bean.fire(this,'changeSelected',this);
+		//bean.fire(this,'changeSelected',this);
 	};
 	Line.prototype.removeSelected = function(){
 		this.selectBox.remove();
+		view.update();
+	}
+	Line.prototype.deleteMe = function(){
+		if(!this.$c2.isEmpty()){this.$c2.remove();}
+		if(!this.$c1.isEmpty()){this.$c1.remove();}
+		if(!this.$line.isEmpty()){this.$line.remove();}
+		if(!this.selectBox.isEmpty()){this.selectBox.remove();}
+		view.update();
 	}
 	Line.prototype.create = function(x1,y1,x2,y2,color) {
 
@@ -94,6 +104,15 @@ module.exports = (function(){
 		this.$line.strokeColor = 'black';
 		this.$line.strokeWidth = 2;
 		e.target.position = e.point;
+		bean.fire(this,'changeSelected',this);
+		this.selectBox.remove();
+		this.selectBox = new Shape.Rectangle(this.$c1.position,this.$c2.position);
+		this.selectBox.style = {
+			strokeColor: 'rgba(0,0,0,.3)',
+		    dashArray: [1, 2],
+		    strokeWidth: 1,
+		    opacity: .1
+		}
 		//this.position = e.point;
 			//is currentTarget c1 or c2?
 

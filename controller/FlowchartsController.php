@@ -1,5 +1,7 @@
 <?php
 require_once WWW_ROOT . 'controller' . DS . 'Controller.php';
+require_once WWW_ROOT . 'js/vendor/php-image-resize' . DS . 'ImageResize.php';
+
 //gebruikte DAOs aanroepen
 require_once WWW_ROOT . 'dao' . DS . 'FlowchartsDAO.php';
 require_once WWW_ROOT . 'dao' . DS . 'GroupsDAO.php';
@@ -26,6 +28,27 @@ class FlowchartsController extends Controller {
 	}
 	public function home() {
 		//index page
+
+	}
+	public function uploadFile(){
+
+		$sourceFile = $_FILES["SelectedFile"]['tmp_name'];
+        $destFile = WWW_ROOT . 'uploads' . DS . $_FILES["SelectedFile"]['name'];
+        move_uploaded_file($sourceFile, $destFile);
+        $dest = 'uploads' . DS . $_FILES["SelectedFile"]['name'];
+        
+        $dotPos = strrpos($_FILES["SelectedFile"]['name'],'.');
+        $name = substr($_FILES["SelectedFile"]['name'],0,$dotPos);
+        $extension = substr($_FILES["SelectedFile"]['name'],$dotPos+1);
+     	$dest = 'uploads' . DS . $name . "." . $extension;
+
+        echo "<input type='hidden' id='sourceFile' value= '{$dest}' />";
+        //echo "<input type='hidden' id='destFile' value= {$destFile}/>";
+
+        //$image = new Eventviva\ImageResize($destFile);
+        //$image->resizeToHeight(100);
+        //$image->save(WWW_ROOT . 'uploads' . DS . $name . '_th.' . $extension);
+        //$image->save(WWW_ROOT . 'uploads' . DS . $name . $extension);
 
 	}
 	public function add() {
@@ -287,11 +310,12 @@ class FlowchartsController extends Controller {
 			$lines = '0';
 			$groups = '0';
 			$name = 'untitled';
+			//var_dump($data);
 
 			//als er iets is gestuurd
 			if(!empty($_POST)){
 				//get name
-				var_dump($data['name']);
+				//var_dump($data['name']);
 				if(!empty($data['name'])){$name = $data['name'];}
 				//check if user is logged in
 				if(!empty($_SESSION['user'])){
@@ -314,26 +338,28 @@ class FlowchartsController extends Controller {
 					$makeFlowchart = $this->flowchartDAO->insert($flowchart);
 					if(!$makeFlowchart){
 						$errors['flowchart'] = $this->flowchartDAO->getValidationErrors($flowchart);
-					}
-					else{
+					}else{
 						//flowchart-save succeeded
 						//get flowchart id
-						$flowchart_id = $makeFlowchart['id'];
-
+						$flowchart_id = (int)$makeFlowchart['id'];
+						//var_dump($data['shapes']);
 						//als er shapes zijn gesaved
 						if(!empty($data['shapes'])){
+							//var_dump($data['shapes']);
 							foreach($data['shapes'] as $shape){
+								var_dump($shape['x']);
 								//set shapesDAO voor elke shape
 								$shapeData = array(
 									'flowchart_id' => $flowchart_id,
-									'x' => $shape['x'],
-									'y' => $shape['y'],
-									'width' => $shape['width'],
-									'height' => $shape['height'],
+									'x' => (int)$shape['x'],
+									'y' => (int)$shape['y'],
+									'width' => (int)$shape['width'],
+									'height' => (int)$shape['height'],
 									'color' => '200,200,200',
 									'type' => $shape['type'],
 									'content' => $shape['content']
 								);
+								var_dump($shapeData);
 								$makeShape = $this->shapeDAO->insert($shapeData);
 								if(!$makeShape){
 									$errors['shapes'] = $this->shapeDAO->getValidationErrors($makeShape);
@@ -346,10 +372,10 @@ class FlowchartsController extends Controller {
 								//set linesDAO voor elke line
 								$lineData = array(
 									'flowchart_id' => $flowchart_id,
-									'x1' => $line['x1'],
-									'y1' => $line['y1'],
-									'x2' => $line['x2'],
-									'y2' => $line['y2'],
+									'x1' => (int)$line['x1'],
+									'y1' => (int)$line['y1'],
+									'x2' => (int)$line['x2'],
+									'y2' => (int)$line['y2'],
 									'color' => '0,0,0'
 								);
 								$makeLine = $this->lineDAO->insert($lineData);

@@ -10,11 +10,11 @@ module.exports = (function(){
 
 		this.$elToolbar = $('<div class="toolbar" value="Shape Tool">');
 		this.$elSelect = $('<input type="button" class="button2" id="Select"/>');
-		this.$elSelect = $('<input type="button" class="button2 active" id="Select"/>');
+		//this.$elSelect = $('<input type="button" class="button2 active" id="Select"/>');
 		this.$elShape = $('<input type="button" class="button2 active" id="Shape"/>');
 		this.$elLine = $('<input type="button" class="button2" id="Line"/>');
-		this.$elFile = $('<input type="button" class="button2" id="File"/>');
-		this.$elDelete = $('<input type="button" class="button2" id="Delete"/>');
+		this.$elFile = $('<form id="uploadWrapper" enctype="multipart/form-data" action="index.php?page=uploadFile"><input type="file" class="button2" id="File"/></div>');
+		this.$elDelete = $('<a class="button2" id="Delete"/>');
 
 		this.$elColor = $('<div class="changeColor"><a href="#"><img src="images/color.jpg"></a>');
 		this.$elColorUl = $('<ul class="testhidden">');
@@ -42,23 +42,34 @@ module.exports = (function(){
 		
 		$el.parent().prepend(this.$elToolbar);
 
-		this.$elShape.click(this.changeTool);
+		//this.$elShape.click(this.changeTool);
+		//this.$elDelete.click(this.changeTool);
 		//addEventListener for button: changeTool
 		//bean.on($('.toolbar input'), 'click', this.changeTool);
-		$('.toolbar input').click(this.changeTool.bind(this));			
-		this.$elToolbar.click(this.changeTool);
-		//addEventListener for button: changeTool			
+		$('.toolbar input[type="button"]').click(this.changeTool.bind(this));	
+		this.$elDelete.click(this.deleteTool.bind(this));
+		$('#File').change(function(){
+			bean.fire(this, 'uploadFile', event.target.files);
+		}.bind(this));			
+	}
+	Toolbar.prototype.deleteTool = function(e){
+		bean.fire(this, 'delete', this);
+	}
+	Toolbar.prototype.fileTool = function(e){
+		bean.fire(this, 'delete', this);
 	}
 	Toolbar.prototype.changeTool = function(e){
 		e.stopPropagation();
 		console.log('clicking '+e.currentTarget.getAttribute('id') + ' button');
 		this.tool = e.currentTarget.getAttribute('id').toLowerCase();
 		if(this.tool === 'line'){
-			$('canvas').css('z-index','0');
-			$('.app').css('z-index','-1');
+			//$('canvas').css('z-index','0');
+			//$('.app').css('z-index','-1');
+			$('canvas').css('pointer-events', 'auto');
 		}else{
-			$('canvas').css('z-index','-1');
-			$('.app').css('z-index','0');
+			$('canvas').css('pointer-events', 'none');
+			//$('canvas').css('z-index','-1');
+			//$('.app').css('z-index','0');
 		}
 		bean.fire(this, 'changeTool', this);
 		//console.log(this);
