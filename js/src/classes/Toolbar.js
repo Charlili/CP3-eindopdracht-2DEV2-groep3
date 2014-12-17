@@ -46,8 +46,8 @@ module.exports = (function(){
 		//this.$elDelete.click(this.changeTool);
 		//addEventListener for button: changeTool
 		//bean.on($('.toolbar input'), 'click', this.changeTool);
-		$('.toolbar input').click(this.changeTool.bind(this));			
-		this.$elToolbar.click(this.changeTool);
+		//$('.toolbar input').click(this.changeTool.bind(this));			
+		//this.$elToolbar.click(this.changeTool);
 		//addEventListener for button: changeTool
 
 		this.$elAlign.click(this.dropTool);			

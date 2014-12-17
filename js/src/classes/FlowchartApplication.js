@@ -3,7 +3,6 @@ module.exports = (function(){
 	var Toolbar = require('./Toolbar.js');
 	var Shape = require('./Shape.js');
 	var Line = require('./Line.js');
-
 	var shapes = {};
 	var lines = {};
 	var tempArray = [];
