@@ -1,7 +1,7 @@
 <section class="create">
 
   <aside>
-    <h2>Add new group</h2>
+    <h1>Add new group</h1>
     <ul>
       <!-- <li><a href="#">Untitled</a></li> -->
       <li id="viewer">Untitled</li>
@@ -36,7 +36,7 @@
       </div>
 
       <div>
-        <label for="invite">Send invites:</label>
+        <label for="invite">Add users:</label>
         <select name="invite[]" multiple>
           <?php 
             foreach($users as $user){

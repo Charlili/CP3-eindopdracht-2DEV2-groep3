@@ -3,30 +3,37 @@ module.exports = (function(){
 	var Toolbar = require('./Toolbar.js');
 	var Shape = require('./Shape.js');
 	var Line = require('./Line.js');
-	var shapes = {};
-	var lines = {};
+	var shapes = [];
+	var lines = [];
 	var tempArray = [];
 	var creatingLine = false;
 	var point = [];
-	var id = 0;
+	var id = 1;
 
-	paper.install(window);
-	paper.setup('cnvs');
+	if($('#cnvs').length != 0){
+		paper.install(window);
+		paper.setup('cnvs');
+	}
 
 	
 	function FlowchartApplication($el) {
-		var tool = new Tool();
+		
 		this.selected = 0;
 		console.log('Making app....');
 
 		this.$el = $el;
 		this.tool = 'shape';
 		this.toolbar = new Toolbar($el);
-
+		this.shapeColor = '#bbb';
+		this.textSize = '1.5em';
+		
 		var shape;
 		this.$el.click(this.clickHandler.bind(this));
-		tool.onMouseDown = this.clickHandler.bind(this);
-		tool.onMouseMove = this.hoverHandler.bind(this);
+		if($('#cnvs').length != 0){
+			var tool = new Tool();
+			tool.onMouseDown = this.clickHandler.bind(this);
+			tool.onMouseMove = this.hoverHandler.bind(this);
+		}
 
 		$('.save-flowchart').click(this.save);
 		if(getParameterByName('id') != ''){
@@ -34,13 +41,14 @@ module.exports = (function(){
 				this.createFlowchart(data);
 			}.bind(this));	
 		}
-
+		$('.add').click(this.sendInvite).bind(this);
 		//bean.on(this.deleteButton, 'click', this.removeHandler.bind(this));
 		bean.on(this.toolbar,'changeTool',this.changeTool.bind(this));
 		bean.on(this.toolbar,'delete',this.deleteSelected.bind(this));
 		bean.on(this.toolbar,'uploadFile',this.uploadFile.bind(this));
-		
-		
+		bean.on(this.toolbar,'color',this.changeColor.bind(this));
+		//bean.on(this.toolbar,'align',this.changeAlign.bind(this));
+		//bean.on(this.toolbar,'size',this.changeSize.bind(this));
 
 	}
 	/*FlowchartApplication.prototype.changeSelected = function(obj){
@@ -50,6 +58,31 @@ module.exports = (function(){
 		console.log(this.selected);
 		//this.tool = tool;
 	};*/
+	FlowchartApplication.prototype.sendInvite = function(e){
+		e.preventDefault();
+		if($('.inputInvite').length == 0){
+			
+			var input = document.createElement('input');
+			input.placeholder = "Enter an email to invite friends."
+			input.classList.add('inputInvite');
+			e.currentTarget.querySelector('p').innerText = 'Send invite';
+			console.log(e.currentTarget.querySelector('p'));
+			$(e.currentTarget).parent().append(input);
+		}else{
+			console.log($('.groupinfo h1').html());
+			data = {'email' : $('.inputInvite').val(),
+					'groupId' : getParameterByName('groupid'),
+					'groupName' : $('.groupinfo h1').html()
+				};
+
+			$.post('index.php?page=sendInvite',data).success(function(){
+				location.reload();
+
+			});
+		}
+
+
+	}
 	FlowchartApplication.prototype.uploadFile = function(files){
 		console.log(files);
 		var error = '';
@@ -125,12 +158,13 @@ module.exports = (function(){
 				        console.log(sourceFile);
 				        var shape = new Shape(undefined,id);
 						shape.create(200,200,200,100,'black',type,sourceFile,ratio);
+						this.selectHandler(shape);
 						++id;
 						shapes[id] = shape;
 				        //var destFile = $($(resp.data).get(1)).val();
 				        //console.log(destFile);
 				    }
-				};
+				}.bind(this);
 				request.open('POST', 'index.php?page=uploadFile');
 				request.send(data);
 			}			
@@ -141,6 +175,7 @@ module.exports = (function(){
 	FlowchartApplication.prototype.deleteSelected = function(){
 		if(this.selected != 0){
 			if(this.selected.type == 'shape'){
+				console.log(this.selected);
 				shapes.splice(this.selected.id, 1);
 				
 			}else if(this.selected.type == 'line'){
@@ -162,6 +197,25 @@ module.exports = (function(){
 			this.deleteSelected();
 		}*/
 	};
+	FlowchartApplication.prototype.changeColor = function(color){
+		console.log(color);
+		switch(color){
+			case 'groen':
+			this.shapeColor = '#bbb';
+			break;
+			case 'geel':
+			this.shapeColor = '#faf05b';
+			break;
+			case 'oranje':
+			this.shapeColor = '#ff7153';
+			break;
+		}
+		if(this.selected.type == 'shape'){
+			console.log('shape color');
+			this.selected.changeColor(this.shapeColor);
+		}
+		//this.shapeColor = '#bbb';
+	}
 	FlowchartApplication.prototype.createFlowchart = function(data){
 		console.log(data);
 		var shapesD = data.shapes;
@@ -170,6 +224,9 @@ module.exports = (function(){
 				var shape = new Shape(undefined,id);
 				shape.create(shapesD[i].x,shapesD[i].y,shapesD[i].width,shapesD[i].height,shapesD[i].color,shapesD[i].type,shapesD[i].content);
 				++id;
+				//this.selectHandler(shape);
+				bean.on(shape,'changeSelected',this.selectHandler.bind(this));
+				//shape.makeSelected();
 				shapes[id] = shape;
 			//}
 			
@@ -185,10 +242,14 @@ module.exports = (function(){
 				//lines.push(line);
 				line.$c1.onMouseDrag = line.moveHandler.bind(line);
 				line.$c2.onMouseDrag = line.moveHandler.bind(line);
+				bean.on(line,'changeSelected',this.selectHandler.bind(this));
+				//line.makeSelected();
+				//this.selectHandler(line);
 				lines[id] = line;
 				++id;
 			//}
 		}
+		view.update();
 		
 
 
@@ -215,7 +276,8 @@ module.exports = (function(){
 			break;
 			case 'shape':
 				console.log('click');
-				var shape = new Shape(e,id); 
+				var shape = new Shape(e,id);
+				shape.changeColor(this.shapeColor); 
 				shapes[id] = shape;
 				++id;
 				this.selectHandler(shape);
@@ -228,7 +290,7 @@ module.exports = (function(){
 					if(!creatingLine){
 						console.log('first create Line');
 						//point = [e.offsetX,e.offsetY]
-						var line = new Line(e);
+						var line = new Line(e,id);
 						++id;
 						lines[id] = line;
 						
@@ -252,34 +314,7 @@ module.exports = (function(){
 			case 'delete':
 			break;
 		}
-		/*if(this.tool === 'shape'){
-			console.log('click');
-			var shape = new Shape(e); 
-			shapes.push(shape);
-
-		}else{
-			if(project.hitTest(e.point) == null){	
-				//create lines with canvas
-				if(!creatingLine){
-					console.log('first create Line');
-					//point = [e.offsetX,e.offsetY]
-					var line = new Line(e);
-					lines.push(line);
-					line.$c1.onMouseDrag = line.moveHandler.bind(line);
-
-				}else{
-					console.log('second create Line');
-					var line = lines[lines.length-1];
-					line.addCircle(e);
-					line.$c2.onMouseDrag = line.moveHandler.bind(line);
-				}
-				console.log(lines);
-				creatingLine = !creatingLine;
-			}
-		}*/
 		
-		//make Shape or Line, depending on this.tool
-		//while get x,y coordinates from release click
 	};
 	
 	FlowchartApplication.prototype.save = function(event){
@@ -302,7 +337,8 @@ module.exports = (function(){
 						'width':parseInt(shapes[i].$el.css('width')),
 						'height':parseInt(shapes[i].$el.css('height')),
 						'type': shapes[i].inputType,
-						'content':type
+						'content':type,
+						'color':shapes[i].shapeColor
 
 					});
 			}
@@ -342,11 +378,11 @@ module.exports = (function(){
 		.success(function(data){
 			//console.log('flowchartId = ' + flowchartId);
 			console.log('posted');
+			//location.reload();
 		});
 		
 		//console.log('Save it yo');
 	};
-	
 	function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),

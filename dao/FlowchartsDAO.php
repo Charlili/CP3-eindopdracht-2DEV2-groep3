@@ -83,9 +83,9 @@ class FlowchartsDAO extends DAO{
 			$errors["user_id"] = "please fill in a user_id";
 		}
 
-		if(empty($data["group_id"])){
-			$errors["group_id"] = "please fill in a group_ids";
-		}
+		/*if(!isset($data["group_id"])){
+			$errors["group_id"] = "please fill in a group_id";
+		}*/
 
 		if(empty($data["shape_ids"])){
 			$errors["shape_ids"] = "please fill in a shape_ids";

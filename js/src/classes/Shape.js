@@ -13,6 +13,7 @@ module.exports = (function(){
 		}
 		this.type = 'shape';
 		this.id = id;
+		this.shapeColor = '#ddd';
 		this.$el = $(document.createElement('div'));
 		this.$el.css('top',this.y - 50 + 'px');
 		this.$el.css('left',this.x - 100 + 'px');
@@ -69,6 +70,8 @@ module.exports = (function(){
 		this.$el.css('width',width);
 		this.$el.css('height',height);
 		this.inputType = 'text';
+		this.shapeColor = color;
+		this.$el.css('background-color',color);
 		//console.log(ratio);
 		if(ratio == undefined){
 			ratio = width/height;
@@ -170,6 +173,13 @@ module.exports = (function(){
 	};
 	Shape.prototype.makeSelected = function(){
 		this.$el.addClass('selected');
+		//bean.fire(this,'changeSelected',this);
+	}
+	Shape.prototype.changeColor = function(color){
+		console.log('at shape to change color');
+		this.shapeColor = color;
+		this.$el.css('background-color',color);
+
 		//bean.fire(this,'changeSelected',this);
 	}
 	Shape.prototype.removeSelected = function(){

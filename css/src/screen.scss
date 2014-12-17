@@ -12,6 +12,18 @@ body {
 	font-size: 1.2em;
 }
 
+.box {
+	width: 500px;
+	margin: 0 auto;
+	text-align: center;
+	/* padding-top: 30px; */
+	position: absolute;
+	top: 12px;
+	left: 50%;
+	margin-left: -250px;
+	/* right: 50%; */
+}
+
 h1 {
 
 	color: #ed6838;
@@ -29,7 +41,7 @@ h2 {
 
 .hidden {
 
-	width: 220%;
+	//width: 220%;
 	//margin-left: -180px;
 	overflow: hidden;
 	height: 0;
@@ -60,7 +72,7 @@ h2 {
 }
 
 .searchgroup {
-	width: 125%;
+	//width: 125%;
 	
 	input[type="submit"] {
 		width: 100%;
@@ -80,9 +92,9 @@ h2 {
 	height: 0;
 	opacity: 0;
 	margin-top: 38px;
-    -webkit-transition: all 0.8s ease-in-out;
-    -moz-transition: all 0.8s ease-in-out;
-    transition: all 0.8s ease-in-out;
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
 }
 
 .dropdown.open {
@@ -285,7 +297,7 @@ aside > p {
 	float: left;
 	bottom: 10px;
 	position: fixed;
-	left: 10px;
+	left: 15px;
 }
 
 .back a {
@@ -297,16 +309,24 @@ aside > p {
 	float: right;
 	margin-right: 12px;
 	color: #ed6838;
-	bottom: 10px;
+	bottom: 15px;
 	right: 10px;
 	position: fixed;
 }
+
+span {
+	display: block;
+	margin-left: 28px;
+}
+
 
 .add p, .info_user p {
 	margin-top: 20px;
 }
 
 .add span, .info_user span{
+	display: inline;
+	margin-left: 0;
 	background-color: #f8d243;
 	padding: 10px;
 }
@@ -318,10 +338,12 @@ aside > p {
 }
 
 .toolbar {
-	width: 525px;
+	position: fixed;
+	width: 309px;
 	height: 35px;
-	float: right;
-	margin-right: 250px;
+	/* float: right; */
+	right: 0;
+	top: 9px;
 	z-index: 2;
 
 	input {
@@ -360,28 +382,26 @@ aside > p {
 	}
 
 }
-
-#Select {
-	background: url('../images/select.jpg');
-
-	&:hover,.active {
-		background: url('../images/select_hover.jpg');
-	}
-
+.inputInvite{
+	right: 13px;
+	position: absolute;
+	bottom: 102px;
+	display: block;
+	width: 200px;
+	height: 22px;
 }
 
 #Shape {
+	//background: url('../images/shape.jpg');
 	background: url('../images/shape.jpg');
-
-	&:hover, .active {
+	&:hover{
 		background: url('../images/shape_hover.jpg');
 	}
 }
-
 #Line {
 	background: url('../images/line.jpg');
 
-	&:hover, .active {
+	&:hover{
 		background: url('../images/line_hover.jpg');
 	}
 }
@@ -453,12 +473,12 @@ input{
 	}
 
 	#groen {
-		background: url('../images/groen.jpg');
+		background: url('../images/groen.png');
 		width: 60px;
 		height: 35px;
 
 		&:hover {
-			background: url('../images/groen_hover.jpg');
+			background: url('../images/groen_hover.png');
 		}
 	}
 
@@ -545,6 +565,8 @@ input{
 
 .title { 
 	float: left;
+	position: relative;
+	top: 63px;
 }
 
 .content{
@@ -605,7 +627,7 @@ canvas{
 	border: dotted 2px black;	
 }
 .shape textarea {
-	background-color: #ddd;
+	background-color: rgba(255,255,255,.3);
 	width: 100%;
 	height: 100%;
 	//margin: 0 auto;

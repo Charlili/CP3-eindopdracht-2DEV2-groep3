@@ -4,14 +4,14 @@
 	
 	function init() {
 		console.log('test');
-		if(getParameterByName('page') != null && (getParameterByName('page') === 'overview' || getParameterByName('page') === 'group')){
+		if(getParameterByName('page') != undefined && (getParameterByName('page') === 'overview' || getParameterByName('page') === 'group')){
 			console.log('Time to make apps');
 			var FlowchartApplication = require('./classes/FlowchartApplication.js');
 			var flowchartApplication = new FlowchartApplication($('.app'));
 		}
 		//console.log(getParameterByName('page'));
 		//login klik
-		if(getParameterByName('page') == '' || getParameterByName('page') === 'home' ){
+		if(getParameterByName('page') == undefined || getParameterByName('page') === 'home' ){
 			var login = document.querySelector('.login');
 			login.addEventListener('click',clickHandlerLogin);
 		}

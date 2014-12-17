@@ -43,8 +43,9 @@ class ShapesDAO extends DAO{
 	}
 
 	public function insert($data){
+		/*var_dump($data);
 		$errors = $this->getValidationErrors($data);
-		if(empty($errors)){
+		if(empty($errors)){*/
 			$sql = "INSERT INTO `shapes` (`flowchart_id`, `x`, `y`, `width`, `height`, `color`, `type`, `content`) 
 					VALUES (:flowchart_id, :x, :y, :width, :height, :color, :type, :content)";
 			$stmt = $this->pdo->prepare($sql);
@@ -60,7 +61,7 @@ class ShapesDAO extends DAO{
 				$lastInsertId = $this->pdo->lastInsertId();
 				return $this->selectById($lastInsertId);
 			}
-		}
+		//}
 		return false;
 	}
 

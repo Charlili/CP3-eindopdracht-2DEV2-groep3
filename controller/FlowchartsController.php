@@ -57,6 +57,7 @@ class FlowchartsController extends Controller {
 		$errors = array();
 		
 		if(!empty($_POST)) {
+			//var_dump($_POST);
 			if(empty($_POST['groupname'])) {
 				$errors['groupname'] = 'Please enter the groupname';
 			} else {
@@ -70,19 +71,20 @@ class FlowchartsController extends Controller {
 			if(empty($_POST['description'])) {
 				$errors['description'] = 'Please enter a description';
 			}
+			$userString = $_SESSION['user']['id'];
+			if(!empty($_POST['invite'])){
+				$userString = implode(", ",$_POST['invite']);
 
-			if(empty($_POST['invite'])){
-				$errors['invite'] = 'Please invite people';
 			}
 
-			//var_dump($_POST);
+			//var_dump($userString);
 
 			if(empty($errors)) {
 
 				$newGroup = array(
 					"name"=>$_POST['groupname'],
 					"description"=>$_POST['description'],
-					"user_ids"=>$_SESSION['user']['id']
+					"user_ids"=>$userString
 				);
 
 				$group = $this->groupDAO->insert($newGroup);
@@ -109,29 +111,63 @@ class FlowchartsController extends Controller {
 		$mailFrom = $_POST['emailFrom'];
 		$subject = $_POST['subject'];
 		$message = $_POST['message'];*/
-		$to = "charlotte.vanroelen@gmail.com";
+		var_dump($_POST);
+		$to = $_POST['email'];
 		$subject = "HTML email";
 
-		$message = "
-		<html>
-		<head>
-		<title>HTML email</title>
-		</head>
-		<body>
-		<p>This email contains HTML Tags!</p>
-		<table>
-		<tr>
-		<th>Firstname</th>
-		<th>Lastname</th>
-		</tr>
-		<tr>
-		<td>John</td>
-		<td>Doe</td>
-		</tr>
-		</table>
-		</body>
-		</html>
-		";
+		$message = '
+			<html>
+			<head>
+			<title>Come join us at Whiteboard!</title>
+			 
+			<style type="text/css"></style></head>
+			<body style="
+			font-family: Arial, Helvetical, sans-serif;
+			">
+			<p style="
+			font-size: 1.2em;
+			">Hi '.$to.',</p>
+			<p><span style="text-transform:capitalize;font-weight: bolder;">CharlotteVanroelen</span> has invited you to join them at <a href="student.howest.be/charlotte.vanroelen/20142015/CPIII/whiteboard/index.php?page=home" title="Click to go to the Whiteboard app!" style="
+			display: inline-block;
+			padding:  20px;
+			background-color: #faf05b;
+			color:  black;
+			text-decoration: none;
+			transform: rotate(2deg);
+			font-size: 1.2em;
+			">Whiteboard.</a></p>
+			<p style="
+			color: rgb(0, 176, 151);
+			">Whiteboard is an application where you can make flowcharts and share them in group.</p>
+			<div style="
+			background-color: #faf05b;
+			display:  block;
+			width: 400px;
+			height: 100px;
+			padding: 50px;
+			position:  relative;
+			font-size: 1.2em;
+			transform: rotate(-2deg);
+			">
+				<p style="
+			transform: rotate(3deg);
+			">Come join my group <a href="student.howest.be/charlotte.vanroelen/20142015/CPIII/whiteboard/index.php?page=group&amp;groupid='.$_POST["groupId"].'&amp;detailid='.$_POST["groupId"].'" title="Click to go to their group!" style="
+			background-color: #00b097;
+			color:  white;
+			text-decoration: none;
+			padding:  20px;
+			">'.$_POST["groupName"].'!</a></p>
+				<p style="
+			float: right;
+			font-size: 0.8em;
+			bottom: 1px;
+			right: 15px;
+			position: absolute;
+			">- CharlotteVanroelen</p>
+				</div>
+
+			</body></html>
+		';
 
 		// Always set content-type when sending HTML email
 		$headers = "MIME-Version: 1.0" . "\r\n";
@@ -142,10 +178,11 @@ class FlowchartsController extends Controller {
 		$headers .= 'Cc: jesamine.deprez@hotmail.com' . "\r\n";
 
 		$mailed = mail($to,$subject,$message,$headers);
-		var_dump($mailed);
+		//var_dump($mailed);
+		//echo $message;
 		//$_SESSION['info'] = 'Email sent to that person.';
 		//$this->redirect('index.php?page=home');
-					
+		//location.reload();			
 		//mail($mailTo, $subject, $message, "From: ".$mailFrom);
 	}
 	public function saveImage(){
@@ -326,8 +363,9 @@ class FlowchartsController extends Controller {
 			$data = $_POST;
 			$shapes = '0';
 			$lines = '0';
-			$group = 0;
+			$group = '';
 			$name = 'untitled';
+			$color = '#ddd';
 			//var_dump($data);
 
 			//als er iets is gestuurd
@@ -362,7 +400,7 @@ class FlowchartsController extends Controller {
 						$existing = $this->flowchartDAO->selectById($_POST['id']);
 					
 						//var_dump($existing);
-						if($existing){
+						if($existing && $existing['user_id'] == $_SESSION['user']['id']){
 							$this->flowchartDAO->delete($_POST['id']);
 						}
 					}
@@ -387,12 +425,13 @@ class FlowchartsController extends Controller {
 									'y' => (int)$shape['y'],
 									'width' => (int)$shape['width'],
 									'height' => (int)$shape['height'],
-									'color' => '200,200,200',
+									'color' => $shape['color'],
 									'type' => $shape['type'],
 									'content' => $shape['content']
 								);
-								//var_dump($shapeData);
+								var_dump($shapeData);
 								$makeShape = $this->shapeDAO->insert($shapeData);
+								var_dump($makeShape);
 								if(!$makeShape){
 									$errors['shapes'] = $this->shapeDAO->getValidationErrors($makeShape);
 								}

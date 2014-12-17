@@ -5,14 +5,14 @@
 	
 	function init() {
 		console.log('test');
-		if(getParameterByName('page') != null && (getParameterByName('page') === 'overview' || getParameterByName('page') === 'group')){
+		if(getParameterByName('page') != undefined && (getParameterByName('page') === 'overview' || getParameterByName('page') === 'group')){
 			console.log('Time to make apps');
 			var FlowchartApplication = require('./classes/FlowchartApplication.js');
 			var flowchartApplication = new FlowchartApplication($('.app'));
 		}
 		//console.log(getParameterByName('page'));
 		//login klik
-		if(getParameterByName('page') == '' || getParameterByName('page') === 'home' ){
+		if(getParameterByName('page') == undefined || getParameterByName('page') === 'home' ){
 			var login = document.querySelector('.login');
 			login.addEventListener('click',clickHandlerLogin);
 		}
@@ -99,30 +99,37 @@ module.exports = (function(){
 	var Toolbar = require('./Toolbar.js');
 	var Shape = require('./Shape.js');
 	var Line = require('./Line.js');
-	var shapes = {};
-	var lines = {};
+	var shapes = [];
+	var lines = [];
 	var tempArray = [];
 	var creatingLine = false;
 	var point = [];
-	var id = 0;
+	var id = 1;
 
-	paper.install(window);
-	paper.setup('cnvs');
+	if($('#cnvs').length != 0){
+		paper.install(window);
+		paper.setup('cnvs');
+	}
 
 	
 	function FlowchartApplication($el) {
-		var tool = new Tool();
+		
 		this.selected = 0;
 		console.log('Making app....');
 
 		this.$el = $el;
 		this.tool = 'shape';
 		this.toolbar = new Toolbar($el);
-
+		this.shapeColor = '#bbb';
+		this.textSize = '1.5em';
+		
 		var shape;
 		this.$el.click(this.clickHandler.bind(this));
-		tool.onMouseDown = this.clickHandler.bind(this);
-		tool.onMouseMove = this.hoverHandler.bind(this);
+		if($('#cnvs').length != 0){
+			var tool = new Tool();
+			tool.onMouseDown = this.clickHandler.bind(this);
+			tool.onMouseMove = this.hoverHandler.bind(this);
+		}
 
 		$('.save-flowchart').click(this.save);
 		if(getParameterByName('id') != ''){
@@ -130,13 +137,14 @@ module.exports = (function(){
 				this.createFlowchart(data);
 			}.bind(this));	
 		}
-
+		$('.add').click(this.sendInvite).bind(this);
 		//bean.on(this.deleteButton, 'click', this.removeHandler.bind(this));
 		bean.on(this.toolbar,'changeTool',this.changeTool.bind(this));
 		bean.on(this.toolbar,'delete',this.deleteSelected.bind(this));
 		bean.on(this.toolbar,'uploadFile',this.uploadFile.bind(this));
-		
-		
+		bean.on(this.toolbar,'color',this.changeColor.bind(this));
+		//bean.on(this.toolbar,'align',this.changeAlign.bind(this));
+		//bean.on(this.toolbar,'size',this.changeSize.bind(this));
 
 	}
 	/*FlowchartApplication.prototype.changeSelected = function(obj){
@@ -146,6 +154,31 @@ module.exports = (function(){
 		console.log(this.selected);
 		//this.tool = tool;
 	};*/
+	FlowchartApplication.prototype.sendInvite = function(e){
+		e.preventDefault();
+		if($('.inputInvite').length == 0){
+			
+			var input = document.createElement('input');
+			input.placeholder = "Enter an email to invite friends."
+			input.classList.add('inputInvite');
+			e.currentTarget.querySelector('p').innerText = 'Send invite';
+			console.log(e.currentTarget.querySelector('p'));
+			$(e.currentTarget).parent().append(input);
+		}else{
+			console.log($('.groupinfo h1').html());
+			data = {'email' : $('.inputInvite').val(),
+					'groupId' : getParameterByName('groupid'),
+					'groupName' : $('.groupinfo h1').html()
+				};
+
+			$.post('index.php?page=sendInvite',data).success(function(){
+				location.reload();
+
+			});
+		}
+
+
+	}
 	FlowchartApplication.prototype.uploadFile = function(files){
 		console.log(files);
 		var error = '';
@@ -221,12 +254,13 @@ module.exports = (function(){
 				        console.log(sourceFile);
 				        var shape = new Shape(undefined,id);
 						shape.create(200,200,200,100,'black',type,sourceFile,ratio);
+						this.selectHandler(shape);
 						++id;
 						shapes[id] = shape;
 				        //var destFile = $($(resp.data).get(1)).val();
 				        //console.log(destFile);
 				    }
-				};
+				}.bind(this);
 				request.open('POST', 'index.php?page=uploadFile');
 				request.send(data);
 			}			
@@ -237,6 +271,7 @@ module.exports = (function(){
 	FlowchartApplication.prototype.deleteSelected = function(){
 		if(this.selected != 0){
 			if(this.selected.type == 'shape'){
+				console.log(this.selected);
 				shapes.splice(this.selected.id, 1);
 				
 			}else if(this.selected.type == 'line'){
@@ -258,6 +293,25 @@ module.exports = (function(){
 			this.deleteSelected();
 		}*/
 	};
+	FlowchartApplication.prototype.changeColor = function(color){
+		console.log(color);
+		switch(color){
+			case 'groen':
+			this.shapeColor = '#bbb';
+			break;
+			case 'geel':
+			this.shapeColor = '#faf05b';
+			break;
+			case 'oranje':
+			this.shapeColor = '#ff7153';
+			break;
+		}
+		if(this.selected.type == 'shape'){
+			console.log('shape color');
+			this.selected.changeColor(this.shapeColor);
+		}
+		//this.shapeColor = '#bbb';
+	}
 	FlowchartApplication.prototype.createFlowchart = function(data){
 		console.log(data);
 		var shapesD = data.shapes;
@@ -266,6 +320,9 @@ module.exports = (function(){
 				var shape = new Shape(undefined,id);
 				shape.create(shapesD[i].x,shapesD[i].y,shapesD[i].width,shapesD[i].height,shapesD[i].color,shapesD[i].type,shapesD[i].content);
 				++id;
+				//this.selectHandler(shape);
+				bean.on(shape,'changeSelected',this.selectHandler.bind(this));
+				//shape.makeSelected();
 				shapes[id] = shape;
 			//}
 			
@@ -281,10 +338,14 @@ module.exports = (function(){
 				//lines.push(line);
 				line.$c1.onMouseDrag = line.moveHandler.bind(line);
 				line.$c2.onMouseDrag = line.moveHandler.bind(line);
+				bean.on(line,'changeSelected',this.selectHandler.bind(this));
+				//line.makeSelected();
+				//this.selectHandler(line);
 				lines[id] = line;
 				++id;
 			//}
 		}
+		view.update();
 		
 
 
@@ -311,7 +372,8 @@ module.exports = (function(){
 			break;
 			case 'shape':
 				console.log('click');
-				var shape = new Shape(e,id); 
+				var shape = new Shape(e,id);
+				shape.changeColor(this.shapeColor); 
 				shapes[id] = shape;
 				++id;
 				this.selectHandler(shape);
@@ -324,7 +386,7 @@ module.exports = (function(){
 					if(!creatingLine){
 						console.log('first create Line');
 						//point = [e.offsetX,e.offsetY]
-						var line = new Line(e);
+						var line = new Line(e,id);
 						++id;
 						lines[id] = line;
 						
@@ -348,34 +410,7 @@ module.exports = (function(){
 			case 'delete':
 			break;
 		}
-		/*if(this.tool === 'shape'){
-			console.log('click');
-			var shape = new Shape(e); 
-			shapes.push(shape);
-
-		}else{
-			if(project.hitTest(e.point) == null){	
-				//create lines with canvas
-				if(!creatingLine){
-					console.log('first create Line');
-					//point = [e.offsetX,e.offsetY]
-					var line = new Line(e);
-					lines.push(line);
-					line.$c1.onMouseDrag = line.moveHandler.bind(line);
-
-				}else{
-					console.log('second create Line');
-					var line = lines[lines.length-1];
-					line.addCircle(e);
-					line.$c2.onMouseDrag = line.moveHandler.bind(line);
-				}
-				console.log(lines);
-				creatingLine = !creatingLine;
-			}
-		}*/
 		
-		//make Shape or Line, depending on this.tool
-		//while get x,y coordinates from release click
 	};
 	
 	FlowchartApplication.prototype.save = function(event){
@@ -398,7 +433,8 @@ module.exports = (function(){
 						'width':parseInt(shapes[i].$el.css('width')),
 						'height':parseInt(shapes[i].$el.css('height')),
 						'type': shapes[i].inputType,
-						'content':type
+						'content':type,
+						'color':shapes[i].shapeColor
 
 					});
 			}
@@ -438,11 +474,11 @@ module.exports = (function(){
 		.success(function(data){
 			//console.log('flowchartId = ' + flowchartId);
 			console.log('posted');
+			//location.reload();
 		});
 		
 		//console.log('Save it yo');
 	};
-	
 	function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -601,6 +637,7 @@ module.exports = (function(){
 		}
 		this.type = 'shape';
 		this.id = id;
+		this.shapeColor = '#ddd';
 		this.$el = $(document.createElement('div'));
 		this.$el.css('top',this.y - 50 + 'px');
 		this.$el.css('left',this.x - 100 + 'px');
@@ -657,6 +694,8 @@ module.exports = (function(){
 		this.$el.css('width',width);
 		this.$el.css('height',height);
 		this.inputType = 'text';
+		this.shapeColor = color;
+		this.$el.css('background-color',color);
 		//console.log(ratio);
 		if(ratio == undefined){
 			ratio = width/height;
@@ -760,6 +799,13 @@ module.exports = (function(){
 		this.$el.addClass('selected');
 		//bean.fire(this,'changeSelected',this);
 	}
+	Shape.prototype.changeColor = function(color){
+		console.log('at shape to change color');
+		this.shapeColor = color;
+		this.$el.css('background-color',color);
+
+		//bean.fire(this,'changeSelected',this);
+	}
 	Shape.prototype.removeSelected = function(){
 		if($('.selected').length != 0){
 			$('.selected').removeClass('selected');
@@ -824,9 +870,7 @@ module.exports = (function(){
 		//handlebars gebruiken maar is overkill momenteel. :)
 
 		this.$elToolbar = $('<div class="toolbar" value="Shape Tool">');
-		this.$elSelect = $('<input type="button" class="active" id="Select"/>');
-		this.$elSelect = $('<input type="button" class=" active" id="Select"/>');
-		this.$elShape = $('<input type="button" class="button2 active" id="Shape"/>');
+		this.$elShape = $('<input type="button" class="button2" id="Shape"/>');
 		this.$elLine = $('<input type="button" class="button2" id="Line"/>');
 		this.$elFile = $('<form id="uploadWrapper" enctype="multipart/form-data" action="index.php?page=uploadFile"><input type="file" class="button2" id="File"/></div>');
 		this.$elDelete = $('<a class="button2" id="Delete"/>');
@@ -836,24 +880,25 @@ module.exports = (function(){
 		this.$elColorOptions = 
 		$('<li><div id="groen"></li>' + '<li><div id="geel"></li>' + '<li><div id="oranje"></li>');
 		
-		this.$elSize = $('<div class="changeSize">');
+		/*this.$elSize = $('<div class="changeSize">');
 		this.$elSizeUl = $('<ul class="dropdown">');
 		this.$elSizeOptions = $('<a href="#"><li>S</li></a>' + '<a href="#"><li>M</li></a>' + '<a href="#"><li>L</li></a>');
 
 		this.$elAlign = $('<div class="changeAlign">');
 		this.$elAlignUl = $('<ul class="dropdown">');
 		this.$elAlignOptions = $('<li><div id="left"></li>' + '<li><div id="right"></li>' + '<li><div id="center"></li>');
-
+		*/
 		this.$elColorUl.append(this.$elColorOptions);
 		this.$elColor.append(this.$elColorUl);
 
-		this.$elSizeUl.append(this.$elSizeOptions);
+		/*this.$elSizeUl.append(this.$elSizeOptions);
 		this.$elSize.append(this.$elSizeUl);
 
 		this.$elAlignUl.append(this.$elAlignOptions);
 		this.$elAlign.append(this.$elAlignUl);
+		*/
 
-		this.$elToolbar.append(this.$elSelect, this.$elShape, this.$elLine, this.$elFile, this.$elDelete, this.$elColor, this.$elSize, this.$elAlign);
+		this.$elToolbar.append(this.$elSelect, this.$elShape, this.$elLine, this.$elFile, this.$elDelete, this.$elColor/*, this.$elSize, this.$elAlign*/);
 		
 		$el.parent().prepend(this.$elToolbar);
 
@@ -865,14 +910,19 @@ module.exports = (function(){
 		//this.$elToolbar.click(this.changeTool);
 		//addEventListener for button: changeTool
 
-		this.$elAlign.click(this.dropTool);			
-		this.$elSize.click(this.dropTool);			
+		$('.changeColor div').click(this.changeColor.bind(this));
+		//$('.changeSize div').click(this.changeSize);
+		//$('.changeAlign div').click(this.changeAlign);
+		//this.$elAlign.click(this.dropTool);			
+		//this.$elSize.click(this.dropTool);			
 		this.$elColor.click(this.dropTool);			
 		$('.toolbar input[type="button"]').click(this.changeTool.bind(this));	
 		this.$elDelete.click(this.deleteTool.bind(this));
 		$('#File').change(function(){
 			bean.fire(this, 'uploadFile', event.target.files);
-		}.bind(this));			
+		}.bind(this));
+
+		this.$elShape.css('background', "url('images/shape_hover.jpg')");			
 	}
 	Toolbar.prototype.deleteTool = function(e){
 		bean.fire(this, 'delete', this);
@@ -880,35 +930,39 @@ module.exports = (function(){
 	Toolbar.prototype.fileTool = function(e){
 		bean.fire(this, 'delete', this);
 	}
+	Toolbar.prototype.changeColor = function(e){
+		console.log('changing color to '+e.currentTarget.getAttribute('id'));
+		bean.fire(this, 'color', e.currentTarget.getAttribute('id'));
+	}
+	/*Toolbar.prototype.changeSize = function(e){
+		bean.fire(this, 'size', e.currentTarget.innerText());
+	}
+	Toolbar.prototype.changeAlign = function(e){
+		bean.fire(this, 'align', e.currentTarget.getAttribute('id'));
+	}*/
 	Toolbar.prototype.changeTool = function(e){
 		e.stopPropagation();
 		console.log('clicking '+e.currentTarget.getAttribute('id') + ' button');
 		this.tool = e.currentTarget.getAttribute('id').toLowerCase();
-		if(this.tool === 'line'){
-			//$('canvas').css('z-index','0');
-			//$('.app').css('z-index','-1');
-			$('canvas').css('pointer-events', 'auto');
-		}else{
-			$('canvas').css('pointer-events', 'none');
-			//$('canvas').css('z-index','-1');
-			//$('.app').css('z-index','0');
+		switch(this.tool){
+			case 'line':
+				this.$elLine.css('background', "url('images/line_hover.jpg')");
+				this.$elShape.css('background', "url('images/shape.jpg')");
+				$('canvas').css('pointer-events', 'auto');
+			break;
+			case 'shape':
+				$('canvas').css('pointer-events', 'none');
+				this.$elLine.css('background', "url('images/line.jpg')");
+				this.$elShape.css('background', "url('images/shape_hover.jpg')");
+			break;
+			case 'file':
+				$('canvas').css('pointer-events', 'none');
+				this.$elLine.css('background', "url('images/line.jpg')");
+				this.$elShape.css('background', "url('images/shape_hover.jpg')");
+			break;
 		}
 		bean.fire(this, 'changeTool', this);
-		//console.log(this);
-		// switch between makeShape or makeLine tool
-		/*shapeTool = !shapeTool;
-		if(shapeTool){
-			this.value = 'Shape Tool';
-			$('canvas').css('z-index','-1');
-			$('.app').css('z-index','0');
-
-		}else{
-			this.value = 'Line Tool';
-			$('canvas').css('z-index','0');
-			$('.app').css('z-index','-1');
-		}*/
-		//use bean.fire to communicate this change to FlowchartApplication
-
+		
 	};
 
 	Toolbar.prototype.dropTool = function(e){

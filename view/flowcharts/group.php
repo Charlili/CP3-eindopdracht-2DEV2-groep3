@@ -2,7 +2,7 @@
 
     <aside>
       <!-- <h2><a href="index.php?page=groupdetail&amp;id=<?php echo $group['id'];?>"><?php echo $group['name'];?></a></h2> -->
-      <h2><a href="index.php?page=group&amp;groupid=<?php echo $group['id'];?>&amp;detailid=<?php echo $group['id'];?>"><?php echo $group['name'];?></a></h2>
+      <h1><a href="index.php?page=group&amp;groupid=<?php echo $group['id'];?>&amp;detailid=<?php echo $group['id'];?>"><?php echo $group['name'];?></a></h1>
       <ul>
         <?php foreach($users as $user){
           echo "<li class='together'>";

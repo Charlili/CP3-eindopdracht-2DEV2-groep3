@@ -165,7 +165,9 @@ class UsersController extends Controller {
 					exit;
 				}
 			}else{
-					$_SESSION['error'] = 'Please fill in your username and password.';
+					$_SESSION['error'] = 'Please fill in your username -and- password.';
+					$this->redirect('index.php?page=home');
+
 					
 			}
 		}
