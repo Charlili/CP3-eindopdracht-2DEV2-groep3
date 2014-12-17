@@ -113,7 +113,7 @@ class FlowchartsController extends Controller {
 		$message = $_POST['message'];*/
 		var_dump($_POST);
 		$to = $_POST['email'];
-		$subject = "HTML email";
+		$subject = "Join Whiteboard today!";
 
 		$message = '
 			<html>
