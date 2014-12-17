@@ -50,7 +50,7 @@
          <?php 
 
             foreach($users as $user){
-              echo '<li><img src="uploads/'. $user['username'].'_th.'. $user['extension'].'"/></li>';
+              echo '<li><img src="uploads/'. $user['username']. '/'. $user['username'] . '_th.'. $user['extension'].'"/></li>';
               echo $user['username'];  
             }
           ;?> 

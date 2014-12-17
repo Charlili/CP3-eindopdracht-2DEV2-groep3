@@ -189,13 +189,16 @@ class FlowchartsController extends Controller {
         if(!empty($_GET['groupid'])){
             $group =$this->groupDAO->selectById($_GET['groupid']);
         }
-    
+
         if(empty($group)){
             $_SESSION['error'] = 'Group does not exist';
             $this->redirect('index.php');
-        }        
-
+        }
         $this->set('group',$group);
+        if(!empty($_GET['id'])){
+			$chosen = $this->flowchartDAO->selectById($_GET['id']);
+			$this->set('chosen', $chosen);
+		}
 
         //$this->set('users',$this->groupDAO->getUsersFromGroup($_GET['groupid']));
 
@@ -207,11 +210,25 @@ class FlowchartsController extends Controller {
 
         foreach($user_ids as $user_id){
         	$user = $this->usersDAO->selectById($user_id);
+        	//var_dump($flowcharts);
+        	$flowcharts = $this->flowchartDAO->selectByGroupIdAndUserId($_GET['groupid'],$user['id']);
+        	//var_dump($flowcharts);
+        	if(!empty($flowcharts)){
+        		//var_dump('hello');
+        		$user['flowcharts'] = array();
+        		foreach($flowcharts as $flowchart){
+        			array_push($user['flowcharts'],$flowchart);
+        		}
+        		//var_dump($user);
+        	}
+        	//var_dump($flowchart);
+        	//$user['flowcharts']$flowchart);
         	array_push($users, $user);
+
         }
 
         //show flowcharts from group
-        $this->set('flowcharts',$this->flowchartDAO->selectByGroupId($_GET['groupid']));
+        //$this->set('flowcharts',$this->flowchartDAO->selectByGroupId($_GET['groupid']));
 
         $detail = false;
 
@@ -220,7 +237,7 @@ class FlowchartsController extends Controller {
         	$detail = $this->groupDAO->selectById($_GET['detailid']);
 			$this->set('detail',$detail);
         }
-
+        //var_dump($users);
         $this->set('users',$users);
 	}
 
@@ -274,6 +291,7 @@ class FlowchartsController extends Controller {
 		
 		if(!empty($_GET['id'])){
 			$chosen = $this->flowchartDAO->selectById($_GET['id']);
+			$this->set('chosen', $chosen);
 		}	
 	}
 	public function loadFlowchart(){
@@ -308,7 +326,7 @@ class FlowchartsController extends Controller {
 			$data = $_POST;
 			$shapes = '0';
 			$lines = '0';
-			$groups = '0';
+			$group = 0;
 			$name = 'untitled';
 			//var_dump($data);
 
@@ -325,16 +343,30 @@ class FlowchartsController extends Controller {
 					//redirect or popup to register
 					//TODO
 				}
+				if(!empty($_POST['groupId'])){
+						$group = $_POST['groupId'];
+					}
 				//save flowchart
 				//TODO: shape_ids en line_ids niet nodig eigenlijk want flowchart_id wordt opgeslagen bij shapes en lines
 				$flowchart = array(
 					'name' => $name,
 					'user_id' => $userId,
-					'group_ids' => ',',
+					'group_id' => $group,
 					'shape_ids' => ',',
 					'line_ids' => ',');
 				if(empty($errors)){
+					//save group_id
+
 					//save flowchart
+					if(!empty($_POST['id'])){
+						$existing = $this->flowchartDAO->selectById($_POST['id']);
+					
+						//var_dump($existing);
+						if($existing){
+							$this->flowchartDAO->delete($_POST['id']);
+						}
+					}
+					//$existing = $this->flowchartDAO->selectById
 					$makeFlowchart = $this->flowchartDAO->insert($flowchart);
 					if(!$makeFlowchart){
 						$errors['flowchart'] = $this->flowchartDAO->getValidationErrors($flowchart);
@@ -347,7 +379,7 @@ class FlowchartsController extends Controller {
 						if(!empty($data['shapes'])){
 							//var_dump($data['shapes']);
 							foreach($data['shapes'] as $shape){
-								var_dump($shape['x']);
+								//var_dump($shape['x']);
 								//set shapesDAO voor elke shape
 								$shapeData = array(
 									'flowchart_id' => $flowchart_id,
@@ -359,7 +391,7 @@ class FlowchartsController extends Controller {
 									'type' => $shape['type'],
 									'content' => $shape['content']
 								);
-								var_dump($shapeData);
+								//var_dump($shapeData);
 								$makeShape = $this->shapeDAO->insert($shapeData);
 								if(!$makeShape){
 									$errors['shapes'] = $this->shapeDAO->getValidationErrors($makeShape);

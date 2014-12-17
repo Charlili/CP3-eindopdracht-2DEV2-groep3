@@ -31,9 +31,18 @@ class FlowchartsDAO extends DAO{
 		$stmt->execute();
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
-
+	public function selectByGroupIdAndUserId($group_id,$user_id){
+		$sql = "SELECT * FROM `flowcharts` 
+				WHERE `group_id` = :group_id
+				AND `user_id` = :user_id";
+		$stmt = $this->pdo->prepare($sql);
+		$stmt->bindValue(":group_id",$group_id);
+		$stmt->bindValue(":user_id",$user_id);
+		$stmt->execute();
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+	}
 	public function selectByGroupId($group_id){
-		$sql = "SELECT * FROM `flowcharts` WHERE `group_ids` = :group_id";
+		$sql = "SELECT * FROM `flowcharts` WHERE `group_id` = :group_id";
 		$stmt = $this->pdo->prepare($sql);
 		$stmt->bindValue(":group_id",$group_id);
 		$stmt->execute();
@@ -52,11 +61,11 @@ class FlowchartsDAO extends DAO{
 	public function insert($data){
 		$errors = $this->getValidationErrors($data);
 		if(empty($errors)){
-			$sql = "INSERT INTO `flowcharts` (`user_id`, `group_ids`, `shape_ids`, `line_ids`, `name`) 
-					VALUES (:user_id, :group_ids, :shape_ids, :line_ids, :name)";
+			$sql = "INSERT INTO `flowcharts` (`user_id`, `group_id`, `shape_ids`, `line_ids`, `name`) 
+					VALUES (:user_id, :group_id, :shape_ids, :line_ids, :name)";
 			$stmt = $this->pdo->prepare($sql);
 			$stmt->bindValue(':user_id', $data["user_id"]);
-			$stmt->bindValue(':group_ids', $data["group_ids"]);
+			$stmt->bindValue(':group_id', $data["group_id"]);
 			$stmt->bindValue(':shape_ids', $data["shape_ids"]);
 			$stmt->bindValue(':line_ids', $data["line_ids"]);
 			$stmt->bindValue(':name', $data["name"]);
@@ -74,8 +83,8 @@ class FlowchartsDAO extends DAO{
 			$errors["user_id"] = "please fill in a user_id";
 		}
 
-		if(empty($data["group_ids"])){
-			$errors["group_ids"] = "please fill in a group_ids";
+		if(empty($data["group_id"])){
+			$errors["group_id"] = "please fill in a group_ids";
 		}
 
 		if(empty($data["shape_ids"])){

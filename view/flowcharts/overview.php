@@ -18,13 +18,19 @@
       ?>
     </ul>
 
-    <p><a href='index.php?page=index'>Cancel</a> | <a  href="index.php?page=overview" class='save-flowchart'>Save flowchart</a></p>
+    <p>
+    <a href='<?php if(empty($_GET['id'])){?>index.php?page=index<?php }else{ ?>index.php?page=overview<?php } ?>'>Cancel</a>
+     | 
+     <a  href="index.php?page=overview" class='save-flowchart'>Save flowchart</a>
+     </p>
   </aside>
 
   <section class="createflow">
-
-    
-        <input type="text" placeholder="Untitled" class="title" id="viewerchanger" name="name_flowchart"> 
+    <?php if(!empty($chosen)){
+      echo '<input type="text" class="title" id="viewerchanger" name="name_flowchart" value="'.$chosen['name'].'">';
+    }else{ ?>
+      <input type="text" placeholder="Untitled" class="title" id="viewerchanger" name="name_flowchart">
+    <?php } ?> 
         
       
 

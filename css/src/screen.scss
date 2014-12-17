@@ -8,7 +8,9 @@ body {
 	font-family: 'Din Alternate', Arial, sans-serif;
 	background: url('../images/white_wall_hash.png') repeat;
 }
-
+.main-centered{
+	font-size: 1.2em;
+}
 
 h1 {
 
@@ -16,8 +18,13 @@ h1 {
 	font-size: 4em;
 	text-align: center;
 	margin-top: 75px;
-	margin-bottom: 70px;
 
+}
+h2 {
+	font-size: 1.8em;
+	font-weight: normal;
+	margin-bottom: 70px;
+	color: rgb(0, 176, 151);
 }
 
 .hidden {
@@ -138,7 +145,19 @@ section input[type="text"], input[type="email"], input[type="password"] {
 	background: none;
 	cursor: pointer;
 }
+.users li{
+	display: inline-block;
+	margin: 10px;
 
+	*{
+		display: block;
+	}
+}
+.together{
+	background-color: rgba(255,255,255,.1);
+	padding: 20px;
+	margin-bottom: 10px;
+}
 .createflow textarea.description {
 	max-width: 250px;
     min-width: 250px;
@@ -225,7 +244,7 @@ aside {
 	bottom: 0;
 
 }
-
+ 
 aside h1 {
 	color: #f8d243;
 	margin-bottom: 20px;
@@ -240,9 +259,11 @@ aside a {
 
 aside li {
 	font-size: 1.2em;
-	margin-bottom: 10px;
+	//margin-bottom: 10px;
 }
-
+aside li a {
+font-size: 0.8em;
+}
 aside > p {
 	position: fixed;
 	bottom: 10px;

@@ -322,7 +322,18 @@ module.exports = (function(){
 		}
 		console.log($shapes2);
 		console.log($lines2);
+		var flowchartId = "";
+		if(getParameterByName('id') != null){
+			flowchartId = getParameterByName('id');
+		}
+		var groupId = "";
+		if(getParameterByName('groupid') != null){
+			groupId = getParameterByName('groupid');
+		}
+
 		var dataFlowchart = {
+			'id': flowchartId,
+			'groupId' : groupId,
 			'name': $("#viewerchanger").val(),
 			'shapes': $shapes2,
 			'lines': $lines2
@@ -330,10 +341,11 @@ module.exports = (function(){
 		//TODO: error handling met .error: meegeven aan user dmv evt window alert?
 		$.post('index.php?page=saveFlowchart',dataFlowchart)
 		.success(function(data){
+			//console.log('flowchartId = ' + flowchartId);
 			console.log('posted');
 		});
 		
-		console.log('Save it yo');
+		//console.log('Save it yo');
 	};
 	
 	function getParameterByName(name) {

@@ -1,6 +1,7 @@
 <section class="index">
 	<?php if(empty($_SESSION['user'])):;?>
-	<h1>Welcome to Whiteboard!</h1>
+	<h1>Welcome to Whiteboard</h1>
+	<h2>The best application to make and share flowcharts!</h2>
 	
 	<ul class="nav">
 

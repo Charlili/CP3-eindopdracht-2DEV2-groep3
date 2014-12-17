@@ -43,34 +43,57 @@ class UsersController extends Controller {
 				$errors['confirm_password'] = 'Passwords do not match';
 			}
 			//IMAGE FUNCTIONALITEIT
+			$errorImage = "";
 
 			if(empty($_POST['image'])){
                 if(!empty($_FILES['image']['error'])){
-                    $errors['image'] = 'Something went wrong, please try again';
+                    $errorImage = 'Something went wrong, please try again';
                 }
                 
-                if(empty($errors['image'])){
+                if(empty($errorImage)){
                     $size = getimagesize($_FILES['image']['tmp_name']);
                     if(empty($size)){
-                        $errors['image'] = 'Uploaded file is not an image';
+                        $errorImage = 'Uploaded file is not an image';
                     }
                 }
 
                 //MAX SIZE
                 
-                if(empty($errors['image'])){
-                    $sourceFile = $_FILES['image']['tmp_name'];
-                    $destFile = WWW_ROOT . 'uploads' . DS . $_FILES['image']['name'];
-                    move_uploaded_file($sourceFile, $destFile);
-                    
-                    $dotPos = strrpos($_FILES['image']['name'],'.');
+                if($errorImage == ""){
+                	$loc = WWW_ROOT . 'uploads' . DS . $_POST['username'];
+                	$dotPos = strrpos($_FILES['image']['name'],'.');
                     $name = substr($_FILES['image']['name'],0,$dotPos);
                     $extension = substr($_FILES['image']['name'],$dotPos+1);
+                    
+                    $sourceFile = $_FILES['image']['tmp_name'];
+                    $destFile = $loc . DS . $_POST['username']. ".". $extension;
+
+                    //move_uploaded_file($sourceFile, $destFile);
+
+                    
+                    if(!file_exists($loc)){
+                    	mkdir(WWW_ROOT . 'uploads' . DS . $_POST['username']);
+                    }
+
+                    
         
-                    $image = new Eventviva\ImageResize($destFile);
+                    $image = new Eventviva\ImageResize($sourceFile);
+                    $image->save($loc . DS . $_POST['username'] . '.' . $extension);
                     $image->resizeToHeight(100);
                     //$image->save(WWW_ROOT . 'uploads' . DS . $name . '_th.' . $extension);
-                    $image->save(WWW_ROOT . 'uploads' . DS . $_POST['username'] . '_th.' . $extension);
+                    $image->save($loc . DS . $_POST['username'] . '_th.' . $extension);
+                }else{
+                	$loc = WWW_ROOT . 'uploads' . DS . $_POST['username'];
+                	if(!file_exists($loc)){
+                    	mkdir(WWW_ROOT . 'uploads' . DS . $_POST['username']);
+                    }
+                	$sourceFile = WWW_ROOT . 'uploads' . DS . 'addprofilepic.jpg';
+                	$extension = 'jpg';
+                	$image = new Eventviva\ImageResize($sourceFile);
+                    $image->save($loc . DS . $_POST['username'] . '.' . $extension);
+                    $image->resizeToHeight(100);
+                    //$image->save(WWW_ROOT . 'uploads' . DS . $name . '_th.' . $extension);
+                    $image->save($loc . DS . $_POST['username'] . '_th.' . $extension);	
                 }
             }
 
