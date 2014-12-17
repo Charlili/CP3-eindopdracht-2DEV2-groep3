@@ -14,6 +14,10 @@ $routes = array(
         'controller' => 'Flowcharts',
         'action' => 'overview'
     ),
+    'uploadFile' => array(
+        'controller' => 'Flowcharts',
+        'action' => 'uploadFile'
+    ),
     'group' => array(
         'controller' => 'Flowcharts',
         'action' => 'group'
@@ -64,7 +68,7 @@ if(empty($_GET['page'])) {
     $_GET['page'] = 'home';
 }//als de blabla-pagina van "?page=blabla" niet bestaat, gaan we ook gewoon naar de home pagina
 if(empty($routes[$_GET['page']])) {
-    header('Location: index.php');
+    header('Location: index.php?page=home');
     exit();
 }
 $route = $routes[$_GET['page']];

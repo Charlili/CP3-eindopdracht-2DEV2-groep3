@@ -3,7 +3,7 @@ module.exports = (function(){
 	//var clicks = 0;
 
 
-	function Shape(event) {
+	function Shape(event, id) {
 		console.log('creating shape');
 		this.x = 100;
 		this.y = 50;
@@ -11,6 +11,8 @@ module.exports = (function(){
 			this.x = event.offsetX;
 			this.y = event.offsetY;
 		}
+		this.type = 'shape';
+		this.id = id;
 		this.$el = $(document.createElement('div'));
 		this.$el.css('top',this.y - 50 + 'px');
 		this.$el.css('left',this.x - 100 + 'px');
@@ -18,7 +20,7 @@ module.exports = (function(){
 		this.$el.addClass('draggable');
 
 		this.input = document.createElement('textarea');
-		this.input.type = 'text';
+		this.inputType = 'text';
 		this.$el.css('value', this.text);
 		this.$el.append(this.input);
 		//save input value
@@ -58,6 +60,56 @@ module.exports = (function(){
 		
 
 	}
+	Shape.prototype.create = function(x,y,width,height,color,type,content,ratio) {
+		console.log('recreating shapes');
+		this.x = x;
+		this.y = y;
+		this.$el.css('top',y + 'px');
+		this.$el.css('left',x +'px');
+		this.$el.css('width',width);
+		this.$el.css('height',height);
+		this.inputType = 'text';
+		//console.log(ratio);
+		if(ratio == undefined){
+			ratio = width/height;
+		}
+		
+		switch(type){
+			case 'image':
+				this.input.remove();
+				this.input = document.createElement('img');
+				this.inputType = type;
+				this.input.style.width = '200px';
+				//console.log(ratio);
+				this.input.style.height = 200 * ratio + 'px';
+				this.$el.css('height',200 * ratio + 'px');
+				this.input.src = content;
+				this.$el.prepend(this.input);
+			break;
+			case 'video':
+				this.input.remove();
+				this.input = document.createElement('video');
+				this.input.style.width = '200px';
+				this.input.style.height = '113px';
+
+				this.$el.css('height','113px');
+				this.inputType = type;
+				this.input.src = content;
+				console.log($('video').innerHeight());
+				this.$el.prepend(this.input);
+				//this.input.play();
+			break;
+			case 'text':
+				//this.input = document.createElement('textarea');
+				this.input.innerText = content;
+			break;
+		}
+		//this.$el.css('value', this.text);
+		//this.$el.append(this.input);
+		//save input value
+		
+
+	};
 	Shape.prototype.rDownHandler = function(event){
 
 		this.removeSelected();
@@ -74,15 +126,12 @@ module.exports = (function(){
 		event.stopPropagation();		
 	};
 	Shape.prototype.rMoveHandler = function(event){
-		//console.log('movin');
 
 		width = event.pageX - this.offsetX;
 		this.$el.css('width',this.width + width + 'px');
 		height = event.pageY - this.offsetY;
 		this.$el.css('height',this.height + height + 'px');
 		this.$resizeBox.css('right',-parseInt(this.$el.css('width')) + 7 + 'px');
-		//console.log(width+","+height);
-
 		
 	};
 	Shape.prototype.rUpHandler = function(event){
@@ -91,9 +140,9 @@ module.exports = (function(){
 
 	};
 	Shape.prototype.mDownHandler = function(event){
-
-		this.removeSelected();
-		this.makeSelected();
+		bean.fire(this,'changeSelected',this);
+		//this.removeSelected();
+		//this.makeSelected();
 		//console.log(this)
 		//console.log('down on the mover');
 		this.offsetX = event.pageX;
@@ -121,43 +170,22 @@ module.exports = (function(){
 	};
 	Shape.prototype.makeSelected = function(){
 		this.$el.addClass('selected');
-		bean.fire(this,'changeSelected',this);
+		//bean.fire(this,'changeSelected',this);
 	}
 	Shape.prototype.removeSelected = function(){
 		if($('.selected').length != 0){
 			$('.selected').removeClass('selected');
 		}
 	}
-	Shape.prototype.create = function(x,y,width,height,color,type,content) {
-		console.log('recreating shapes');
-		this.x = x;
-		this.y = y;
-		this.$el.css('top',y + 'px');
-		this.$el.css('left',x +'px');
-		this.$el.css('width',width);
-		this.$el.css('height',height);
-		
-		this.$el.addClass('draggable');
-
-		this.input.type = 'text';
-		this.text = content;
-		this.input.innerText = content;
-		this.type = type;
-		this.$el.css('value', this.text);
-		this.$el.append(this.input);
-		//save input value
-		
-
-	};
+	Shape.prototype.deleteMe = function(){
+		this.$el.remove();
+	}
+	
 	/*Shape.prototype.changeSize = function(event){
 		this.$el.css('width',event.offsetX);
 		this.$el.css('height',event.offsetY);
 
 	};*/
-	Shape.prototype.remove = function(){
-		//this.square.remove();
-
-	};
 	Shape.prototype.addText = function(){
 		//add event listener for when input loses focus:
 		
