@@ -66,18 +66,19 @@ h1 {
 	height: 117px;
 }
 
-//test toolbar dropdown
+// toolbar dropdown
 
-.testhidden {
+.dropdown {
 	overflow: hidden;
 	height: 0;
 	opacity: 0;
+	margin-top: 38px;
     -webkit-transition: all 0.8s ease-in-out;
     -moz-transition: all 0.8s ease-in-out;
     transition: all 0.8s ease-in-out;
 }
 
-.testhidden.open {
+.dropdown.open {
 	opacity: 1;
 	height: 117px;
 }
@@ -309,6 +310,7 @@ aside > p {
 		border: none;
 		cursor: pointer;
 		float: left;
+		margin-left: 1px;
 
 	}
 
@@ -322,6 +324,8 @@ aside > p {
 		float: left;
 		width: 60px;
 		height: 35px;
+		cursor: pointer;
+		margin-left: 1px;
 
 		li {
 			list-style: none;
@@ -339,7 +343,7 @@ aside > p {
 #Select {
 	background: url('../images/select.jpg');
 
-	&:hover, .active {
+	&:hover,.active {
 		background: url('../images/select_hover.jpg');
 	}
 
@@ -389,24 +393,58 @@ aside > p {
 		background: url('../images/color_hover.jpg');
 	}
 
-}
+	#groen {
+		background: url('../images/groen.jpg');
+		width: 60px;
+		height: 35px;
 
+		&:hover {
+			background: url('../images/groen_hover.jpg');
+		}
+	}
+
+	#geel {
+
+		background: url('../images/geel.jpg');
+		width: 60px;
+		height: 35px;
+
+		&:hover {
+			background: url('../images/geel_hover.jpg');	
+		}
+	}
+
+	#oranje {
+		background: url('../images/oranje.jpg');
+		width: 60px;
+		height: 35px;
+
+		&:hover {
+			background: url('../images/oranje_hover.jpg');
+		}
+	}
+
+}
 
 .changeSize {
 	background: url('../images/size.jpg');
 
-	li a {
-		//border: 1px solid #d1d1d1;
-		text-decoration: none;
+	li{
+		width: 60px;
+		height: 33px;
+		background-color: #e6e6e6;
+		border: #d1d1d1 1px solid;
 		font-size: 2em;
-		color: #000;
-		padding: 12px;
-		
+		color: #000;	
+
+		&:hover {
+				background-color: #d1d1d1;
+		}
 	}
 
 	&:hover, .active {
-		background: url('../images/size_hover.jpg');
-	}	
+			background: url('../images/size_hover.jpg');
+	}
 }
 
 
@@ -415,7 +453,34 @@ aside > p {
 
 	&:hover, .active {
 		background: url('../images/align_hover.jpg');
+	}
+
+	#left {
+		background: url('../images/left.jpg');
+
+		&:hover {
+			background: url('../images/left_hover.jpg');
+		} 
+
+	}
+
+	#right {
+		background: url('../images/right.jpg');
+
+		&:hover {
+			background: url('../images/right_hover.jpg');
+		} 
+
 	}	
+
+	#center {
+		background: url('../images/center.jpg');
+
+		&:hover {
+			background: url('../images/center_hover.jpg');
+		} 
+
+	}		
 }
 
 

@@ -627,25 +627,25 @@ module.exports = (function(){
 		//handlebars gebruiken maar is overkill momenteel. :)
 
 		this.$elToolbar = $('<div class="toolbar" value="Shape Tool">');
-		this.$elSelect = $('<input type="button" class="button2" id="Select"/>');
-		this.$elSelect = $('<input type="button" class="button2 active" id="Select"/>');
+		this.$elSelect = $('<input type="button" class="active" id="Select"/>');
+		this.$elSelect = $('<input type="button" class=" active" id="Select"/>');
 		this.$elShape = $('<input type="button" class="button2 active" id="Shape"/>');
 		this.$elLine = $('<input type="button" class="button2" id="Line"/>');
 		this.$elFile = $('<input type="button" class="button2" id="File"/>');
 		this.$elDelete = $('<input type="button" class="button2" id="Delete"/>');
 
-		this.$elColor = $('<div class="changeColor"><a href="#"><img src="images/color.jpg"></a>');
-		this.$elColorUl = $('<ul class="testhidden">');
+		this.$elColor = $('<div class="changeColor">');
+		this.$elColorUl = $('<ul class="dropdown">');
 		this.$elColorOptions = 
-		$('<li><a href="#"><img src="images/groen.jpg"></a></li>' + '<li><a href="#"><img src="images/geel.jpg"></a></li>' + '<li><a href="#"><img src="images/oranje.jpg"></a></li>');
+		$('<li><div id="groen"></li>' + '<li><div id="geel"></li>' + '<li><div id="oranje"></li>');
 		
-		this.$elSize = $('<div class="changeSize"><a href="#"><img src="images/size.jpg"></a>');
-		this.$elSizeUl = $('<ul class="testhidden">');
-		this.$elSizeOptions = $('<li><a href="#">S</a></li>' + '<li><a href="#">M</a></li>' + '<li><a href="#">L</a></li>');
+		this.$elSize = $('<div class="changeSize">');
+		this.$elSizeUl = $('<ul class="dropdown">');
+		this.$elSizeOptions = $('<a href="#"><li>S</li></a>' + '<a href="#"><li>M</li></a>' + '<a href="#"><li>L</li></a>');
 
-		this.$elAlign = $('<div class="changeAlign"><a href="#"><img src="images/align.jpg"></a><ul class="hidden">');
-		this.$elAlignUl = $('<ul class="testhidden open">');
-		this.$elAlignOptions = $('<li><a href="#"><img src="images/left.jpg"></a></li>' + '<li><a href="#"><img src="images/right.jpg"></a></li>' + '<li><a href="#"><img src="images/center.jpg"></a></li>');
+		this.$elAlign = $('<div class="changeAlign">');
+		this.$elAlignUl = $('<ul class="dropdown">');
+		this.$elAlignOptions = $('<li><div id="left"></li>' + '<li><div id="right"></li>' + '<li><div id="center"></li>');
 
 		this.$elColorUl.append(this.$elColorOptions);
 		this.$elColor.append(this.$elColorUl);
@@ -665,7 +665,11 @@ module.exports = (function(){
 		//bean.on($('.toolbar input'), 'click', this.changeTool);
 		$('.toolbar input').click(this.changeTool.bind(this));			
 		this.$elToolbar.click(this.changeTool);
-		//addEventListener for button: changeTool			
+		//addEventListener for button: changeTool
+
+		this.$elAlign.click(this.dropTool);			
+		this.$elSize.click(this.dropTool);			
+		this.$elColor.click(this.dropTool);			
 	}
 	Toolbar.prototype.changeTool = function(e){
 		e.stopPropagation();
@@ -695,6 +699,10 @@ module.exports = (function(){
 		//use bean.fire to communicate this change to FlowchartApplication
 
 	};
+
+	Toolbar.prototype.dropTool = function(e){
+		this.drop = e.currentTarget.querySelector('ul').classList.toggle('open');
+	}
 	
 	return Toolbar;
 })();
