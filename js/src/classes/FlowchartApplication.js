@@ -378,7 +378,7 @@ module.exports = (function(){
 		.success(function(data){
 			//console.log('flowchartId = ' + flowchartId);
 			console.log('posted');
-			//location.reload();
+			location.reload();
 		});
 		
 		//console.log('Save it yo');

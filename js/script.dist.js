@@ -474,7 +474,7 @@ module.exports = (function(){
 		.success(function(data){
 			//console.log('flowchartId = ' + flowchartId);
 			console.log('posted');
-			//location.reload();
+			location.reload();
 		});
 		
 		//console.log('Save it yo');
@@ -724,7 +724,7 @@ module.exports = (function(){
 				this.input.src = content;
 				console.log($('video').innerHeight());
 				this.$el.prepend(this.input);
-				//this.input.play();
+				this.input.play();
 			break;
 			case 'text':
 				//this.input = document.createElement('textarea');

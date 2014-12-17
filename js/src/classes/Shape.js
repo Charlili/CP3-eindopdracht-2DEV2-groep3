@@ -100,7 +100,7 @@ module.exports = (function(){
 				this.input.src = content;
 				console.log($('video').innerHeight());
 				this.$el.prepend(this.input);
-				//this.input.play();
+				this.input.play();
 			break;
 			case 'text':
 				//this.input = document.createElement('textarea');

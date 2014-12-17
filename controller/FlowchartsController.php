@@ -180,9 +180,9 @@ class FlowchartsController extends Controller {
 		$mailed = mail($to,$subject,$message,$headers);
 		//var_dump($mailed);
 		//echo $message;
-		//$_SESSION['info'] = 'Email sent to that person.';
+		$_SESSION['error'] = 'Email has been sent!.';
 		//$this->redirect('index.php?page=home');
-		//location.reload();			
+		location.reload();			
 		//mail($mailTo, $subject, $message, "From: ".$mailFrom);
 	}
 	public function saveImage(){
@@ -455,6 +455,7 @@ class FlowchartsController extends Controller {
 								}
 							}
 						}
+						$_SESSION['error'] = 'Flowchart has been saved!';
 					}
 				}
 
